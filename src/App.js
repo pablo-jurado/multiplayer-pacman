@@ -2,7 +2,7 @@ import { version } from 'inferno'
 import Component from 'inferno-component'
 import './App.css'
 
-function move(direction) {
+function move (direction) {
   console.log('move ' + direction)
 }
 
@@ -19,26 +19,45 @@ function checkArrow (event) {
   if (keyValue === down) move('down')
 }
 
-function Player () {
+function Player (state) {
+
+  let direction = state.direction
+  let num = state.x
+  let styles = {}
+  styles[direction] = num + 'px'
   return (
-    <div className='player' />
+    <div className='player' style={styles} />
   )
 }
 
-function Board () {
+function Square (square) {
+  let classVal = 'square'
+  const squares = square.map((item, i) => {
+    if (!item) classVal = 'square blue'
+    if (item) classVal = 'square'
+    return <div key={i} className={classVal} />
+  })
+  return squares
+}
+
+function Board (state) {
+  const board = state.board
+  const rows = board.map((item, i) => {
+    return <div key={i} className='row'>{Square(item)}</div>
+  })
   return (
-    <div className='game-board'>
-      {Player()}
+    <div className='board'>
+      {rows}
     </div>
   )
 }
 
-function App () {
+function App (state) {
   return (
     <div tabIndex='0' onkeydown={checkArrow} className='game'>
       <div>
         <h2>Multiplayer Pacman</h2>
-        {Board()}
+        {Board(state)}
       </div>
     </div>
   )

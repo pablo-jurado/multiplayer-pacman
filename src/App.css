@@ -2,7 +2,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: "Open Sans", "lucida grande", "Segoe UI", arial, verdana, "lucida sans unicode", tahoma, sans-serif;
-  background: #333333;
+  background: #2b2b2b;
   color: #fff;
 }
 
@@ -15,18 +15,31 @@ body {
   outline: none;
 }
 
-
-.game-board {
-  border: solid 10px #3f51b5;
-  box-shadow: 0 0 20px #212121, inset 0 0 20px #212121;
-  width: 600px;
-  height: 600px;
-  margin: 0 auto;
-}
-
 .player {
   width: 20px;
   height: 20px;
   background: #fff;
   display: inline-block;
+  position: absolute;
+}
+
+.board {
+  margin: 0 auto;
+  position: relative;
+}
+
+.row {
+  line-height: 0;
+}
+
+.square {
+  border-top: solid 1px #000;
+  border-right: solid 1px #000;
+  height: 30px;
+  width: 30px;
+  display: inline-block;
+}
+
+.square.blue {
+  background: #3f51b5;
 }
