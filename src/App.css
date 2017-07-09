@@ -16,11 +16,12 @@ body {
 }
 
 .player {
-  width: 20px;
-  height: 20px;
-  background: #fff;
+  border-top: solid 1px #000;
+  border-right: solid 1px #000;
+  height: 2vw;
+  width: 2vw;
   display: inline-block;
-  position: absolute;
+  background: #fff;
 }
 
 .board {
@@ -35,8 +36,8 @@ body {
 .square {
   border-top: solid 1px #000;
   border-right: solid 1px #000;
-  height: 30px;
-  width: 30px;
+  height: 2vw;
+  width: 2vw;
   display: inline-block;
 }
 
