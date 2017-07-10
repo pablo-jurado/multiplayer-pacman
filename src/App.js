@@ -15,6 +15,8 @@ function checkArrow (event) {
   if (keyValue === down) window.appState.player.direction = 'down'
 }
 
+window.addEventListener('keydown', checkArrow)
+
 function Square (square) {
   let classVal = 'square'
   const squares = square.map((item, i) => {
@@ -38,9 +40,11 @@ function Board (state) {
   )
 }
 
+//     <div tabIndex='0' onkeydown={checkArrow} className='game'>
+
 function App (state) {
   return (
-    <div tabIndex='0' onkeydown={checkArrow} className='game'>
+    <div className='game'>
       <div>
         <h2>Multiplayer Pacman</h2>
         {Board(state)}

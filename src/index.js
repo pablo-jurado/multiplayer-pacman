@@ -34,18 +34,29 @@ window.appState = {
   player: {
     direction: 'right',
     x: 1,
-    y: 2
+    y: 1
   }
 }
 
 function movePlayer () {
+  let x = window.appState.player.x
+  let y = window.appState.player.y
+  let board = window.appState.board
+
   const direction = window.appState.player.direction
-  if (direction === 'right') {
-    var x = window.appState.player.x
-    var y = window.appState.player.y++
-    window.appState.board[x][y] = 'p'
-    window.appState.board[x][y - 1] = 0
-  }
+  const yLength = window.appState.board[x].length - 1
+  const xLength = window.appState.board.length - 1
+
+  board[x][y] = 0
+
+  if (direction === 'right' && y + 1 !== yLength) y++
+  if (direction === 'left' && y - 1 !== 0) y--
+  if (direction === 'down' && x + 1 !== xLength) x++
+  if (direction === 'up' && x - 1 !== 0) x--
+
+  board[x][y] = 'p'
+  window.appState.player.x = x
+  window.appState.player.y = y
 }
 
 // -----------------------------------------------------------------------------
@@ -55,15 +66,15 @@ function movePlayer () {
 // window.setInterval(renderNow, 511)
 
 const rootEl = document.getElementById('app')
-const renderTime = 500
+const renderTime = 300
 
 function renderNow () {
-  render(App(window.appState), rootEl)
   movePlayer()
+  render(App(window.appState), rootEl)
   // window.requestAnimationFrame(renderNow)
 }
 // window.requestAnimationFrame(renderNow)
 
-setInterval(renderNow, renderTime)
+// setInterval(renderNow, renderTime)
 
 renderNow()
