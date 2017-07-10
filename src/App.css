@@ -18,8 +18,8 @@ body {
 .player {
   border-top: solid 1px #000;
   border-right: solid 1px #000;
-  height: 2vw;
-  width: 2vw;
+  height: 1.2vw;
+  width: 1.2vw;
   display: inline-block;
   background: #fff;
 }
@@ -27,6 +27,7 @@ body {
 .board {
   margin: 0 auto;
   position: relative;
+  max-height: 80vh;
 }
 
 .row {
@@ -36,8 +37,8 @@ body {
 .square {
   border-top: solid 1px #000;
   border-right: solid 1px #000;
-  height: 2vw;
-  width: 2vw;
+  height: 1.2vw;
+  width: 1.2vw;
   display: inline-block;
 }
 
