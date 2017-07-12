@@ -25,6 +25,7 @@ body {
   position: absolute;
   top: 20px;
   left: 20px;
+  transition: all 100ms linear;
 }
 
 .board {
@@ -45,6 +46,6 @@ body {
   display: inline-block;
 }
 
-.square.blue {
+.square.wall {
   background: #3f51b5;
 }

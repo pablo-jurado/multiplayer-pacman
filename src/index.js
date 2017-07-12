@@ -45,9 +45,9 @@ window.appState = {
   board: emptyBoard.slice(0),
   player: {
     direction: 'right',
-    speed: 0.5,
-    x: 0,
-    y: 0
+    speed: 1,
+    x: 5,
+    y: 5
   }
 }
 

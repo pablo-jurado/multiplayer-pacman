@@ -29,8 +29,11 @@ function Player (player) {
   if (direction === 'top') y -= speed
 
   let styles = { left: x + '%', top: y + '%' }
-  window.appState.player.x = x
-  window.appState.player.y = y
+
+  if (x <= 100 && x >= 0 && y <= 100 && y >= 0) {
+    window.appState.player.x = x
+    window.appState.player.y = y
+  }
 
   return (
     <div className='player' style={styles} />
@@ -40,7 +43,7 @@ function Player (player) {
 function Square (square) {
   let classVal = 'square'
   const squares = square.map((item, i) => {
-    if (item === 1) classVal = 'square blue'
+    if (item === 1) classVal = 'square wall'
     if (item === 0) classVal = 'square'
     return <div key={i} className={classVal} />
   })
