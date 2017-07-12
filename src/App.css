@@ -1,3 +1,11 @@
+/*html {
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}*/
+
 body {
   margin: 0;
   padding: 0;
@@ -48,4 +56,12 @@ body {
 
 .square.wall {
   background: #3f51b5;
+}
+
+.square.dot {
+  background: #e8da5a;
+  border-radius: 50%;
+  height: 5px;
+  width: 5px;
+  margin: 7.5px;
 }
