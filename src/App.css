@@ -18,10 +18,13 @@ body {
 .player {
   border-top: solid 1px #000;
   border-right: solid 1px #000;
-  height: 1.2vw;
-  width: 1.2vw;
+  height: 20px;
+  width: 20px;
   display: inline-block;
   background: #fff;
+  position: absolute;
+  top: 20px;
+  left: 20px;
 }
 
 .board {
@@ -37,8 +40,8 @@ body {
 .square {
   border-top: solid 1px #000;
   border-right: solid 1px #000;
-  height: 1.2vw;
-  width: 1.2vw;
+  height: 20px;
+  width: 20px;
   display: inline-block;
 }
 
