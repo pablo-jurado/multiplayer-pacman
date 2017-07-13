@@ -28,6 +28,12 @@ function checkCollision (x, y, direction) {
   return value
 }
 
+function checkTunnel (x, y, dir) {
+  let xMax = window.appState.board[0].length
+  if (x === 0 && dir === 'left') window.appState.player.x = xMax + 1
+  if (x === (xMax - 1) && dir === 'right') window.appState.player.x = -2
+}
+
 function Player (player) {
   let direction = player.direction
   let x = player.x
@@ -36,7 +42,6 @@ function Player (player) {
   let collisionVal = checkCollision(x, y, direction)
 
   if (collisionVal !== 1) {
-    if (collisionVal === 2) console.log('eat dot')
     if (direction === 'right' && x < 27) x += 1
     if (direction === 'left' && x > 0) x -= 1
     if (direction === 'bottom' && y < 30) y += 1
@@ -44,9 +49,12 @@ function Player (player) {
 
     window.appState.player.x = x
     window.appState.player.y = y
+
+    checkTunnel(x, y, direction)
   }
 
   if (collisionVal === 2) {
+    // TODO: add score and check for pallets
     window.appState.board[y][x] = 0
   }
 
