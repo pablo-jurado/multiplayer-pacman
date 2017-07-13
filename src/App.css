@@ -39,7 +39,6 @@ body {
 .board {
   margin: 0 auto;
   position: relative;
-  max-height: 80vh;
 }
 
 .row {
