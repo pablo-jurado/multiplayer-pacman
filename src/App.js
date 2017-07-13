@@ -17,9 +17,19 @@ function checkArrow (event) {
   if (keyValue === down) window.appState.player.direction = 'bottom'
 }
 
+function checkNextMove() {
+
+}
+
 function checkCollision (x, y, direction) {
-  console.log('test collision', x, y, direction)
-// TODO:
+  let board = window.appState.board
+  let value = null
+
+  if (direction === 'right') value = board[y][x + 1]
+  if (direction === 'left') value = board[y][x - 1]
+  if (direction === 'bottom') value = board[y + 1][x]
+  if (direction === 'top') value = board[y - 1][x]
+  return value
 }
 
 function Player (player) {
@@ -28,27 +38,22 @@ function Player (player) {
   let x = player.x
   let y = player.y
 
-  checkCollision(x, y, direction)
+  let collisionVal = checkCollision(x, y, direction)
 
-  if (direction === 'right' && x < 27) x += speed
-  if (direction === 'left' && x > 0) x -= speed
-  if (direction === 'bottom' && y < 30) y += speed
-  if (direction === 'top' && y > 0) y -= speed
+  if (collisionVal !== 1) {
+    if (collisionVal === 2) console.log('eat dot')
+    if (direction === 'right' && x < 27) x += speed
+    if (direction === 'left' && x > 0) x -= speed
+    if (direction === 'bottom' && y < 30) y += speed
+    if (direction === 'top' && y > 0) y -= speed
 
-  console.log('x', x)
-  console.log('y', y)
-
-  window.appState.player.x = x
-  window.appState.player.y = y
+    window.appState.player.x = x
+    window.appState.player.y = y
+  }
 
   var xPercent = x * 100 / 28
   var yPercent = y * 98.3 / 30
-
-  console.log('x % ', xPercent)
-  console.log('y % ', yPercent)
-
   let styles = { left: xPercent + '%', top: yPercent + '%' }
-  // let styles = null
 
   return (
     <div className='player' style={styles} />
