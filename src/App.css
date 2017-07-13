@@ -33,7 +33,7 @@ body {
   position: absolute;
   top: 20px;
   left: 20px;
-  transition: all 100ms linear;
+  transition: all 200ms linear;
 }
 
 .board {

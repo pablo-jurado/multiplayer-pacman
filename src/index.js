@@ -5,6 +5,7 @@ import App from './App'
 // App State
 // -----------------------------------------------------------------------------
 
+// board diensions 28 x 31
 // 0 path
 // 1 wall
 // 2 dot
@@ -48,8 +49,8 @@ window.appState = {
   player: {
     direction: 'right',
     speed: 1,
-    x: 5,
-    y: 5
+    x: 1,
+    y: 1
   }
 }
 
@@ -58,7 +59,7 @@ window.appState = {
 // -----------------------------------------------------------------------------
 
 const rootEl = document.getElementById('app')
-const renderTime = 100
+const renderTime = 200
 
 function renderNow () {
   render(App(window.appState), rootEl)

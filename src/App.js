@@ -17,23 +17,38 @@ function checkArrow (event) {
   if (keyValue === down) window.appState.player.direction = 'bottom'
 }
 
+function checkCollision (x, y, direction) {
+  console.log('test collision', x, y, direction)
+// TODO:
+}
+
 function Player (player) {
   let direction = player.direction
   let speed = player.speed
   let x = player.x
   let y = player.y
 
-  if (direction === 'right') x += speed
-  if (direction === 'left') x -= speed
-  if (direction === 'bottom') y += speed
-  if (direction === 'top') y -= speed
+  checkCollision(x, y, direction)
 
-  let styles = { left: x + '%', top: y + '%' }
+  if (direction === 'right' && x < 27) x += speed
+  if (direction === 'left' && x > 0) x -= speed
+  if (direction === 'bottom' && y < 30) y += speed
+  if (direction === 'top' && y > 0) y -= speed
 
-  if (x <= 100 && x >= 0 && y <= 100 && y >= 0) {
-    window.appState.player.x = x
-    window.appState.player.y = y
-  }
+  console.log('x', x)
+  console.log('y', y)
+
+  window.appState.player.x = x
+  window.appState.player.y = y
+
+  var xPercent = x * 100 / 28
+  var yPercent = y * 98.3 / 30
+
+  console.log('x % ', xPercent)
+  console.log('y % ', yPercent)
+
+  let styles = { left: xPercent + '%', top: yPercent + '%' }
+  // let styles = null
 
   return (
     <div className='player' style={styles} />
