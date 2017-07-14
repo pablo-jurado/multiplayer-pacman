@@ -11,10 +11,12 @@ function checkArrow (event) {
   const right = 39
   const down = 40
 
-  if (keyValue === left) window.appState.player.direction = 'left'
-  if (keyValue === right) window.appState.player.direction = 'right'
-  if (keyValue === up) window.appState.player.direction = 'top'
-  if (keyValue === down) window.appState.player.direction = 'bottom'
+  for (var i = 0; i < window.appState.players.length; i++) {
+    if (keyValue === left) window.appState.players[i].direction = 'left'
+    if (keyValue === right) window.appState.players[i].direction = 'right'
+    if (keyValue === up) window.appState.players[i].direction = 'top'
+    if (keyValue === down) window.appState.players[i].direction = 'bottom'
+  }
 }
 
 function checkCollision (x, y, direction) {
@@ -29,13 +31,15 @@ function checkCollision (x, y, direction) {
 }
 
 function checkTunnel (x, y, dir) {
-  let xMax = window.appState.board[0].length
-  if (x === 0 && dir === 'left') window.appState.player.x = xMax + 1
-  if (x === (xMax - 1) && dir === 'right') window.appState.player.x = -2
+  let xMax = window.appState.board[0].length - 1
+  if (x === 0 && dir === 'left') window.appState.player.x = xMax
+  if (x === (xMax) && dir === 'right') window.appState.player.x = 0
 }
 
 function Player (player) {
-  let direction = player.direction
+  const direction = player.direction
+  const id = player.id
+  const classVal = 'player player' + id
   let x = player.x
   let y = player.y
 
@@ -47,23 +51,28 @@ function Player (player) {
     if (direction === 'bottom' && y < 30) y += 1
     if (direction === 'top' && y > 0) y -= 1
 
-    window.appState.player.x = x
-    window.appState.player.y = y
+    window.appState.players[id].x = x
+    window.appState.players[id].y = y
 
-    checkTunnel(x, y, direction)
-  }
-
-  if (collisionVal === 2) {
-    // TODO: add score and check for pallets
-    window.appState.board[y][x] = 0
+    if (collisionVal === 2) {
+      window.appState.players[id].score += 1
+      window.appState.board[y][x] = 0
+    }
   }
 
   var xPercent = x * 100 / 28
   var yPercent = y * 100 / 31
-  let styles = { left: xPercent + '%', top: yPercent + '%' }
+
+  let styles = {
+    left: xPercent + '%',
+    top: yPercent + '%'
+  }
+
+  // checkTunnel(x, y, direction)
+  // if (x <= 0 || x >= 27) styles.display = 'none'
 
   return (
-    <div className='player' style={styles} />
+    <div className={classVal} style={styles} />
   )
 }
 
@@ -81,12 +90,16 @@ function Square (square) {
 
 function Board (state) {
   const board = state.board
+  const players = state.players
   const rows = board.map((item, i) => {
     return <div key={i} className='row'>{Square(item)}</div>
   })
+  const playersArr = players.map((playerState) => {
+    return Player(playerState)
+  })
   return (
     <div className='board'>
-      {Player(state.player)}
+      {playersArr}
       {rows}
     </div>
   )

@@ -33,8 +33,12 @@ body {
   position: absolute;
   top: 20px;
   left: 20px;
-  transition: all 200ms linear;
 }
+
+.player0 { background: #dda412;}
+.player1 { background: #199644;}
+.player2 { background: #d22929;}
+.player3 { background: #a60bbf;}
 
 .board {
   margin: 0 auto;
