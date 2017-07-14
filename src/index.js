@@ -1,5 +1,5 @@
 import { render } from 'inferno'
-import App from './App'
+import { App, movePlayer } from './App'
 
 // -----------------------------------------------------------------------------
 // App State
@@ -81,18 +81,18 @@ const board1 =
     [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]
 
-function createPlayer (id, x, y, direction) {
+function createPlayer (id, x, y, direction, speed) {
   return {
     id,
     x,
     y,
     direction,
-    speed: 2000
+    speed
   }
 }
 
-const initialPlayer1 = createPlayer(0, 1, 1, 'right')
-const initialPlayer2 = createPlayer(1, 12, 12, 'left')
+const initialPlayer1 = createPlayer(0, 1, 1, 'right', 200)
+const initialPlayer2 = createPlayer(1, 12, 12, 'left', 200)
 // const initialPlayer3 = createPlayer(2, 22, 22, 'right', 1)
 // const initialPlayer4 = createPlayer(3, 22, 17, 'left', 1)
 
@@ -102,28 +102,39 @@ window.appState = {
   players: [initialPlayer1, initialPlayer2]
 }
 
+export let player1Tic = setInterval(movePlayer, initialPlayer1.speed, initialPlayer1)
+export let player2Tic = setInterval(movePlayer, initialPlayer2.speed, initialPlayer2)
+
+export function changeSpeed (id, speed) {
+  let player = window.appState.players[id]
+  clearInterval(player1Tic)
+  player1Tic = setInterval(movePlayer, speed, player)
+  player.speed = speed
+}
+
 // -----------------------------------------------------------------------------
 // Render Loop
 // -----------------------------------------------------------------------------
-
 const rootEl = document.getElementById('app')
 
-function renderNow () {
-  render(App(window.appState), rootEl)
-  window.requestAnimationFrame(renderNow)
-}
-window.requestAnimationFrame(renderNow)
+//
+// function renderNow () {
+//   render(App(window.appState), rootEl)
+//   window.requestAnimationFrame(renderNow)
+// }
+// window.requestAnimationFrame(renderNow)
 
 // -----------------------------------------------------------------------------
 // Render Tic (this is an alternative to the render loop)
 // -----------------------------------------------------------------------------
 
-// const renderTime = 200
-// let renderNum = 0
+const renderTime = 100
+let renderNum = 0
 
-// function renderTic () {
-//   console.log('render', renderNum += 1)
-//   render(App(appState), rootEl)
-// }
-// setInterval(renderNow, renderTime)
-// renderTic()
+function renderTic () {
+  // console.log('render', renderNum += 1)
+  render(App(window.appState), rootEl)
+}
+
+setInterval(renderTic, renderTime)
+renderTic()

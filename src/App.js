@@ -1,10 +1,28 @@
 import { version } from 'inferno'
 import Component from 'inferno-component'
+import { changeSpeed } from './index'
 import './App.css'
 
 window.addEventListener('keydown', checkArrow)
 
-console.log(window.appState)
+export function movePlayer (player) {
+  let id = player.id
+  let direction = player.direction
+  let x = player.x
+  let y = player.y
+
+  let collisionVal = checkCollision(x, y, direction)
+
+  if (collisionVal !== 1) {
+    if (direction === 'right' && x < 27) x += 1
+    if (direction === 'left' && x > 0) x -= 1
+    if (direction === 'bottom' && y < 30) y += 1
+    if (direction === 'top' && y > 0) y -= 1
+
+    window.appState.players[id].x = x
+    window.appState.players[id].y = y
+  }
+}
 
 function checkArrow (event) {
   const keyValue = event.keyCode
@@ -25,9 +43,8 @@ function checkArrow (event) {
 }
 
 function checkCollision (x, y, direction) {
-  let board = window.appState.board
   let value = null
-
+  let board = window.appState.board
   if (direction === 'right') value = board[y][x + 1]
   if (direction === 'left') value = board[y][x - 1]
   if (direction === 'bottom') value = board[y + 1][x]
@@ -35,36 +52,18 @@ function checkCollision (x, y, direction) {
   return value
 }
 
-function checkTunnel (x, y, dir) {
-  let xMax = window.appState.board[0].length - 1
+function checkTunnel (x, y, dir, board) {
+  let xMax = board[0].length - 1
   if (x === 0 && dir === 'left') window.appState.player.x = xMax
   if (x === (xMax) && dir === 'right') window.appState.player.x = 0
 }
 
-function Player (player) {
-  const direction = player.direction
+function Player (player, board) {
   const id = player.id
+  const classVal = 'player player' + id
+  const speed = player.speed
   let x = player.x
   let y = player.y
-  const classVal = 'player player' + id
-  let speed = player.speed
-
-  let collisionVal = checkCollision(x, y, direction)
-
-  if (collisionVal !== 1) {
-    if (direction === 'right' && x < 27) x += 1
-    if (direction === 'left' && x > 0) x -= 1
-    if (direction === 'bottom' && y < 30) y += 1
-    if (direction === 'top' && y > 0) y -= 1
-
-    window.appState.players[id].x = x
-    window.appState.players[id].y = y
-
-    if (collisionVal === 2) {
-      window.appState.players[id].score += 1
-      window.appState.board[y][x] = 0
-    }
-  }
 
   var xPercent = x * 100 / 28
   var yPercent = y * 100 / 31
@@ -72,10 +71,10 @@ function Player (player) {
   let styles = {
     left: xPercent + '%',
     top: yPercent + '%',
-    transition: 'all 200ms linear'
+    transition: 'all ' + speed + 'ms linear'
   }
 
-  // checkTunnel(x, y, direction)
+  // checkTunnel(x, y, direction, board)
   // if (x <= 0 || x >= 27) styles.display = 'none'
 
   return (
@@ -102,7 +101,7 @@ function Board (state) {
     return <div key={i} className='row'>{Square(item)}</div>
   })
   const playersArr = players.map((playerState) => {
-    return Player(playerState)
+    return Player(playerState, board)
   })
   return (
     <div className='board'>
@@ -112,16 +111,15 @@ function Board (state) {
   )
 }
 
-function App (state) {
+export function App (state) {
   return (
     <div className='game'>
       <div>
         <h2>Multiplayer Pacman</h2>
         {Board(state)}
-        <button>speed player1</button>
+        <button onClick={changeSpeed.bind(null, 0, 500)}>slow Speed Player1</button>
+        <button onClick={changeSpeed.bind(null, 0, 100)}>fast Speed Player1</button>
       </div>
     </div>
   )
 }
-
-export default App
