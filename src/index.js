@@ -81,26 +81,25 @@ const board1 =
     [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]
 
-const initialPlayer1 = createPlayer(0, 1, 1, 'right', 1)
-const initialPlayer2 = createPlayer(1, 12, 12, 'left', 1)
-const initialPlayer3 = createPlayer(2, 22, 22, 'right', 1)
-const initialPlayer4 = createPlayer(3, 22, 17, 'left', 1)
-
-function createPlayer (id, x, y, direction, speed) {
+function createPlayer (id, x, y, direction) {
   return {
     id,
     x,
     y,
     direction,
-    speed,
-    score: 0
+    speed: 2000
   }
 }
+
+const initialPlayer1 = createPlayer(0, 1, 1, 'right')
+const initialPlayer2 = createPlayer(1, 12, 12, 'left')
+// const initialPlayer3 = createPlayer(2, 22, 22, 'right', 1)
+// const initialPlayer4 = createPlayer(3, 22, 17, 'left', 1)
 
 window.appState = {
   // board: deepCopy(board1),
   board: deepCopy(emptyBoard),
-  players: [initialPlayer1, initialPlayer2, initialPlayer3, initialPlayer4]
+  players: [initialPlayer1, initialPlayer2]
 }
 
 // -----------------------------------------------------------------------------
@@ -108,14 +107,23 @@ window.appState = {
 // -----------------------------------------------------------------------------
 
 const rootEl = document.getElementById('app')
-const renderTime = 200
 
 function renderNow () {
   render(App(window.appState), rootEl)
-  // window.requestAnimationFrame(renderNow)
+  window.requestAnimationFrame(renderNow)
 }
-// window.requestAnimationFrame(renderNow)
+window.requestAnimationFrame(renderNow)
 
-setInterval(renderNow, renderTime)
+// -----------------------------------------------------------------------------
+// Render Tic (this is an alternative to the render loop)
+// -----------------------------------------------------------------------------
 
-renderNow()
+// const renderTime = 200
+// let renderNum = 0
+
+// function renderTic () {
+//   console.log('render', renderNum += 1)
+//   render(App(appState), rootEl)
+// }
+// setInterval(renderNow, renderTime)
+// renderTic()

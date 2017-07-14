@@ -4,19 +4,24 @@ import './App.css'
 
 window.addEventListener('keydown', checkArrow)
 
+console.log(window.appState)
+
 function checkArrow (event) {
   const keyValue = event.keyCode
   const left = 37
   const up = 38
   const right = 39
   const down = 40
+  if (keyValue === left) window.appState.players[0].direction = 'left'
+  if (keyValue === right) window.appState.players[0].direction = 'right'
+  if (keyValue === up) window.appState.players[0].direction = 'top'
+  if (keyValue === down) window.appState.players[0].direction = 'bottom'
 
-  for (var i = 0; i < window.appState.players.length; i++) {
-    if (keyValue === left) window.appState.players[i].direction = 'left'
-    if (keyValue === right) window.appState.players[i].direction = 'right'
-    if (keyValue === up) window.appState.players[i].direction = 'top'
-    if (keyValue === down) window.appState.players[i].direction = 'bottom'
-  }
+  // this is just for testing
+  if (keyValue === 65) window.appState.players[1].direction = 'left'
+  if (keyValue === 68) window.appState.players[1].direction = 'right'
+  if (keyValue === 87) window.appState.players[1].direction = 'top'
+  if (keyValue === 83) window.appState.players[1].direction = 'bottom'
 }
 
 function checkCollision (x, y, direction) {
@@ -39,9 +44,10 @@ function checkTunnel (x, y, dir) {
 function Player (player) {
   const direction = player.direction
   const id = player.id
-  const classVal = 'player player' + id
   let x = player.x
   let y = player.y
+  const classVal = 'player player' + id
+  let speed = player.speed
 
   let collisionVal = checkCollision(x, y, direction)
 
@@ -65,7 +71,8 @@ function Player (player) {
 
   let styles = {
     left: xPercent + '%',
-    top: yPercent + '%'
+    top: yPercent + '%',
+    transition: 'all 200ms linear'
   }
 
   // checkTunnel(x, y, direction)
@@ -111,6 +118,7 @@ function App (state) {
       <div>
         <h2>Multiplayer Pacman</h2>
         {Board(state)}
+        <button>speed player1</button>
       </div>
     </div>
   )
