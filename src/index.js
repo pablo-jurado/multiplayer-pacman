@@ -1,5 +1,5 @@
 import { render } from 'inferno'
-import { App, movePlayer } from './App'
+import { App } from './App'
 
 // -----------------------------------------------------------------------------
 // App State
@@ -87,12 +87,13 @@ function createPlayer (id, x, y, direction, speed) {
     x,
     y,
     direction,
-    speed
+    speed,
+    count: 1
   }
 }
 
-const initialPlayer1 = createPlayer(0, 1, 1, 'right', 200)
-const initialPlayer2 = createPlayer(1, 12, 12, 'left', 200)
+const initialPlayer1 = createPlayer(0, 1, 1, 'right', 4)
+const initialPlayer2 = createPlayer(1, 12, 12, 'left', 4)
 // const initialPlayer3 = createPlayer(2, 22, 22, 'right', 1)
 // const initialPlayer4 = createPlayer(3, 22, 17, 'left', 1)
 
@@ -100,16 +101,6 @@ window.appState = {
   // board: deepCopy(board1),
   board: deepCopy(emptyBoard),
   players: [initialPlayer1, initialPlayer2]
-}
-
-export let player1Tic = setInterval(movePlayer, initialPlayer1.speed, initialPlayer1)
-export let player2Tic = setInterval(movePlayer, initialPlayer2.speed, initialPlayer2)
-
-export function changeSpeed (id, speed) {
-  let player = window.appState.players[id]
-  clearInterval(player1Tic)
-  player1Tic = setInterval(movePlayer, speed, player)
-  player.speed = speed
 }
 
 // -----------------------------------------------------------------------------
@@ -131,10 +122,10 @@ const rootEl = document.getElementById('app')
 const renderTime = 100
 let renderNum = 0
 
-function renderTic () {
+function renderNow () {
   // console.log('render', renderNum += 1)
   render(App(window.appState), rootEl)
 }
 
-setInterval(renderTic, renderTime)
-renderTic()
+setInterval(renderNow, renderTime)
+renderNow()
