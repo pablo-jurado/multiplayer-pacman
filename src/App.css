@@ -43,6 +43,8 @@ body {
 .board {
   margin: 0 auto;
   position: relative;
+  width: 560px;
+  height: 620px;
 }
 
 .row {
@@ -50,27 +52,34 @@ body {
 }
 
 .square {
-  border-top: solid 1px #000;
-  border-right: solid 1px #000;
   height: 20px;
   width: 20px;
   display: inline-block;
 }
 
-.square.wall {
-  background: #3f51b5;
-}
-
 .square.dot {
-  background: #e8da5a;
+  background: #ffeb3b;
   border-radius: 50%;
   height: 5px;
   width: 5px;
   margin: 7.5px;
+  box-shadow: 4px 5px 5px #191919;
 }
 
 .score-board {
   display: flex;
   justify-content: space-between;
   margin: 10px 0;
+}
+
+.maze {
+  position: absolute;
+  margin-top: 122px;
+  margin-left: -5px;
+}
+
+.maze2 {
+  margin-top: 134px;
+  margin-left: 6px;
+  opacity: 0.2;
 }

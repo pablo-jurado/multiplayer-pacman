@@ -1,5 +1,6 @@
 import { version } from 'inferno'
 import Component from 'inferno-component'
+import maze from './img/maze.svg'
 import './App.css'
 
 window.addEventListener('keydown', checkArrow)
@@ -55,15 +56,15 @@ function movePlayer (id, direction, x, y) {
   let collisionVal = checkCollision(x, y, direction)
 
   if (collisionVal !== 1) {
-    if (collisionVal === 2) {
-      window.appState.board[y][x] = 0
-      window.appState.players[id].score++
-    }
-
     if (direction === 'right' && x < 27) x += 1
     if (direction === 'left' && x > 0) x -= 1
     if (direction === 'bottom' && y < 30) y += 1
     if (direction === 'top' && y > 0) y -= 1
+
+    if (collisionVal === 2) {
+      window.appState.board[y][x] = 0
+      window.appState.players[id].score++
+    }
 
     window.appState.players[id].x = x
     window.appState.players[id].y = y
@@ -153,6 +154,8 @@ export function App (state) {
         {Board(state)}
         <button onClick={changeSpeed}>toggle Speed</button>
       </div>
+      <img className='maze' src={maze} />
+      <img className='maze maze2' src={maze} />
     </div>
   )
 }
