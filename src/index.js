@@ -88,18 +88,19 @@ function createPlayer (id, x, y, direction, speed) {
     y,
     direction,
     speed,
+    score: 0,
     count: 1
   }
 }
 
 const initialPlayer1 = createPlayer(0, 1, 1, 'right', 4)
-const initialPlayer2 = createPlayer(1, 12, 12, 'left', 4)
+const initialPlayer2 = createPlayer(1, 26, 1, 'left', 4)
 // const initialPlayer3 = createPlayer(2, 22, 22, 'right', 1)
 // const initialPlayer4 = createPlayer(3, 22, 17, 'left', 1)
 
 window.appState = {
-  // board: deepCopy(board1),
-  board: deepCopy(emptyBoard),
+  board: deepCopy(board1),
+  // board: deepCopy(emptyBoard),
   players: [initialPlayer1, initialPlayer2]
 }
 

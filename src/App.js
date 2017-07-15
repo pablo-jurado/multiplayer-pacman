@@ -5,8 +5,11 @@ import './App.css'
 window.addEventListener('keydown', checkArrow)
 
 function changeSpeed () {
+  let speed = window.appState.players[0].speed
+  if (speed === 1) window.appState.players[0].speed = 4
+  else window.appState.players[0].speed = 1
+
   window.appState.players[0].count = 1
-  window.appState.players[0].speed = 1
 }
 
 function checkArrow (event) {
@@ -52,6 +55,11 @@ function movePlayer (id, direction, x, y) {
   let collisionVal = checkCollision(x, y, direction)
 
   if (collisionVal !== 1) {
+    if (collisionVal === 2) {
+      window.appState.board[y][x] = 0
+      window.appState.players[id].score++
+    }
+
     if (direction === 'right' && x < 27) x += 1
     if (direction === 'left' && x > 0) x -= 1
     if (direction === 'bottom' && y < 30) y += 1
@@ -103,6 +111,22 @@ function Square (square) {
   return squares
 }
 
+function Score (players) {
+  let playersArr = players.map(function (p) {
+    return (
+      <div className='score'>
+        <div>Player{p.id}</div>
+        <div>Score: {p.score}</div>
+      </div>
+    )
+  })
+  return (
+    <div className='score-board'>
+      {playersArr}
+    </div>
+  )
+}
+
 function Board (state) {
   const board = state.board
   const players = state.players
@@ -125,6 +149,7 @@ export function App (state) {
     <div className='game'>
       <div>
         <h2>Multiplayer Pacman</h2>
+        {Score(state.players)}
         {Board(state)}
         <button onClick={changeSpeed}>toggle Speed</button>
       </div>

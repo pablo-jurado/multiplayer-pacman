@@ -68,3 +68,9 @@ body {
   width: 5px;
   margin: 7.5px;
 }
+
+.score-board {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+}
