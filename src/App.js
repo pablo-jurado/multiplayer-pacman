@@ -49,10 +49,10 @@ function checkCollision (x, y, direction) {
   return value
 }
 
-function checkTunnel (x, y, dir, board) {
-  let xMax = board[0].length - 1
-  if (x === 0 && dir === 'left') window.appState.player.x = xMax
-  if (x === (xMax) && dir === 'right') window.appState.player.x = 0
+function checkTunnel (x, y, dir, board, id) {
+  let xMax = 27
+  if (x === 0 && dir === 'left') window.appState = mori.assocIn(window.appState, ['players', id, 'x'], xMax)
+  if (x === (xMax) && dir === 'right') window.appState = mori.assocIn(window.appState, ['players', id, 'x'], 0)
 }
 
 function updateRenderFrame (id, count, speed) {
@@ -99,8 +99,8 @@ function Player (player, board) {
     transition: 'all ' + speed + '00ms linear'
   }
 
-  // checkTunnel(x, y, direction, board)
-  // if (x <= 0 || x >= 27) styles.display = 'none'
+  checkTunnel(x, y, direction, board, id)
+  if (x <= 0 || x >= 27) styles.display = 'none'
 
   return (
     <div className={classVal} style={styles} />
