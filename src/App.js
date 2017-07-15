@@ -11,11 +11,13 @@ const log = (...args) => {
 window.addEventListener('keydown', checkArrow)
 
 function changeSpeed () {
-  let speed = window.appState.players[0].speed
-  if (speed === 1) window.appState.players[0].speed = 4
-  else window.appState.players[0].speed = 1
-
-  window.appState.players[0].count = 1
+  let speed = mori.getIn(window.appState, ['players', 0, 'speed'])
+  if (speed === 1) {
+    window.appState = mori.assocIn(window.appState, ['players', 0, 'speed'], 4)
+  } else {
+    window.appState = mori.assocIn(window.appState, ['players', 0, 'speed'], 1)
+  }
+  window.appState = mori.assocIn(window.appState, ['players', 0, 'count'], 1)
 }
 
 function checkArrow (event) {
@@ -24,25 +26,26 @@ function checkArrow (event) {
   const up = 38
   const right = 39
   const down = 40
-  if (keyValue === left) window.appState.players[0].direction = 'left'
-  if (keyValue === right) window.appState.players[0].direction = 'right'
-  if (keyValue === up) window.appState.players[0].direction = 'top'
-  if (keyValue === down) window.appState.players[0].direction = 'bottom'
+  if (keyValue === left) window.appState = mori.assocIn(window.appState, ['players', 0, 'direction'], 'left')
+  if (keyValue === right) window.appState = mori.assocIn(window.appState, ['players', 0, 'direction'], 'right')
+  if (keyValue === up) window.appState = mori.assocIn(window.appState, ['players', 0, 'direction'], 'top')
+  if (keyValue === down) window.appState = mori.assocIn(window.appState, ['players', 0, 'direction'], 'bottom')
 
   // this is just for testing
-  if (keyValue === 65) window.appState.players[1].direction = 'left'
-  if (keyValue === 68) window.appState.players[1].direction = 'right'
-  if (keyValue === 87) window.appState.players[1].direction = 'top'
-  if (keyValue === 83) window.appState.players[1].direction = 'bottom'
+  if (keyValue === 65) window.appState = mori.assocIn(window.appState, ['players', 1, 'direction'], 'left')
+  if (keyValue === 68) window.appState = mori.assocIn(window.appState, ['players', 1, 'direction'], 'right')
+  if (keyValue === 87) window.appState = mori.assocIn(window.appState, ['players', 1, 'direction'], 'top')
+  if (keyValue === 83) window.appState = mori.assocIn(window.appState, ['players', 1, 'direction'], 'bottom')
 }
 
 function checkCollision (x, y, direction) {
   let value = null
-  let board = window.appState.board
-  if (direction === 'right') value = board[y][x + 1]
-  if (direction === 'left') value = board[y][x - 1]
-  if (direction === 'bottom') value = board[y + 1][x]
-  if (direction === 'top') value = board[y - 1][x]
+  let board = mori.get(window.appState, 'board')
+
+  if (direction === 'right') value = mori.getIn(board, [y, x + 1])
+  if (direction === 'left') value = mori.getIn(board, [y, x - 1])
+  if (direction === 'bottom') value = mori.getIn(board, [y + 1, x])
+  if (direction === 'top') value = mori.getIn(board, [y - 1, x])
   return value
 }
 
@@ -55,7 +58,6 @@ function checkTunnel (x, y, dir, board) {
 function updateRenderFrame (id, count, speed) {
   if (count === speed) window.appState = mori.assocIn(window.appState, ['players', id, 'count'], 0)
   window.appState = mori.updateIn(window.appState, ['players', id, 'count'], mori.inc)
-  console.log(count)
 }
 
 function movePlayer (id, direction, x, y) {
@@ -68,12 +70,11 @@ function movePlayer (id, direction, x, y) {
     if (direction === 'top' && y > 0) y -= 1
 
     if (collisionVal === 2) {
-      window.appState.board[y][x] = 0
-      window.appState.players[id].score++
+      window.appState = mori.assocIn(window.appState, ['board', y, x], 0)
+      window.appState = mori.updateIn(window.appState, ['players', id, 'score'], mori.inc)
     }
-
-    window.appState.players[id].x = x
-    window.appState.players[id].y = y
+    window.appState = mori.assocIn(window.appState, ['players', id, 'x'], x)
+    window.appState = mori.assocIn(window.appState, ['players', id, 'y'], y)
   }
 }
 
@@ -86,7 +87,7 @@ function Player (player, board) {
   let count = mori.get(player, 'count')
   const classVal = 'player player' + id
 
-  // if (count === speed) movePlayer(id, direction, x, y)
+  if (count === speed) movePlayer(id, direction, x, y)
   updateRenderFrame(id, count, speed)
 
   var xPercent = x * 100 / 28

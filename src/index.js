@@ -123,7 +123,7 @@ const rootEl = document.getElementById('app')
 // Render Tic (this is an alternative to the render loop)
 // -----------------------------------------------------------------------------
 
-const renderTime = 1000
+const renderTime = 100
 let renderNum = 0
 
 function renderNow () {
