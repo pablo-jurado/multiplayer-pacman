@@ -123,14 +123,14 @@ const rootEl = document.getElementById('app')
 // Render Tic (this is an alternative to the render loop)
 // -----------------------------------------------------------------------------
 
-const renderTime = 100
+const renderTime = 1000
 let renderNum = 0
 
 function renderNow () {
   // console.log('render', renderNum += 1)
-  render(App({moriData: window.appState}), rootEl)
+  render(App(window.appState), rootEl)
 }
 
-//setInterval(renderNow, renderTime)
+setInterval(renderNow, renderTime)
 
 renderNow()

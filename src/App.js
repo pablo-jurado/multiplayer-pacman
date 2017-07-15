@@ -53,8 +53,9 @@ function checkTunnel (x, y, dir, board) {
 }
 
 function updateRenderFrame (id, count, speed) {
-  if (count === speed) window.appState.players[id].count = 0
-  window.appState.players[id].count += 1
+  if (count === speed) window.appState = mori.assocIn(window.appState, ['players', id, 'count'], 0)
+  window.appState = mori.updateIn(window.appState, ['players', id, 'count'], mori.inc)
+  console.log(count)
 }
 
 function movePlayer (id, direction, x, y) {
@@ -86,7 +87,7 @@ function Player (player, board) {
   const classVal = 'player player' + id
 
   // if (count === speed) movePlayer(id, direction, x, y)
-  // updateRenderFrame(id, count, speed)
+  updateRenderFrame(id, count, speed)
 
   var xPercent = x * 100 / 28
   var yPercent = y * 100 / 31
@@ -123,14 +124,18 @@ function Square (squares) {
 }
 
 function Score (players) {
-  let playersArr = players.map(function (p) {
-    return (
+  let playersArr = []
+  mori.each(players, function (p) {
+    let id = mori.get(p, 'id')
+    let score = mori.get(p, 'score')
+
+    playersArr.push(
       <div className='score'>
-        <div>Player{p.id}</div>
-        <div>Score: {p.score}</div>
+        <div>Player{id}</div><div>Score: {score}</div>
       </div>
     )
   })
+
   return (
     <div className='score-board'>
       {playersArr}
@@ -139,9 +144,9 @@ function Score (players) {
 }
 
 function Board (state) {
-  const board = mori.get(state.moriData, 'board')
+  const board = mori.get(state, 'board')
   const numRows = mori.count(board)
-  const players = mori.get(state.moriData, 'players')
+  const players = mori.get(state, 'players')
   const numPlayers = mori.count(players)
 
   let rows = []
@@ -149,10 +154,6 @@ function Board (state) {
     const squares = mori.get(board, i)
     rows.push(<div key={i} className='row'>{Square(squares)}</div>)
   }
-
-  // const playersArr = players.map((playerState) => {
-  //   return Player(playerState, board)
-  // })
 
   let playersArr = []
   for (let i = 0; i < numPlayers; i++) {
@@ -168,16 +169,17 @@ function Board (state) {
 }
 
 export function App (state) {
+  const players = mori.get(state, 'players')
   return (
     <div className='game'>
       <div>
         <h2>Multiplayer Pacman</h2>
-        {/* {Score(state.players)} */}
+        {Score(players)}
         {Board(state)}
         <button onClick={changeSpeed}>toggle Speed</button>
       </div>
-      {/* <img className='maze' src={maze} />
-      <img className='maze maze2' src={maze} /> */}
+      <img className='maze' src={maze} />
+      <img className='maze maze2' src={maze} />
     </div>
   )
 }
