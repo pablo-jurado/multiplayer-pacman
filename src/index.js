@@ -1,5 +1,6 @@
 import { render } from 'inferno'
 import { App } from './App'
+import mori from 'mori'
 
 // -----------------------------------------------------------------------------
 // App State
@@ -98,11 +99,13 @@ const initialPlayer2 = createPlayer(1, 26, 1, 'left', 4)
 const initialPlayer3 = createPlayer(2, 1, 29, 'right', 4)
 const initialPlayer4 = createPlayer(3, 26, 29, 'left', 4)
 
-window.appState = {
+let initialState = {
   board: deepCopy(board1),
   // board: deepCopy(emptyBoard),
   players: [initialPlayer1, initialPlayer2, initialPlayer3, initialPlayer4]
 }
+
+window.appState = mori.toClj(initialState)
 
 // -----------------------------------------------------------------------------
 // Render Loop
@@ -125,8 +128,9 @@ let renderNum = 0
 
 function renderNow () {
   // console.log('render', renderNum += 1)
-  render(App(window.appState), rootEl)
+  render(App({moriData: window.appState}), rootEl)
 }
 
-setInterval(renderNow, renderTime)
+//setInterval(renderNow, renderTime)
+
 renderNow()

@@ -1,7 +1,12 @@
 import { version } from 'inferno'
 import Component from 'inferno-component'
+import mori from 'mori'
 import maze from './img/maze.svg'
 import './App.css'
+
+const log = (...args) => {
+  console.log(...args.map(mori.toJs))
+}
 
 window.addEventListener('keydown', checkArrow)
 
@@ -100,16 +105,21 @@ function Player (player, board) {
   )
 }
 
-function Square (square) {
+function Square (squares) {
   let classVal = 'square'
-  const squares = square.map((item, i) => {
+  const squaresNum = mori.count(squares)
+  let squaresArr = []
+
+  for (let i = 0; i < squaresNum; i++) {
+    const item = mori.get(squares, i)
+
     if (item === 0) classVal = 'square'
     if (item === 1) classVal = 'square wall'
     if (item === 2) classVal = 'square dot'
 
-    return <div key={i} className={classVal} />
-  })
-  return squares
+    squaresArr.push(<div key={i} className={classVal} />)
+  }
+  return squaresArr
 }
 
 function Score (players) {
@@ -129,17 +139,22 @@ function Score (players) {
 }
 
 function Board (state) {
-  const board = state.board
-  const players = state.players
-  const rows = board.map((item, i) => {
-    return <div key={i} className='row'>{Square(item)}</div>
-  })
-  const playersArr = players.map((playerState) => {
-    return Player(playerState, board)
-  })
+  const board = mori.get(state.moriData, 'board')
+  const numRows = mori.count(board)
+  // const players = mori.get(state.moriData, 'players')
+
+  let rows = []
+  for (let i = 0; i < numRows; i++) {
+    const squares = mori.get(board, i)
+    rows.push(<div key={i} className='row'>{Square(squares)}</div>)
+  }
+
+  // const playersArr = players.map((playerState) => {
+  //   return Player(playerState, board)
+  // })
   return (
     <div className='board'>
-      {playersArr}
+      {/* {playersArr} */}
       {rows}
     </div>
   )
@@ -150,12 +165,12 @@ export function App (state) {
     <div className='game'>
       <div>
         <h2>Multiplayer Pacman</h2>
-        {Score(state.players)}
+        {/* {Score(state.players)} */}
         {Board(state)}
         <button onClick={changeSpeed}>toggle Speed</button>
       </div>
-      <img className='maze' src={maze} />
-      <img className='maze maze2' src={maze} />
+      {/* <img className='maze' src={maze} />
+      <img className='maze maze2' src={maze} /> */}
     </div>
   )
 }
