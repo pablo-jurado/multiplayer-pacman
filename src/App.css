@@ -24,21 +24,18 @@ body {
 }
 
 .player {
-  border-top: solid 1px #000;
-  border-right: solid 1px #000;
   height: 20px;
   width: 20px;
   display: inline-block;
-  background: #fff;
   position: absolute;
   top: 20px;
   left: 20px;
 }
 
-.player0 { background: #dda412;}
-.player1 { background: #199644;}
-.player2 { background: #d22929;}
-.player3 { background: #a60bbf;}
+.player0 { background-image: url('img/player1.svg');}
+.player1 { background-image: url('img/player2.svg');}
+.player2 { background-image: url('img/player3.svg');}
+.player3 { background-image: url('img/player4.svg');}
 
 .board {
   margin: 0 auto;
