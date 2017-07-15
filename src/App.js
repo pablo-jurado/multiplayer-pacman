@@ -77,16 +77,16 @@ function movePlayer (id, direction, x, y) {
 }
 
 function Player (player, board) {
-  const id = player.id
-  const direction = player.direction
+  const id = mori.get(player, 'id')
+  const direction = mori.get(player, 'direction')
+  const speed = mori.get(player, 'speed')
+  let x = mori.get(player, 'x')
+  let y = mori.get(player, 'y')
+  let count = mori.get(player, 'count')
   const classVal = 'player player' + id
-  const speed = player.speed
-  let x = player.x
-  let y = player.y
-  let count = player.count
 
-  if (count === speed) movePlayer(id, direction, x, y)
-  updateRenderFrame(id, count, speed)
+  // if (count === speed) movePlayer(id, direction, x, y)
+  // updateRenderFrame(id, count, speed)
 
   var xPercent = x * 100 / 28
   var yPercent = y * 100 / 31
@@ -141,7 +141,8 @@ function Score (players) {
 function Board (state) {
   const board = mori.get(state.moriData, 'board')
   const numRows = mori.count(board)
-  // const players = mori.get(state.moriData, 'players')
+  const players = mori.get(state.moriData, 'players')
+  const numPlayers = mori.count(players)
 
   let rows = []
   for (let i = 0; i < numRows; i++) {
@@ -152,9 +153,15 @@ function Board (state) {
   // const playersArr = players.map((playerState) => {
   //   return Player(playerState, board)
   // })
+
+  let playersArr = []
+  for (let i = 0; i < numPlayers; i++) {
+    const player = mori.get(players, i)
+    playersArr.push(Player(player, board))
+  }
   return (
     <div className='board'>
-      {/* {playersArr} */}
+      {playersArr}
       {rows}
     </div>
   )
