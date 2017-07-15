@@ -30,6 +30,7 @@ body {
   position: absolute;
   top: 20px;
   left: 20px;
+  box-shadow: 4px 6px 3px #1f1f1f;
 }
 
 .player0 { background-image: url('img/player1.svg');}
