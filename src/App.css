@@ -30,7 +30,7 @@ body {
   position: absolute;
   top: 20px;
   left: 20px;
-  box-shadow: 4px 6px 3px #1f1f1f;
+  /*box-shadow: 4px 6px 3px #1f1f1f;*/
 }
 
 .player0 { background-image: url('img/player1.svg');}
@@ -56,12 +56,30 @@ body {
 }
 
 .square.dot {
-  background: #ffeb3b;
+  background: #fff;
   border-radius: 50%;
   height: 5px;
   width: 5px;
   margin: 7.5px;
   box-shadow: 4px 5px 5px #191919;
+}
+
+.square.power-dot {
+  background: #fff;
+  border-radius: 50%;
+  height: 10px;
+  width: 10px;
+  margin: 5px;
+  box-shadow: 4px 5px 5px #191919;
+  animation-name: animate-dow;
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes animate-dow {
+    0%   {background: #ffeb3b; box-shadow: 0px 0px 0px #fff;}
+    50%  {background: #fff; box-shadow: 0px 0px 10px #ffeb3b;}
+    100% {background: #ffeb3b; box-shadow: 0px 0px 0px #fff;}
 }
 
 .score-board {

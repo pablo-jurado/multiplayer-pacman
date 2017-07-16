@@ -56,7 +56,7 @@ const board1 =
     [1, 2, 1, 0, 0, 1, 2, 1, 0, 0, 0, 1, 2, 1, 1, 2, 1, 0, 0, 0, 1, 2, 1, 0, 0, 1, 2, 1],
     [1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1],
     [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
-    [1, 2, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1],
+    [1, 2, 1, 1, 1, 1, 3, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1],
     [1, 2, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 2, 1],
     [1, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 1],
     [1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1],
@@ -90,12 +90,14 @@ function createPlayer (id, x, y, direction, speed) {
     direction,
     speed,
     score: 0,
+    isWeak: false,
+    hasPower: false,
     count: 1
   }
 }
 
-const initialPlayer1 = createPlayer(0, 1, 1, 'right', 4)
-const initialPlayer2 = createPlayer(1, 26, 1, 'left', 4)
+const initialPlayer1 = createPlayer(0, 6, 1, 'bottom', 4)
+const initialPlayer2 = createPlayer(1, 6, 16, 'top', 4)
 const initialPlayer3 = createPlayer(2, 1, 29, 'right', 4)
 const initialPlayer4 = createPlayer(3, 26, 29, 'left', 4)
 

@@ -15,9 +15,8 @@ function changeSpeed () {
   if (speed === 1) {
     window.appState = mori.assocIn(window.appState, ['players', 0, 'speed'], 4)
   } else {
-    window.appState = mori.assocIn(window.appState, ['players', 0, 'speed'], 1)
+    window.appState = mori.assocIn(window.appState, ['players', 0, 'speed'], 2)
   }
-  window.appState = mori.assocIn(window.appState, ['players', 0, 'count'], 1)
 }
 
 function checkArrow (event) {
@@ -30,6 +29,7 @@ function checkArrow (event) {
   if (keyValue === right) window.appState = mori.assocIn(window.appState, ['players', 0, 'direction'], 'right')
   if (keyValue === up) window.appState = mori.assocIn(window.appState, ['players', 0, 'direction'], 'top')
   if (keyValue === down) window.appState = mori.assocIn(window.appState, ['players', 0, 'direction'], 'bottom')
+  window.appState = mori.assocIn(window.appState, ['players', 0, 'count'], 0)
 
   // this is just for testing
   if (keyValue === 65) window.appState = mori.assocIn(window.appState, ['players', 1, 'direction'], 'left')
@@ -60,6 +60,22 @@ function updateRenderFrame (id, count, speed) {
   window.appState = mori.updateIn(window.appState, ['players', id, 'count'], mori.inc)
 }
 
+function extraPoints (v) {
+  return v + 100
+}
+
+function weakenAllPlayers (id) {
+  console.log('need to make weak all players but player' + id)
+  let players = mori.get(window.appState, 'players')
+  mori.each(players, function (p) {
+    const currentPlayerID = mori.get(p, 'id')
+    if (currentPlayerID !== id) {
+      window.appState = mori.assocIn(window.appState, ['players', currentPlayerID, 'isWeak'], true)
+    }
+  })
+  log(window.appState)
+}
+
 function movePlayer (id, direction, x, y) {
   let collisionVal = checkCollision(x, y, direction)
 
@@ -68,6 +84,13 @@ function movePlayer (id, direction, x, y) {
     if (direction === 'left' && x > 0) x -= 1
     if (direction === 'bottom' && y < 30) y += 1
     if (direction === 'top' && y > 0) y -= 1
+
+    if (collisionVal === 3) {
+      window.appState = mori.assocIn(window.appState, ['board', y, x], 0)
+      window.appState = mori.updateIn(window.appState, ['players', id, 'score'], extraPoints)
+      window.appState = mori.assocIn(window.appState, ['players', id, 'hasPower'], true)
+      weakenAllPlayers(id)
+    }
 
     if (collisionVal === 2) {
       window.appState = mori.assocIn(window.appState, ['board', y, x], 0)
@@ -118,6 +141,7 @@ function Square (squares) {
     if (item === 0) classVal = 'square'
     if (item === 1) classVal = 'square wall'
     if (item === 2) classVal = 'square dot'
+    if (item === 3) classVal = 'square power-dot'
 
     squaresArr.push(<div key={i} className={classVal} />)
   }
