@@ -1,5 +1,5 @@
 import { render } from 'inferno'
-import { App } from './App'
+import { App, log } from './App'
 import mori from 'mori'
 
 // -----------------------------------------------------------------------------
