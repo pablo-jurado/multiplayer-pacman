@@ -97,7 +97,7 @@ function createPlayer (id, direction, x, y) {
 }
 
 const initialPlayer1 = createPlayer(0, 'bottom', 6, 1)
-const initialPlayer2 = createPlayer(1, 'top', 6, 16)
+const initialPlayer2 = createPlayer(1, 'bottom', 6, 16)
 const initialPlayer3 = createPlayer(2, 'right', 1, 29)
 const initialPlayer4 = createPlayer(3, 'left', 26, 29)
 

@@ -126,6 +126,13 @@ function Player (player, board) {
   if (count === speed) movePlayer(id, direction, x, y)
   updateRenderFrame(id, count, speed)
 
+  if (!hasPower && speed !== 4) window.appState = mori.assocIn(window.appState, ['players', id, 'speed'], 4)
+  if (hasPower) {
+    classVal += ' hasPower'
+    window.appState = mori.assocIn(window.appState, ['players', id, 'speed'], 2)
+  }
+  if (isWeak) classVal += ' isWeak'
+
   var xPercent = x * 100 / 28
   var yPercent = y * 100 / 31
 
@@ -134,9 +141,6 @@ function Player (player, board) {
     top: yPercent + '%',
     transition: 'all ' + speed + '00ms linear'
   }
-
-  if (hasPower) classVal += ' hasPower'
-  if (isWeak) classVal += ' isWeak'
 
   checkTunnel(x, y, direction, board, id)
   if (x <= 0 || x >= 27) styles.display = 'none'
