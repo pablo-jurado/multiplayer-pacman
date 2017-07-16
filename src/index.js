@@ -82,13 +82,13 @@ const board1 =
     [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]
 
-function createPlayer (id, x, y, direction, speed) {
+function createPlayer (id, direction, x, y) {
   return {
     id,
+    direction,
     x,
     y,
-    direction,
-    speed,
+    speed: 4,
     score: 0,
     isWeak: false,
     hasPower: false,
@@ -96,15 +96,17 @@ function createPlayer (id, x, y, direction, speed) {
   }
 }
 
-const initialPlayer1 = createPlayer(0, 6, 1, 'bottom', 4)
-const initialPlayer2 = createPlayer(1, 6, 16, 'top', 4)
-const initialPlayer3 = createPlayer(2, 1, 29, 'right', 4)
-const initialPlayer4 = createPlayer(3, 26, 29, 'left', 4)
+const initialPlayer1 = createPlayer(0, 'bottom', 6, 1)
+const initialPlayer2 = createPlayer(1, 'top', 6, 16)
+const initialPlayer3 = createPlayer(2, 'right', 1, 29)
+const initialPlayer4 = createPlayer(3, 'left', 26, 29)
 
 let initialState = {
   board: deepCopy(board1),
   // board: deepCopy(emptyBoard),
-  players: [initialPlayer1, initialPlayer2, initialPlayer3, initialPlayer4]
+  players: [initialPlayer1, initialPlayer2, initialPlayer3, initialPlayer4],
+  powerTimer: 0,
+  isPowerMode: false
 }
 
 window.appState = mori.toClj(initialState)

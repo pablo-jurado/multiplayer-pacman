@@ -65,7 +65,6 @@ function extraPoints (v) {
 }
 
 function weakenAllPlayers (id) {
-  console.log('need to make weak all players but player' + id)
   let players = mori.get(window.appState, 'players')
   mori.each(players, function (p) {
     const currentPlayerID = mori.get(p, 'id')
@@ -73,7 +72,16 @@ function weakenAllPlayers (id) {
       window.appState = mori.assocIn(window.appState, ['players', currentPlayerID, 'isWeak'], true)
     }
   })
-  log(window.appState)
+}
+
+function resetAllPlayers () {
+  console.log('reset')
+  let players = mori.get(window.appState, 'players')
+  mori.each(players, function (p) {
+    const id = mori.get(p, 'id')
+    window.appState = mori.assocIn(window.appState, ['players', id, 'isWeak'], false)
+    window.appState = mori.assocIn(window.appState, ['players', id, 'hasPower'], false)
+  })
 }
 
 function movePlayer (id, direction, x, y) {
@@ -86,9 +94,12 @@ function movePlayer (id, direction, x, y) {
     if (direction === 'top' && y > 0) y -= 1
 
     if (collisionVal === 3) {
+      // if the player eata a power dot assing extra points and eating power
       window.appState = mori.assocIn(window.appState, ['board', y, x], 0)
       window.appState = mori.updateIn(window.appState, ['players', id, 'score'], extraPoints)
       window.appState = mori.assocIn(window.appState, ['players', id, 'hasPower'], true)
+      // start game power mode
+      window.appState = mori.assoc(window.appState, 'isPowerMode', true)
       weakenAllPlayers(id)
     }
 
@@ -105,10 +116,12 @@ function Player (player, board) {
   const id = mori.get(player, 'id')
   const direction = mori.get(player, 'direction')
   const speed = mori.get(player, 'speed')
+  const hasPower = mori.get(player, 'hasPower')
+  const isWeak = mori.get(player, 'isWeak')
   let x = mori.get(player, 'x')
   let y = mori.get(player, 'y')
   let count = mori.get(player, 'count')
-  const classVal = 'player player' + id
+  let classVal = 'player player' + id
 
   if (count === speed) movePlayer(id, direction, x, y)
   updateRenderFrame(id, count, speed)
@@ -121,6 +134,9 @@ function Player (player, board) {
     top: yPercent + '%',
     transition: 'all ' + speed + '00ms linear'
   }
+
+  if (hasPower) classVal += ' hasPower'
+  if (isWeak) classVal += ' isWeak'
 
   checkTunnel(x, y, direction, board, id)
   if (x <= 0 || x >= 27) styles.display = 'none'
@@ -193,8 +209,24 @@ function Board (state) {
   )
 }
 
+function updatePowerTimer (powerTimer, isPowerMode) {
+  if (isPowerMode) {
+    if (powerTimer === 50) {
+      // when timer is done, reset all values
+      window.appState = mori.assoc(window.appState, 'powerTimer', 0)
+      window.appState = mori.assoc(window.appState, 'isPowerMode', false)
+      resetAllPlayers()
+    }
+    // increments timer by 1 every 100ms
+    window.appState = mori.updateIn(window.appState, ['powerTimer'], mori.inc)
+  }
+}
+
 export function App (state) {
   const players = mori.get(state, 'players')
+  const powerTimer = mori.get(state, 'powerTimer')
+  const isPowerMode = mori.get(state, 'isPowerMode')
+  updatePowerTimer(powerTimer, isPowerMode)
   return (
     <div className='game'>
       <div>

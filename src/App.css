@@ -38,6 +38,22 @@ body {
 .player2 { background-image: url('img/player3.svg');}
 .player3 { background-image: url('img/player4.svg');}
 
+.player0.isWeak { opacity: 0.3;}
+.player1.isWeak { opacity: 0.3;}
+.player2.isWeak { opacity: 0.3;}
+.player3.isWeak { opacity: 0.3;}
+
+.player0.hasPower { animation-name: power-animation; animation-duration: 1.5s; animation-iteration-count: infinite;}
+.player1.hasPower { animation-name: power-animation; animation-duration: 1.5s; animation-iteration-count: infinite;}
+.player2.hasPower { animation-name: power-animation; animation-duration: 1.5s; animation-iteration-count: infinite;}
+.player3.hasPower { animation-name: power-animation; animation-duration: 1.5s; animation-iteration-count: infinite;}
+
+@keyframes power-animation {
+    0%   {box-shadow: 0px 0px 0px #fff;}
+    50%  {box-shadow: 0px 0px 10px #ffeb3b;}
+    100% {box-shadow: 0px 0px 0px #fff;}
+}
+
 .board {
   margin: 0 auto;
   position: relative;
