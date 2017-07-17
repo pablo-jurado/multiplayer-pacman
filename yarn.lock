@@ -2907,7 +2907,7 @@ indexof@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/indexof/-/indexof-0.0.1.tgz#82dc336d232b9062179d05ab3293a66059fd435d"
 
-inferno-component@3.6.4, inferno-component@^3.5.4:
+inferno-component@^3.5.4, inferno-component@^3.6.4:
   version "3.6.4"
   resolved "https://registry.yarnpkg.com/inferno-component/-/inferno-component-3.6.4.tgz#8645383bac1965559a37d493e142295ac11731e7"
   dependencies:
@@ -3010,7 +3010,7 @@ inferno-vnode-flags@3.6.4:
   version "3.6.4"
   resolved "https://registry.yarnpkg.com/inferno-vnode-flags/-/inferno-vnode-flags-3.6.4.tgz#1237612232e22fc2de0346bcb3f802edbd347cae"
 
-inferno@3.6.4, inferno@^3.5.4:
+inferno@3.6.4, inferno@^3.5.4, inferno@^3.6.4:
   version "3.6.4"
   resolved "https://registry.yarnpkg.com/inferno/-/inferno-3.6.4.tgz#d36dee9c895530dca0e4a03648b2530531a7aa32"
   dependencies:
@@ -4029,6 +4029,10 @@ mkdirp@0.5.1, mkdirp@0.5.x, "mkdirp@>=0.5 0", mkdirp@^0.5.0, mkdirp@^0.5.1, mkdi
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-0.5.1.tgz#30057438eac6cf7f8c4767f38648d6697d75c903"
   dependencies:
     minimist "0.0.8"
+
+mori@^0.3.2:
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/mori/-/mori-0.3.2.tgz#1a53da165287f3bef0cab62398c4931bece80a3f"
 
 ms@0.7.1:
   version "0.7.1"
