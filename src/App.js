@@ -1,7 +1,7 @@
 import { version } from 'inferno'
 import Component from 'inferno-component'
 import mori from 'mori'
-import maze from './img/maze.svg'
+import { maze } from './maze'
 import Board from './Board'
 import './App.css'
 
@@ -81,20 +81,22 @@ function Score (players) {
 }
 
 export function App (state) {
+  let gameClass = 'game'
   const players = mori.get(state, 'players')
   const powerTimer = mori.get(state, 'powerTimer')
   const isPowerMode = mori.get(state, 'isPowerMode')
   updatePowerTimer(powerTimer, isPowerMode)
+
+  if (isPowerMode) gameClass = 'game power-mode'
   return (
-    <div className='game'>
+    <div className={gameClass}>
       <div>
         <h2>Multiplayer Pacman</h2>
         {Score(players)}
         {Board(state)}
         <button onClick={changeSpeed}>toggle Speed</button>
       </div>
-      <img className='maze' src={maze} />
-      <img className='maze maze2' src={maze} />
+      {maze}
     </div>
   )
 }
