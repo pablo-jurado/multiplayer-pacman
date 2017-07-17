@@ -24,7 +24,7 @@ body {
 }
 
 .player {
-  height: 20px;
+  height: 30px;
   width: 20px;
   display: inline-block;
   position: absolute;
@@ -70,7 +70,7 @@ body {
   position: relative;
   width: 560px;
   height: 620px;
-  transform: rotateX(60deg);
+  transform: rotateX(40deg);
 }
 
 .row {
@@ -116,11 +116,19 @@ body {
   margin: 10px 0;
 }
 
-.maze {
+.board-wrapper svg {
   position: absolute;
-  top: -6px;
-  margin-left: 0px;
-  transform: rotateX(60deg);
+  top: -4px;
+  left: 20px;
+  transform: rotateX(40deg);
+}
+
+.board-wrapper svg:last-child{
+  position: absolute;
+  top: 8px;
+  left: 20px;
+  transform: rotateX(40deg);
+  opacity: 0.2;
 }
 
 .maze path {
