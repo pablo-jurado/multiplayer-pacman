@@ -92,6 +92,7 @@ function createPlayer (id, direction, x, y) {
     score: 0,
     isWeak: false,
     hasPower: false,
+    isDead: false,
     count: 1
   }
 }

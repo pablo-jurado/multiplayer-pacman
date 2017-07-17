@@ -39,18 +39,31 @@ function weakenAllPlayers (id) {
   })
 }
 
-function movePlayer (id, direction, x, y) {
+function movePlayer (id, direction, x, y, hasPower) {
   let collisionVal = checkCollision(x, y, direction)
 
+  if (collisionVal === 'p0' || collisionVal === 'p1' ||
+      collisionVal === 'p2' || collisionVal === 'p3') {
+    if (hasPower) {
+      const num = parseInt(collisionVal.slice(1))
+      window.appState = mori.assocIn(window.appState, ['players', num, 'isDead'], true)
+    } else {
+      return
+    }
+  }
+  // number 1 is a wall
   if (collisionVal !== 1) {
+    // reset board value to empty
+    window.appState = mori.assocIn(window.appState, ['board', y, x], 0)
+
     if (direction === 'right' && x < 27) x += 1
     if (direction === 'left' && x > 0) x -= 1
     if (direction === 'bottom' && y < 30) y += 1
     if (direction === 'top' && y > 0) y -= 1
 
+    // number 3 is a power dot
     if (collisionVal === 3) {
-      // if the player eata a power dot assing extra points and eating power
-      window.appState = mori.assocIn(window.appState, ['board', y, x], 0)
+      // if the player eats a a power dot assing extra points and eating power
       window.appState = mori.updateIn(window.appState, ['players', id, 'score'], extraPoints)
       window.appState = mori.assocIn(window.appState, ['players', id, 'hasPower'], true)
       // start game power mode
@@ -58,10 +71,14 @@ function movePlayer (id, direction, x, y) {
       weakenAllPlayers(id)
     }
 
+    // number 2 is a regular dot
     if (collisionVal === 2) {
-      window.appState = mori.assocIn(window.appState, ['board', y, x], 0)
       window.appState = mori.updateIn(window.appState, ['players', id, 'score'], mori.inc)
     }
+
+    // updates next tile
+    window.appState = mori.assocIn(window.appState, ['board', y, x], 'p' + id)
+    // update player x and y
     window.appState = mori.assocIn(window.appState, ['players', id, 'x'], x)
     window.appState = mori.assocIn(window.appState, ['players', id, 'y'], y)
   }
@@ -73,12 +90,13 @@ function Player (player, board) {
   const speed = mori.get(player, 'speed')
   const hasPower = mori.get(player, 'hasPower')
   const isWeak = mori.get(player, 'isWeak')
+  const isDead = mori.get(player, 'isDead')
   let x = mori.get(player, 'x')
   let y = mori.get(player, 'y')
   let count = mori.get(player, 'count')
   let classVal = 'player player' + id
 
-  if (count === speed) movePlayer(id, direction, x, y)
+  if (count === speed) movePlayer(id, direction, x, y, hasPower)
   updateRenderFrame(id, count, speed)
 
   if (!hasPower && speed !== 4) window.appState = mori.assocIn(window.appState, ['players', id, 'speed'], 4)
@@ -87,7 +105,8 @@ function Player (player, board) {
     window.appState = mori.assocIn(window.appState, ['players', id, 'speed'], 2)
   }
   if (isWeak) classVal += ' isWeak'
-
+  if (isDead) classVal += ' dead'
+  
   var xPercent = x * 100 / 28
   var yPercent = y * 100 / 31
 
