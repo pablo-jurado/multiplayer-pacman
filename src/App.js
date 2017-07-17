@@ -1,7 +1,6 @@
 import { version } from 'inferno'
 import Component from 'inferno-component'
 import mori from 'mori'
-import { maze } from './maze'
 import Board from './Board'
 import './App.css'
 
@@ -27,15 +26,6 @@ function checkArrow (event) {
   if (keyValue === 68) window.appState = mori.assocIn(window.appState, ['players', 1, 'direction'], 'right')
   if (keyValue === 87) window.appState = mori.assocIn(window.appState, ['players', 1, 'direction'], 'top')
   if (keyValue === 83) window.appState = mori.assocIn(window.appState, ['players', 1, 'direction'], 'bottom')
-}
-
-function changeSpeed () {
-  let speed = mori.getIn(window.appState, ['players', 0, 'speed'])
-  if (speed === 1) {
-    window.appState = mori.assocIn(window.appState, ['players', 0, 'speed'], 4)
-  } else {
-    window.appState = mori.assocIn(window.appState, ['players', 0, 'speed'], 2)
-  }
 }
 
 function resetAllPlayers () {
@@ -94,9 +84,7 @@ export function App (state) {
         <h2>Multiplayer Pacman</h2>
         {Score(players)}
         {Board(state)}
-        <button onClick={changeSpeed}>toggle Speed</button>
       </div>
-      {maze}
     </div>
   )
 }

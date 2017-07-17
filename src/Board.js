@@ -3,6 +3,7 @@ import Component from 'inferno-component'
 import mori from 'mori'
 import Tile from './Tile'
 import Player from './Player'
+import { maze } from './maze'
 import { log } from './App'
 
 function Board (state) {
@@ -23,9 +24,12 @@ function Board (state) {
     playersArr.push(Player(player, board))
   }
   return (
-    <div className='board'>
-      {playersArr}
-      {rows}
+    <div className='board-wrapper'>
+      <div className='board'>
+        {playersArr}
+        {rows}
+      </div>
+      {maze}
     </div>
   )
 }
