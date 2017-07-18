@@ -70,20 +70,35 @@ function Score (players) {
   )
 }
 
+function boolNot (x) {
+  return !x
+}
+
+function toggle3D () {
+  window.appState = mori.updateIn(window.appState, ['is3D'], boolNot)
+}
+
 export function App (state) {
   let gameClass = 'game'
+  let class3D = null
   const players = mori.get(state, 'players')
   const powerTimer = mori.get(state, 'powerTimer')
   const isPowerMode = mori.get(state, 'isPowerMode')
+  const is3D = mori.get(state, 'is3D')
+
   updatePowerTimer(powerTimer, isPowerMode)
 
   if (isPowerMode) gameClass = 'game power-mode'
+  if (is3D) class3D = 'is3d'
+  if (!is3D) class3D = null
+
   return (
     <div className={gameClass}>
-      <div>
+      <div className={class3D}>
         <h2>Multiplayer Pacman</h2>
         {Score(players)}
         {Board(state)}
+        <button className='button-3d' onClick={toggle3D}>toggle 3D</button>
       </div>
     </div>
   )

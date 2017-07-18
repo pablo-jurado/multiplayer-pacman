@@ -107,7 +107,8 @@ let initialState = {
   // board: deepCopy(emptyBoard),
   players: [initialPlayer1, initialPlayer2, initialPlayer3, initialPlayer4],
   powerTimer: 0,
-  isPowerMode: false
+  isPowerMode: false,
+  is3D: false
 }
 
 window.appState = mori.toClj(initialState)
