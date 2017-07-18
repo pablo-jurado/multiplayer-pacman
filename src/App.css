@@ -70,7 +70,7 @@ body {
   position: relative;
   width: 560px;
   height: 620px;
-  transform: rotateX(40deg);
+  transform: rotateX(30deg);
 }
 
 .row {
@@ -120,14 +120,14 @@ body {
   position: absolute;
   top: -4px;
   left: 20px;
-  transform: rotateX(40deg);
+  transform: rotateX(30deg);
 }
 
 .board-wrapper svg:last-child{
   position: absolute;
   top: 8px;
   left: 20px;
-  transform: rotateX(40deg);
+  transform: rotateX(30deg);
   opacity: 0.2;
 }
 

@@ -11,11 +11,10 @@ function Tile (tiles) {
   for (let i = 0; i < tilesNum; i++) {
     const item = mori.get(tiles, i)
 
-    if (item === 0) classVal = 'square'
     if (item === 1) classVal = 'square wall'
     if (item === 2) classVal = 'square dot'
     if (item === 3) classVal = 'square power-dot'
-    if (typeof item === 'string') classVal = 'square'
+    if (typeof item === 'string' || item === 0) classVal = 'square'
 
     tilesArr.push(<div key={i} className={classVal} />)
   }
