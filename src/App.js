@@ -2,7 +2,8 @@ import { version } from 'inferno'
 import Component from 'inferno-component'
 import mori from 'mori'
 import Board from './Board'
-import io from 'socket.io-client'
+import Score from './Score'
+import { testServer } from './Socket'
 import './App.css'
 
 var socket = io(`http://localhost:3100`)
@@ -17,26 +18,6 @@ socket.on('testBack', function (data) {
 
 export const log = (...args) => {
   console.log(...args.map(mori.toJs))
-}
-
-window.addEventListener('keydown', checkArrow)
-
-function checkArrow (event) {
-  const keyValue = event.keyCode
-  const left = 37
-  const up = 38
-  const right = 39
-  const down = 40
-  if (keyValue === left) window.appState = mori.assocIn(window.appState, ['players', 0, 'direction'], 'left')
-  if (keyValue === right) window.appState = mori.assocIn(window.appState, ['players', 0, 'direction'], 'right')
-  if (keyValue === up) window.appState = mori.assocIn(window.appState, ['players', 0, 'direction'], 'top')
-  if (keyValue === down) window.appState = mori.assocIn(window.appState, ['players', 0, 'direction'], 'bottom')
-
-  // this is just for testing
-  if (keyValue === 65) window.appState = mori.assocIn(window.appState, ['players', 1, 'direction'], 'left')
-  if (keyValue === 68) window.appState = mori.assocIn(window.appState, ['players', 1, 'direction'], 'right')
-  if (keyValue === 87) window.appState = mori.assocIn(window.appState, ['players', 1, 'direction'], 'top')
-  if (keyValue === 83) window.appState = mori.assocIn(window.appState, ['players', 1, 'direction'], 'bottom')
 }
 
 function resetAllPlayers () {
@@ -61,51 +42,23 @@ function updatePowerTimer (powerTimer, isPowerMode) {
   }
 }
 
-function Score (players) {
-  let playersArr = []
-  mori.each(players, function (p) {
-    let id = mori.get(p, 'id')
-    let score = mori.get(p, 'score')
-
-    playersArr.push(
-      <div className='score'>
-        <div>Player{id}</div><div>Score: {score}</div>
-      </div>
-    )
-  })
-
-  return (
-    <div className='score-board'>
-      {playersArr}
-    </div>
-  )
-}
-
-function boolNot (x) {
-  return !x
-}
-
-function toggle3D () {
-  window.appState = mori.updateIn(window.appState, ['is3D'], boolNot)
-}
-
 export function App (state) {
   let gameClass = 'game'
-  let class3D = null
   const players = mori.get(state, 'players')
   const powerTimer = mori.get(state, 'powerTimer')
   const isPowerMode = mori.get(state, 'isPowerMode')
-  const is3D = mori.get(state, 'is3D')
+  const isGameReady = mori.get(state, 'isGameReady')
 
   updatePowerTimer(powerTimer, isPowerMode)
 
   if (isPowerMode) gameClass = 'game power-mode'
-  if (is3D) class3D = 'is3d'
-  if (!is3D) class3D = null
+  if (!isGameReady) {
+    return
+  }
 
   return (
     <div className={gameClass}>
-      <div className={class3D}>
+      <div>
         <h2>Multiplayer Pacman</h2>
         {Score(players)}
         {Board(state)}

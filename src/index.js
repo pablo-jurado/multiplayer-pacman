@@ -108,7 +108,7 @@ let initialState = {
   players: [initialPlayer1, initialPlayer2, initialPlayer3, initialPlayer4],
   powerTimer: 0,
   isPowerMode: false,
-  is3D: false
+  isGameReady: false
 }
 
 window.appState = mori.toClj(initialState)
