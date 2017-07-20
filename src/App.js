@@ -2,7 +2,18 @@ import { version } from 'inferno'
 import Component from 'inferno-component'
 import mori from 'mori'
 import Board from './Board'
+import io from 'socket.io-client'
 import './App.css'
+
+var socket = io(`http://localhost:3100`)
+
+function testServer () {
+  socket.emit('test', 'hello')
+}
+
+socket.on('testBack', function (data) {
+  console.log(data)
+})
 
 export const log = (...args) => {
   console.log(...args.map(mori.toJs))
@@ -98,7 +109,7 @@ export function App (state) {
         <h2>Multiplayer Pacman</h2>
         {Score(players)}
         {Board(state)}
-        <button className='button-3d' onClick={toggle3D}>toggle 3D</button>
+        <button className='button-3d' onClick={testServer}>send test to server</button>
       </div>
     </div>
   )

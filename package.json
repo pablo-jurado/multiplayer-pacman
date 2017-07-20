@@ -5,13 +5,16 @@
   "dependencies": {
     "inferno": "^3.6.4",
     "inferno-component": "^3.6.4",
-    "mori": "^0.3.2"
+    "mori": "^0.3.2",
+    "express": "^4.15.2",
+    "socket.io": "^1.7.3"
   },
   "devDependencies": {
     "inferno-scripts": "4.1.0"
   },
   "scripts": {
-    "start": "inferno-scripts start",
+    "start": "nodemon index.js",
+    "webpack": "inferno-scripts start",
     "build": "inferno-scripts build",
     "test": "inferno-scripts test --env=jsdom",
     "eject": "inferno-scripts eject"
