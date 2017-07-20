@@ -1,5 +1,3 @@
-import { version } from 'inferno'
-import Component from 'inferno-component'
 import mori from 'mori'
 
 window.addEventListener('keydown', checkArrow)

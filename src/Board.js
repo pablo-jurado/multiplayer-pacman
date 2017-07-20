@@ -3,7 +3,7 @@ import Component from 'inferno-component'
 import mori from 'mori'
 import Tile from './Tile'
 import Player from './Player'
-import { maze, maze2 } from './maze'
+import { maze, maze2 } from './img/maze'
 import { log } from './App'
 
 function Board (state) {
