@@ -3,7 +3,6 @@ import Component from 'inferno-component'
 import mori from 'mori'
 import Board from './Board'
 import Score from './Score'
-import { testServer } from './Socket'
 
 export const log = (...args) => {
   console.log(...args.map(mori.toJs))
@@ -51,7 +50,6 @@ function Game (state) {
         <h2>Multiplayer Pacman</h2>
         {Score(players)}
         {Board(state)}
-        <button className='button-3d' onClick={testServer}>send test to server</button>
       </div>
     </div>
   )

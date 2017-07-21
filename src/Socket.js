@@ -2,10 +2,10 @@ import io from 'socket.io-client'
 
 var socket = io(`http://localhost:3100`)
 
-export function testServer () {
-  socket.emit('test', 'hello')
+export function setName (name) {
+  socket.emit('setName', name)
 }
 
-socket.on('testBack', function (data) {
+socket.on('gotUser', function (data) {
   console.log(data)
 })

@@ -12,10 +12,10 @@ app.use(express.static(path.join(__dirname, '/build/')))
 io.on('connection', function (socket) {
   console.log('a user connected')
 
-  socket.on('test', function (data) {
-    console.log(data)
+  socket.on('setName', function (name) {
+    users.push(name)
 
-    socket.emit('testBack', data + ' from the server')
+    socket.emit('gotUser', 'got user ' + users + ' on the server')
   })
 })
 
