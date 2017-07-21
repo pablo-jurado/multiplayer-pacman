@@ -5,17 +5,24 @@ var http = require('http').Server(app)
 var io = require('socket.io')(http)
 var port = process.env.PORT || 3100
 
-var users = []
-
+var usersArr = []
 app.use(express.static(path.join(__dirname, '/build/')))
 
 io.on('connection', function (socket) {
   console.log('a user connected')
 
-  socket.on('setName', function (name) {
-    users.push(name)
+  socket.on('registerUser', function (user) {
+    let newUser = JSON.parse(user)
+    let numOfUsers = usersArr.length
+    if (numOfUsers < 4) {
+      newUser.id = numOfUsers
+      usersArr.push(newUser)
+      socket.emit('gotUser', JSON.stringify(usersArr))
+    }
+  })
 
-    socket.emit('gotUser', 'got user ' + users + ' on the server')
+  socket.on('getCurrentUsers', function () {
+    socket.emit('gotUser', JSON.stringify(usersArr))
   })
 })
 
