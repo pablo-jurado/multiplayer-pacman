@@ -40,9 +40,9 @@ function Game (state) {
   updatePowerTimer(powerTimer, isPowerMode)
 
   if (isPowerMode) gameClass = 'game power-mode'
-  if (!isGameReady) {
-    return
-  }
+  // if (!isGameReady) {
+  //   return
+  // }
 
   return (
     <div className={gameClass}>

@@ -3,6 +3,7 @@ import Component from 'inferno-component'
 import mori from 'mori'
 import Game from './Game'
 import { setName } from './Socket'
+import playerSrc from './img/player.png'
 import './App.css'
 
 export const log = (...args) => {
@@ -11,6 +12,7 @@ export const log = (...args) => {
 
 let userName = ''
 let selectChareacter = null
+let isPlayerReady = null
 
 function submitUserName (e) {
   e.preventDefault()
@@ -22,18 +24,22 @@ function updateName (e) {
   userName = e.target.value
 }
 
+function selectPlayer (e) {
+  console.log(e.target.id)
+  selectChareacter = false
+  isPlayerReady = true
+}
+
 function Character () {
   return (
     <div className='home'>
       <h2>Welcome {userName}</h2>
       <p>Please select your player</p>
-      <div>
-        <div>player 1</div>
-        <div>player 2</div>
-      </div>
-      <div>
-        <div>player 3</div>
-        <div>player 4</div>
+      <div className='preview' onClick={selectPlayer}>
+        <img id='player1' src={playerSrc} alt='player' />
+        <img id='player2' src={playerSrc} alt='player' />
+        <img id='player3' src={playerSrc} alt='player' />
+        <img id='player4' src={playerSrc} alt='player' />
       </div>
     </div>
   )
@@ -53,8 +59,8 @@ function homePage (name) {
 
 export function App (state) {
   let page = homePage(userName)
-  const isGameReady = mori.get(state, 'isGameReady')
-  // if (isGameReady) page Game(state)
   if (selectChareacter) page = Character()
+  if (isPlayerReady) page = Game(state)
+
   return page
 }

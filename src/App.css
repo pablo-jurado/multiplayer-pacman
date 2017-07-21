@@ -162,6 +162,20 @@ body {
 
 }
 
+.preview {
+  display: flex;
+}
+
+.preview img {
+  width: 20%;
+  height: 20%;
+  margin: 2.5%;
+}
+
+.preview img:hover {
+  opacity: 0.5;
+}
+
 @keyframes animate-maze {
   0%   {fill: purple;}
   50%  {fill: yellow;}

@@ -94,7 +94,8 @@ function createPlayer (direction, x, y) {
     isWeak: false,
     hasPower: false,
     isDead: false,
-    count: 1
+    count: 1,
+    isGameReady: false
   }
 }
 
@@ -109,8 +110,7 @@ let initialState = {
   // players: [initialPlayer1, initialPlayer2, initialPlayer3, initialPlayer4],
   players: [],
   powerTimer: 0,
-  isPowerMode: false,
-  isGameReady: false
+  isPowerMode: false
 }
 
 window.appState = mori.toClj(initialState)
