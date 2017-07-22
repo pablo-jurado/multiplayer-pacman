@@ -15,7 +15,9 @@ function checkCollision (x, y, direction) {
 }
 
 function checkTunnel (x, y, dir, board, id) {
-  let xMax = 27
+  const xrow = mori.get(board, 0)
+  const xMax = mori.count(xrow) - 1
+
   if (x === 0 && dir === 'left') window.appState = mori.assocIn(window.appState, ['players', id, 'x'], xMax)
   if (x === (xMax) && dir === 'right') window.appState = mori.assocIn(window.appState, ['players', id, 'x'], 0)
 }
@@ -39,7 +41,7 @@ function weakenAllPlayers (id) {
   })
 }
 
-function movePlayer (id, direction, x, y, hasPower) {
+function movePlayer (id, direction, x, y, hasPower, board) {
   let collisionVal = checkCollision(x, y, direction)
 
   if (collisionVal === 'p0' || collisionVal === 'p1' ||
@@ -56,9 +58,14 @@ function movePlayer (id, direction, x, y, hasPower) {
     // reset board value to empty
     window.appState = mori.assocIn(window.appState, ['board', y, x], 0)
 
-    if (direction === 'right' && x < 27) x += 1
+    // board limits
+    const yMax = mori.count(board) - 1
+    const xRow = mori.get(board, 0)
+    const xMax = mori.count(xRow) - 1
+
+    if (direction === 'right' && x < xMax) x += 1
     if (direction === 'left' && x > 0) x -= 1
-    if (direction === 'bottom' && y < 30) y += 1
+    if (direction === 'bottom' && y < yMax) y += 1
     if (direction === 'top' && y > 0) y -= 1
 
     // number 3 is a power dot
@@ -96,7 +103,7 @@ function Player (player, board) {
   let count = mori.get(player, 'count')
   let classVal = 'player player' + id
 
-  if (count === speed) movePlayer(id, direction, x, y, hasPower)
+  if (count === speed) movePlayer(id, direction, x, y, hasPower, board)
   updateRenderFrame(id, count, speed)
 
   if (!hasPower && speed !== 4) window.appState = mori.assocIn(window.appState, ['players', id, 'speed'], 4)
@@ -106,7 +113,7 @@ function Player (player, board) {
   }
   if (isWeak) classVal += ' isWeak'
   if (isDead) classVal += ' dead'
-  
+
   var xPercent = x * 100 / 28
   var yPercent = y * 100 / 31
 

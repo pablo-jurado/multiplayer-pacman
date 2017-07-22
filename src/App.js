@@ -32,7 +32,7 @@ function updateName (instance, event) {
   instance.setState({ name: event.target.value })
 }
 
-function savetUserName (instance, event)  {
+function savetUserName (instance, event) {
   event.preventDefault()
   instance.setState({ isNameSet: true })
 }
@@ -48,6 +48,7 @@ function startGame (userData) {
     users.push(createPlayer(user.id, user.name, user.color))
     if (window.mainUserColor === user.color) addKeyListener(user.id)
   })
+  // need to save user on server
   window.appState = mori.assoc(window.appState, 'players', mori.toClj(users))
   isGameReady = true
 }
@@ -71,7 +72,7 @@ class HomePage extends Component {
       })
       // checks if there is 4 players to start the game
       // TODO: need to add timer to start the games anyways
-      if (userData.length === 4) startGame(userData)
+      if (userData.length === 1) startGame(userData)
     })
     if (!this.state.isNameSet) {
       return (

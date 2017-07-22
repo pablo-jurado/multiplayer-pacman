@@ -113,7 +113,7 @@ export function createPlayer (id, name, color,) {
     id,
     name,
     color,
-    speed: 4,
+    speed: 1,
     score: 0,
     isWeak: false,
     hasPower: false,
