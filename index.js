@@ -17,7 +17,7 @@ function uuid () {
     s4() + '-' + s4() + s4() + s4()
 }
 
-const initialState = {
+let initialState = {
   players: {}
 }
 
@@ -33,9 +33,9 @@ io.on('connection', function (socket) {
     let newUser = JSON.parse(user)
     numOfUsers += 1
     if (numOfUsers < 5) {
-      const newUserID = uuid()
+      const newUserKey = uuid()
       newUser.id = numOfUsers
-      initialState.players = {[newUserID]: newUser}
+      initialState.players[newUserKey] = newUser
       // playersArr.push(newUser)
       socket.emit('gotUser', JSON.stringify(newUser))
     }

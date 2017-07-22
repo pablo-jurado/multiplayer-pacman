@@ -20,13 +20,15 @@ function selectPlayer (instance, event) {
   let color = event.target.id
   if (isColorSelected || color === 'grey') return
   isColorSelected = true
-  // console.log('local user color', color)
   window.mainUserColor = color
   instance.setState({ color: color })
+  // save user data on server
   let userData = JSON.stringify(instance.state)
   socket.emit('registerUser', userData)
+  // gets users data and unique ID from server
   socket.on('gotUser', function (user) {
     // console.log('got', JSON.parse(user))
+    // TODO: need to add key event listener here
   })
 }
 
@@ -45,6 +47,16 @@ function getAllColors (color) {
 }
 
 function startGame (userData) {
+  let players = userData.players
+
+  for (var key in players) {
+    console.log('id', players[key].id)
+    console.log('name', players[key].name)
+    console.log('color', players[key].color)
+  }
+
+  // TODO: crete users with the new data structure
+
   // let users = []
   // userData.forEach(function (user) {
   //   users.push(createPlayer(user.id, user.name, user.color))
@@ -68,22 +80,19 @@ class HomePage extends Component {
   render () {
     socket.emit('getCurrentUsers')
     socket.on('gotAllUser', function (users) {
+      let userCount = 0
       let userData = JSON.parse(users)
       let players = userData.players
-
+      // if a color is used will erase from colorsLeft
       for (var key in players) {
         let color = players[key].color
         let idx = colorsLeft.indexOf(color)
         colorsLeft[idx] = null
+        userCount += 1
       }
-
-      // userData.forEach(function (user) {
-      //   colorsLeft.push(user.color)
-      // })
-
-      // checks if there is 4 players to start the game
+      // checks num of players to start the game
       // TODO: need to add timer to start the games anyways
-      // if (userData.length === numberOfPlayers) startGame(userData)
+      if (userCount === numberOfPlayers) startGame(userData)
     })
     if (!this.state.isNameSet) {
       return (
