@@ -1,5 +1,6 @@
 import { render } from 'inferno'
-import { App, log } from './App'
+import App from './App'
+import { deepCopy, log } from './helpers'
 import mori from 'mori'
 
 // -----------------------------------------------------------------------------
@@ -11,10 +12,6 @@ import mori from 'mori'
 // 1 wall
 // 2 dot
 // 3 pellet
-
-function deepCopy (thing) {
-  return JSON.parse(JSON.stringify(thing))
-}
 
 const emptyBoard =
   [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],

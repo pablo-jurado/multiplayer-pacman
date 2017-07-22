@@ -2,30 +2,32 @@ import { version, linkEvent } from 'inferno'
 import Component from 'inferno-component'
 import mori from 'mori'
 import Game from './Game'
-import { registerUser, socket } from './Socket'
+import { socket } from './Socket'
 import { addKeyListener } from './KeyHandler'
 import { createPlayer } from './index'
+import { log } from './helpers'
 import io from 'socket.io-client'
 import playerSrc from './img/player.png'
 import './App.css'
 
-export const log = (...args) => {
-  console.log(...args.map(mori.toJs))
-}
+const numberOfPlayers = 2
 
 let isGameReady = null
 let isColorSelected = null
-let colorsTaken = []
+let colorsLeft = ['green', 'red', 'blue', 'purple']
 
 function selectPlayer (instance, event) {
   let color = event.target.id
   if (isColorSelected || color === 'grey') return
   isColorSelected = true
-  console.log('local user color', color)
+  // console.log('local user color', color)
   window.mainUserColor = color
   instance.setState({ color: color })
   let userData = JSON.stringify(instance.state)
-  registerUser(userData)
+  socket.emit('registerUser', userData)
+  socket.on('gotUser', function (user) {
+    // console.log('got', JSON.parse(user))
+  })
 }
 
 function updateName (instance, event) {
@@ -38,19 +40,19 @@ function savetUserName (instance, event) {
 }
 
 function getAllColors (color) {
-  if (colorsTaken.indexOf(color) !== -1) return <img id='grey' src={playerSrc} alt={color} />
-  return <img id={color} src={playerSrc} alt={color} />
+  if (color) return <img id={color} src={playerSrc} alt={color} />
+  return <img id='grey' src={playerSrc} alt={color} />
 }
 
 function startGame (userData) {
-  let users = []
-  userData.forEach(function (user) {
-    users.push(createPlayer(user.id, user.name, user.color))
-    if (window.mainUserColor === user.color) addKeyListener(user.id)
-  })
+  // let users = []
+  // userData.forEach(function (user) {
+  //   users.push(createPlayer(user.id, user.name, user.color))
+  //   if (window.mainUserColor === user.color) addKeyListener(user.id)
+  // })
   // need to save user on server
-  window.appState = mori.assoc(window.appState, 'players', mori.toClj(users))
-  isGameReady = true
+  // window.appState = mori.assoc(window.appState, 'players', mori.toClj(users))
+  // isGameReady = true
 }
 
 class HomePage extends Component {
@@ -65,14 +67,23 @@ class HomePage extends Component {
   }
   render () {
     socket.emit('getCurrentUsers')
-    socket.on('gotUser', function (users) {
+    socket.on('gotAllUser', function (users) {
       let userData = JSON.parse(users)
-      userData.forEach(function (user) {
-        colorsTaken.push(user.color)
-      })
+      let players = userData.players
+
+      for (var key in players) {
+        let color = players[key].color
+        let idx = colorsLeft.indexOf(color)
+        colorsLeft[idx] = null
+      }
+
+      // userData.forEach(function (user) {
+      //   colorsLeft.push(user.color)
+      // })
+
       // checks if there is 4 players to start the game
       // TODO: need to add timer to start the games anyways
-      if (userData.length === 1) startGame(userData)
+      // if (userData.length === numberOfPlayers) startGame(userData)
     })
     if (!this.state.isNameSet) {
       return (
@@ -85,8 +96,7 @@ class HomePage extends Component {
         </div>
       )
     } else {
-      const colors = ['green', 'red', 'blue', 'purple']
-      const allColors = colors.map(getAllColors)
+      const allColors = colorsLeft.map(getAllColors)
       return (
         <div className='home'>
           <h2>Welcome {this.state.name}</h2>
@@ -100,7 +110,9 @@ class HomePage extends Component {
   }
 }
 
-export function App (state) {
+function App (state) {
   if (isGameReady) return Game(state)
   return <HomePage />
 }
+
+export default App

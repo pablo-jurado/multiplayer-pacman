@@ -5,7 +5,25 @@ var http = require('http').Server(app)
 var io = require('socket.io')(http)
 var port = process.env.PORT || 3100
 
-var newUsersArr = []
+var mori = require('mori')
+
+function uuid () {
+  function s4 () {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1)
+  }
+  return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+    s4() + '-' + s4() + s4() + s4()
+}
+
+const initialState = {
+  players: {}
+}
+
+// let playersArr = []
+
+let numOfUsers = 0
 app.use(express.static(path.join(__dirname, '/build/')))
 
 io.on('connection', function (socket) {
@@ -13,16 +31,18 @@ io.on('connection', function (socket) {
 
   socket.on('registerUser', function (user) {
     let newUser = JSON.parse(user)
-    let numOfUsers = newUsersArr.length
-    if (numOfUsers < 4) {
+    numOfUsers += 1
+    if (numOfUsers < 5) {
+      const newUserID = uuid()
       newUser.id = numOfUsers
-      newUsersArr.push(newUser)
-      socket.emit('gotUser', JSON.stringify(newUsersArr))
+      initialState.players = {[newUserID]: newUser}
+      // playersArr.push(newUser)
+      socket.emit('gotUser', JSON.stringify(newUser))
     }
   })
 
   socket.on('getCurrentUsers', function () {
-    socket.emit('gotUser', JSON.stringify(newUsersArr))
+    socket.emit('gotAllUser', JSON.stringify(initialState))
   })
 
   socket.on('sendUserMove', function (data) {
