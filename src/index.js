@@ -82,13 +82,37 @@ const board1 =
     [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]
 
-function createPlayer (direction, x, y) {
+export function createPlayer (id, name, color,) {
+  let direction, x, y = null
+
+  if (id === 0) {
+    direction = 'right'
+    x = 2
+    y = 1
+  }
+  if (id === 1) {
+    direction = 'left'
+    x = 27
+    y = 1
+  }
+  if (id === 2) {
+    direction = 'right'
+    x = 1
+    y = 29
+  }
+  if (id === 3) {
+    direction = 'left'
+    x = 27
+    y = 29
+  }
+
   return {
     direction,
     x,
     y,
-    id: null,
-    name: null,
+    id,
+    name,
+    color,
     speed: 4,
     score: 0,
     isWeak: false,
@@ -98,11 +122,6 @@ function createPlayer (direction, x, y) {
     isGameReady: false
   }
 }
-
-// const initialPlayer1 = createPlayer(0, 'bottom', 6, 1)
-// const initialPlayer2 = createPlayer(1, 'bottom', 6, 16)
-// const initialPlayer3 = createPlayer(2, 'right', 1, 29)
-// const initialPlayer4 = createPlayer(3, 'left', 26, 29)
 
 let initialState = {
   board: deepCopy(board1),

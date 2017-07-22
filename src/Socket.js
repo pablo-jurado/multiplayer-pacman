@@ -1,11 +1,11 @@
 import io from 'socket.io-client'
 
-var socket = io(`http://localhost:3100`)
+export const socket = io(`http://localhost:3100`)
 
-export function setName (name) {
-  socket.emit('setName', name)
+export function registerUser (user) {
+  socket.emit('registerUser', user)
 }
 
-socket.on('gotUser', function (data) {
+socket.on('gotAllUsers', function (data) {
   console.log(data)
 })
