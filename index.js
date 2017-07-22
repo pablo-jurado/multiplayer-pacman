@@ -24,6 +24,10 @@ io.on('connection', function (socket) {
   socket.on('getCurrentUsers', function () {
     socket.emit('gotUser', JSON.stringify(newUsersArr))
   })
+
+  socket.on('sendUserMove', function (data) {
+    socket.emit('gotUserMove', data)
+  })
 })
 
 http.listen(port, function () {
