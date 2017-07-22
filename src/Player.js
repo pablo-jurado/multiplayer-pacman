@@ -70,7 +70,7 @@ function movePlayer (id, direction, x, y, hasPower, board) {
 
     // number 3 is a power dot
     if (collisionVal === 3) {
-      // if the player eats a a power dot assing extra points and eating power
+      // if the player eats a power dot gets extra points and eating power
       window.appState = mori.updateIn(window.appState, ['players', id, 'score'], extraPoints)
       window.appState = mori.assocIn(window.appState, ['players', id, 'hasPower'], true)
       // start game power mode
@@ -102,20 +102,25 @@ function Player (player, board) {
   let y = mori.get(player, 'y')
   let count = mori.get(player, 'count')
   let classVal = 'player player' + id
+  const yMax = mori.count(board)
+  const xRow = mori.count(mori.get(board, 0))
 
   if (count === speed) movePlayer(id, direction, x, y, hasPower, board)
   updateRenderFrame(id, count, speed)
 
-  if (!hasPower && speed !== 4) window.appState = mori.assocIn(window.appState, ['players', id, 'speed'], 4)
+  // change player speed depending on is status
+  if (isWeak) window.appState = mori.assocIn(window.appState, ['players', id, 'speed'], 4)
   if (hasPower) {
     classVal += ' hasPower'
     window.appState = mori.assocIn(window.appState, ['players', id, 'speed'], 2)
   }
+  if (!isWeak && !hasPower) window.appState = mori.assocIn(window.appState, ['players', id, 'speed'], 3)
+
   if (isWeak) classVal += ' isWeak'
   if (isDead) classVal += ' dead'
 
-  var xPercent = x * 100 / 28
-  var yPercent = y * 100 / 31
+  var xPercent = x * 100 / xRow
+  var yPercent = y * 100 / yMax
 
   let styles = {
     left: xPercent + '%',
@@ -124,7 +129,7 @@ function Player (player, board) {
   }
 
   checkTunnel(x, y, direction, board, id)
-  if (x <= 0 || x >= 27) styles.display = 'none'
+  if (x <= 0 || x >= xRow - 1) styles.display = 'none'
 
   return (
     <div className={classVal} style={styles} />
