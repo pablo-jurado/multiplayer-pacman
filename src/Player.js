@@ -1,7 +1,7 @@
 import { version } from 'inferno'
 import Component from 'inferno-component'
 import mori from 'mori'
-import { log } from './App'
+import { log } from './helpers'
 
 function checkCollision (x, y, direction) {
   let value = null
@@ -92,6 +92,8 @@ function movePlayer (id, direction, x, y, hasPower, board) {
 }
 
 function Player (player, board) {
+  log(player)
+  return
   const id = mori.get(player, 'id')
   const direction = mori.get(player, 'direction')
   const speed = mori.get(player, 'speed')

@@ -1,16 +1,12 @@
-import { version } from 'inferno'
-import Component from 'inferno-component'
 import mori from 'mori'
 import Tile from './Tile'
 import Player from './Player'
 import { maze, maze2 } from './img/maze'
-import { log } from './App'
 
 function Board (state) {
   const board = mori.get(state, 'board')
   const numRows = mori.count(board)
-  const players = mori.get(state, 'players')
-  const numPlayers = mori.count(players)
+  const players = mori.vals(mori.get(state, 'players'))
 
   let rows = []
   for (let i = 0; i < numRows; i++) {
@@ -19,10 +15,9 @@ function Board (state) {
   }
 
   let playersArr = []
-  for (let i = 0; i < numPlayers; i++) {
-    const player = mori.get(players, i)
-    playersArr.push(Player(player, board))
-  }
+  mori.each(players, function (p) {
+    playersArr.push(Player(p, board))
+  })
   return (
     <div className='board-wrapper'>
       <div className='board'>

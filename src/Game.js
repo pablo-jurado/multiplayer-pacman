@@ -4,10 +4,6 @@ import mori from 'mori'
 import Board from './Board'
 import Score from './Score'
 
-export const log = (...args) => {
-  console.log(...args.map(mori.toJs))
-}
-
 function resetAllPlayers () {
   let players = mori.get(window.appState, 'players')
   mori.each(players, function (p) {
@@ -31,9 +27,6 @@ function updatePowerTimer (powerTimer, isPowerMode) {
 }
 
 function Game (state) {
-  // TODO: update to work with new data structure
-  // log(state)
-
   let gameClass = 'game'
   const players = mori.get(state, 'players')
   const powerTimer = mori.get(state, 'powerTimer')
@@ -48,7 +41,7 @@ function Game (state) {
       <div>
         <h2>Multiplayer Pacman</h2>
         {Score(players)}
-        {/* {Board(state)} */}
+        {Board(state)}
       </div>
     </div>
   )
