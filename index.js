@@ -32,7 +32,8 @@ io.on('connection', function (socket) {
     numOfUsers += 1
     if (numOfUsers < 5) {
       const newUserKey = uuid()
-      newUser.id = numOfUsers
+      newUser.index = numOfUsers
+      newUser.id = newUserKey
       initialState.players[newUserKey] = newUser
       socket.emit('gotUser', JSON.stringify(newUser))
     }

@@ -79,25 +79,25 @@ const board1 =
     [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]
 
-export function createPlayer (id, name, color) {
+export function createPlayer (id, index, name, color) {
   let direction, x, y = null
 
-  if (id === 0) {
+  if (index === 0) {
     direction = 'right'
     x = 2
     y = 1
   }
-  if (id === 1) {
+  if (index === 1) {
     direction = 'left'
     x = 27
     y = 1
   }
-  if (id === 2) {
+  if (index === 2) {
     direction = 'right'
     x = 1
     y = 29
   }
-  if (id === 3) {
+  if (index === 3) {
     direction = 'left'
     x = 27
     y = 29
@@ -108,6 +108,7 @@ export function createPlayer (id, name, color) {
     x,
     y,
     id,
+    index,
     name,
     color,
     speed: 3,
@@ -146,7 +147,7 @@ const rootEl = document.getElementById('app')
 // Render Tic (this is an alternative to the render loop)
 // -----------------------------------------------------------------------------
 
-const renderTime = 1000
+const renderTime = 100
 let renderNum = 0
 
 function renderNow () {

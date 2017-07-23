@@ -45,25 +45,25 @@ body {
   /*box-shadow: 4px 6px 3px #1f1f1f;*/
 }
 
-.player0 { background-image: url('img/player1.svg');}
-.player1 { background-image: url('img/player2.svg');}
-.player2 { background-image: url('img/player3.svg');}
-.player3 { background-image: url('img/player4.svg');}
+.player.red { background-image: url('img/player1.svg');}
+.player.green { background-image: url('img/player2.svg');}
+.player.blue { background-image: url('img/player3.svg');}
+.player.purple { background-image: url('img/player4.svg');}
 
-.player0.isWeak { opacity: 0.3;}
-.player1.isWeak { opacity: 0.3;}
-.player2.isWeak { opacity: 0.3;}
-.player3.isWeak { opacity: 0.3;}
+.player.isWeak { opacity: 0.3;}
+.player.isWeak { opacity: 0.3;}
+.player.isWeak { opacity: 0.3;}
+.player.isWeak { opacity: 0.3;}
 
-.player0.hasPower { animation-name: power-animation; animation-duration: 1.5s; animation-iteration-count: infinite;}
-.player1.hasPower { animation-name: power-animation; animation-duration: 1.5s; animation-iteration-count: infinite;}
-.player2.hasPower { animation-name: power-animation; animation-duration: 1.5s; animation-iteration-count: infinite;}
-.player3.hasPower { animation-name: power-animation; animation-duration: 1.5s; animation-iteration-count: infinite;}
+.player.hasPower { animation-name: power-animation; animation-duration: 1.5s; animation-iteration-count: infinite;}
+.player.hasPower { animation-name: power-animation; animation-duration: 1.5s; animation-iteration-count: infinite;}
+.player.hasPower { animation-name: power-animation; animation-duration: 1.5s; animation-iteration-count: infinite;}
+.player.hasPower { animation-name: power-animation; animation-duration: 1.5s; animation-iteration-count: infinite;}
 
-.player0.dead { display: none;}
-.player1.dead { display: none;}
-.player2.dead { display: none;}
-.player3.dead { display: none;}
+.player.dead { display: none;}
+.player.dead { display: none;}
+.player.dead { display: none;}
+.player.dead { display: none;}
 
 @keyframes power-animation {
     0%   {box-shadow: 0px 0px 0px #fff;}

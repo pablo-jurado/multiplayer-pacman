@@ -8,12 +8,12 @@ function Score (players) {
   let playersArr = []
 
   mori.each(playerVal, function (p) {
-    let id = mori.get(p, 'id')
+    let name = mori.get(p, 'name')
     let score = mori.get(p, 'score')
 
     playersArr.push(
       <div className='score'>
-        <div>Player{id}</div><div>Score: {score}</div>
+        <div>Player{name}</div><div>Score: {score}</div>
       </div>
     )
   })

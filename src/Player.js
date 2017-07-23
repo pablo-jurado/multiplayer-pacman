@@ -92,9 +92,8 @@ function movePlayer (id, direction, x, y, hasPower, board) {
 }
 
 function Player (player, board) {
-  log(player)
-  return
   const id = mori.get(player, 'id')
+  const color = mori.get(player, 'color')
   const direction = mori.get(player, 'direction')
   const speed = mori.get(player, 'speed')
   const hasPower = mori.get(player, 'hasPower')
@@ -103,7 +102,7 @@ function Player (player, board) {
   let x = mori.get(player, 'x')
   let y = mori.get(player, 'y')
   let count = mori.get(player, 'count')
-  let classVal = 'player player' + id
+  let classVal = 'player ' + color
   const yMax = mori.count(board)
   const xRow = mori.count(mori.get(board, 0))
 

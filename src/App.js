@@ -51,7 +51,7 @@ function startGame (userData) {
   let statePlayers = {}
 
   for (var key in players) {
-    const newPlayer = createPlayer(players[key].id, players[key].name, players[key])
+    const newPlayer = createPlayer(players[key].id, players[key].index, players[key].name, players[key].color)
     statePlayers[key] = newPlayer
   }
   // TODO: need to save user on server
