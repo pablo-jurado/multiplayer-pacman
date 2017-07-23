@@ -21,8 +21,6 @@ let initialState = {
   players: {}
 }
 
-// let playersArr = []
-
 let numOfUsers = 0
 app.use(express.static(path.join(__dirname, '/build/')))
 
@@ -36,7 +34,6 @@ io.on('connection', function (socket) {
       const newUserKey = uuid()
       newUser.id = numOfUsers
       initialState.players[newUserKey] = newUser
-      // playersArr.push(newUser)
       socket.emit('gotUser', JSON.stringify(newUser))
     }
   })

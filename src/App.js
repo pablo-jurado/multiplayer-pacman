@@ -10,7 +10,7 @@ import io from 'socket.io-client'
 import playerSrc from './img/player.png'
 import './App.css'
 
-const numberOfPlayers = 2
+const numberOfPlayers = 1
 
 let isGameReady = null
 let isColorSelected = null

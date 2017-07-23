@@ -1,10 +1,13 @@
 import { version } from 'inferno'
 import Component from 'inferno-component'
+import { log } from './helpers'
 import mori from 'mori'
 
 function Score (players) {
+  const playerVal = mori.vals(players)
   let playersArr = []
-  mori.each(players, function (p) {
+
+  mori.each(playerVal, function (p) {
     let id = mori.get(p, 'id')
     let score = mori.get(p, 'score')
 

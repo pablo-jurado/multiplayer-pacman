@@ -32,28 +32,23 @@ function updatePowerTimer (powerTimer, isPowerMode) {
 
 function Game (state) {
   // TODO: update to work with new data structure
-  console.log('game!!!')
-  return
+  // log(state)
 
   let gameClass = 'game'
   const players = mori.get(state, 'players')
   const powerTimer = mori.get(state, 'powerTimer')
   const isPowerMode = mori.get(state, 'isPowerMode')
-  const isGameReady = mori.get(state, 'isGameReady')
 
   updatePowerTimer(powerTimer, isPowerMode)
 
   if (isPowerMode) gameClass = 'game power-mode'
-  // if (!isGameReady) {
-  //   return
-  // }
 
   return (
     <div className={gameClass}>
       <div>
         <h2>Multiplayer Pacman</h2>
         {Score(players)}
-        {Board(state)}
+        {/* {Board(state)} */}
       </div>
     </div>
   )
