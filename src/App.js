@@ -48,23 +48,15 @@ function getAllColors (color) {
 
 function startGame (userData) {
   let players = userData.players
+  let statePlayers = {}
 
   for (var key in players) {
-    console.log('id', players[key].id)
-    console.log('name', players[key].name)
-    console.log('color', players[key].color)
+    const newPlayer = createPlayer(players[key].id, players[key].name, players[key])
+    statePlayers[key] = newPlayer
   }
-
-  // TODO: crete users with the new data structure
-
-  // let users = []
-  // userData.forEach(function (user) {
-  //   users.push(createPlayer(user.id, user.name, user.color))
-  //   if (window.mainUserColor === user.color) addKeyListener(user.id)
-  // })
-  // need to save user on server
-  // window.appState = mori.assoc(window.appState, 'players', mori.toClj(users))
-  // isGameReady = true
+  // TODO: need to save user on server
+  window.appState = mori.assoc(window.appState, 'players', mori.toClj(statePlayers))
+  isGameReady = true
 }
 
 class HomePage extends Component {

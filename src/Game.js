@@ -31,6 +31,10 @@ function updatePowerTimer (powerTimer, isPowerMode) {
 }
 
 function Game (state) {
+  // TODO: update to work with new data structure
+  console.log('game!!!')
+  return
+
   let gameClass = 'game'
   const players = mori.get(state, 'players')
   const powerTimer = mori.get(state, 'powerTimer')

@@ -23,7 +23,7 @@ export function addKeyListener (id) {
     if (keyValue === down) window.appState = mori.assocIn(window.appState, ['players', id, 'direction'], 'bottom')
 
     // TODO: in each move it should fetch data to server
-    // the event gets fired to many times so needs to be debounced
+    // change debounced to throttle
     socketDebounceCall(player)
   }
 }

@@ -1,6 +1,6 @@
 import { render } from 'inferno'
 import App from './App'
-import { deepCopy, log } from './helpers'
+import { deepCopy } from './helpers'
 import mori from 'mori'
 
 // -----------------------------------------------------------------------------
@@ -79,7 +79,7 @@ const board1 =
     [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]
 
-export function createPlayer (id, name, color,) {
+export function createPlayer (id, name, color) {
   let direction, x, y = null
 
   if (id === 0) {
@@ -123,8 +123,7 @@ export function createPlayer (id, name, color,) {
 let initialState = {
   board: deepCopy(board1),
   // board: deepCopy(emptyBoard),
-  // players: [initialPlayer1, initialPlayer2, initialPlayer3, initialPlayer4],
-  players: [],
+  players: {},
   powerTimer: 0,
   isPowerMode: false
 }
