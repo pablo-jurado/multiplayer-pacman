@@ -5,7 +5,7 @@ var http = require('http').Server(app)
 var io = require('socket.io')(http)
 var port = process.env.PORT || 3100
 
-var mori = require('mori')
+// var mori = require('mori')
 
 function uuid () {
   function s4 () {
@@ -16,13 +16,6 @@ function uuid () {
   return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
     s4() + '-' + s4() + s4() + s4()
 }
-
-// let initialState = {
-//   board: null,
-//   players: {},
-//   powerTimer: 0,
-//   isPowerMode: false
-// }
 
 let players = {}
 
@@ -48,11 +41,23 @@ io.on('connection', function (socket) {
     socket.emit('gotAllUser', JSON.stringify(players))
   })
 
-  socket.on('sendUserMove', function (data) {
+  socket.on('createPlayers', function (data) {
+    let allPlayers = JSON.parse(data)
+    players = allPlayers
+    socket.emit('updateAllPlayers', JSON.stringify(players))
+  })
+
+  socket.on('updateUser', function (data) {
     let user = JSON.parse(data)
     players[user.id] = user
-    socket.emit('gotUserMove', JSON.stringify(players))
   })
+
+  function sendUpdate () {
+    socket.emit('serverUpdate', JSON.stringify(players))
+  }
+
+  const updateTime = 100
+  setInterval(sendUpdate, updateTime)
 })
 
 http.listen(port, function () {

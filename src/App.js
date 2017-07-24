@@ -51,9 +51,8 @@ function startGame (players) {
   for (var key in players) {
     const newPlayer = createPlayer(players[key].id, players[key].index, players[key].name, players[key].color)
     statePlayers[key] = newPlayer
-    socket.emit('sendUserMove', JSON.stringify(newPlayer))
   }
-  // TODO: need to save user on server
+  socket.emit('createPlayers', JSON.stringify(statePlayers))
   isGameReady = true
 }
 

@@ -14,9 +14,9 @@ export function addKeyListener (player) {
     const right = 39
     const down = 40
 
-    let player = mori.getIn(window.appState, ['players', id])
+    // let player = mori.getIn(window.appState, ['players', id])
     let currentState = window.appState
-    let newState = null
+    let newState = window.appState
 
     if (keyValue === left) newState = mori.assocIn(currentState, ['players', id, 'direction'], 'left')
     if (keyValue === right) newState = mori.assocIn(currentState, ['players', id, 'direction'], 'right')
@@ -31,7 +31,7 @@ export function addKeyListener (player) {
 }
 
 var socketDebounceCall = debounce(function (player) {
-  socket.emit('sendUserMove', JSON.stringify(player))
+  socket.emit('updateUser', JSON.stringify(player))
 }, 50)
 
 // socket.on('gotUserMove', function (data) {

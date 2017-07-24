@@ -1,5 +1,5 @@
 import { render } from 'inferno'
-import { deepCopy } from './helpers'
+import { deepCopy, log } from './helpers'
 import { socket } from './Socket'
 import App from './App'
 import mori from 'mori'
@@ -90,7 +90,7 @@ export function createPlayer (id, index, name, color) {
   }
   if (index === 1) {
     direction = 'left'
-    x = 27
+    x = 26
     y = 1
   }
   if (index === 2) {
@@ -100,7 +100,7 @@ export function createPlayer (id, index, name, color) {
   }
   if (index === 3) {
     direction = 'left'
-    x = 27
+    x = 26
     y = 29
   }
 
@@ -132,11 +132,21 @@ let initialState = {
 
 window.appState = mori.toClj(initialState)
 
-socket.on('gotUserMove', function (data) {
-  // let player = mori.toClj(JSON.parse(data))
-  // let id = mori.get(player, 'id')
-  let players = mori.toClj(JSON.parse(data))
+socket.on('updateAllPlayers', function (playersServer) {
+  const players = mori.toClj(JSON.parse(playersServer))
   window.appState = mori.assocIn(window.appState, ['players'], players)
+})
+
+socket.on('serverUpdate', function (playersServer) {
+  const players = JSON.parse(playersServer)
+
+  for (var key in players) {
+    let id = players[key].id
+    let direction = players[key].direction
+
+    window.appState = mori.assocIn(window.appState, ['players', id, 'direction'], direction)
+  }
+  renderNow(window.appState)
 })
 
 // -----------------------------------------------------------------------------
@@ -155,14 +165,6 @@ const rootEl = document.getElementById('app')
 // Render Tic (this is an alternative to the render loop)
 // -----------------------------------------------------------------------------
 
-const renderTime = 100
-let renderNum = 0
-
-function renderNow () {
-  // console.log('render', renderNum += 1)
-  render(App(window.appState), rootEl)
+function renderNow (state) {
+  render(App(state), rootEl)
 }
-
-setInterval(renderNow, renderTime)
-
-renderNow()

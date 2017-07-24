@@ -15,6 +15,8 @@ function checkCollision (x, y, direction) {
 }
 
 function checkTunnel (x, y, dir, board, id) {
+  return
+  // TODO: need to fix
   const xrow = mori.get(board, 0)
   const xMax = mori.count(xrow) - 1
 
@@ -105,7 +107,7 @@ function Player (player, board) {
   let classVal = 'player ' + color
   const yMax = mori.count(board)
   const xRow = mori.count(mori.get(board, 0))
-
+  
   if (count === speed) movePlayer(id, direction, x, y, hasPower, board)
   updateRenderFrame(id, count, speed)
 
