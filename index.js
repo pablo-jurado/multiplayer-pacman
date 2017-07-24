@@ -17,9 +17,14 @@ function uuid () {
     s4() + '-' + s4() + s4() + s4()
 }
 
-let initialState = {
-  players: {}
-}
+// let initialState = {
+//   board: null,
+//   players: {},
+//   powerTimer: 0,
+//   isPowerMode: false
+// }
+
+let players = {}
 
 let numOfUsers = 0
 app.use(express.static(path.join(__dirname, '/build/')))
@@ -34,17 +39,19 @@ io.on('connection', function (socket) {
       const newUserKey = uuid()
       newUser.index = numOfUsers
       newUser.id = newUserKey
-      initialState.players[newUserKey] = newUser
+      players[newUserKey] = newUser
       socket.emit('gotUser', JSON.stringify(newUser))
     }
   })
 
   socket.on('getCurrentUsers', function () {
-    socket.emit('gotAllUser', JSON.stringify(initialState))
+    socket.emit('gotAllUser', JSON.stringify(players))
   })
 
   socket.on('sendUserMove', function (data) {
-    socket.emit('gotUserMove', data)
+    let user = JSON.parse(data)
+    players[user.id] = user
+    socket.emit('gotUserMove', JSON.stringify(players))
   })
 })
 

@@ -2,10 +2,9 @@ import mori from 'mori'
 import { socket } from './Socket'
 import { log } from './helpers'
 
-// TODO save user data on local storage to keep game data when closing browser
-window.mainUserColor = null
-
-export function addKeyListener (id) {
+export function addKeyListener (player) {
+  // TODO save user data on local storage to keep game data when closing browser
+  const id = player.id
   window.addEventListener('keydown', checkArrow)
 
   function checkArrow (event) {
@@ -16,26 +15,29 @@ export function addKeyListener (id) {
     const down = 40
 
     let player = mori.getIn(window.appState, ['players', id])
+    let currentState = window.appState
+    let newState = null
 
-    if (keyValue === left) window.appState = mori.assocIn(window.appState, ['players', id, 'direction'], 'left')
-    if (keyValue === right) window.appState = mori.assocIn(window.appState, ['players', id, 'direction'], 'right')
-    if (keyValue === up) window.appState = mori.assocIn(window.appState, ['players', id, 'direction'], 'top')
-    if (keyValue === down) window.appState = mori.assocIn(window.appState, ['players', id, 'direction'], 'bottom')
+    if (keyValue === left) newState = mori.assocIn(currentState, ['players', id, 'direction'], 'left')
+    if (keyValue === right) newState = mori.assocIn(currentState, ['players', id, 'direction'], 'right')
+    if (keyValue === up) newState = mori.assocIn(currentState, ['players', id, 'direction'], 'top')
+    if (keyValue === down) newState = mori.assocIn(currentState, ['players', id, 'direction'], 'bottom')
 
     // TODO: in each move it should fetch data to server
     // change debounced to throttle
-    socketDebounceCall(player)
+    newState = mori.toJs(newState)
+    socketDebounceCall(newState.players[id])
   }
 }
 
 var socketDebounceCall = debounce(function (player) {
-  socket.emit('sendUserMove', 'test')
-  log(player)
+  socket.emit('sendUserMove', JSON.stringify(player))
 }, 50)
 
-socket.on('gotUserMove', function (data) {
-  console.log('got ' + data + ' from server')
-})
+// socket.on('gotUserMove', function (data) {
+//   let state = JSON.parse(data)
+//   console.log(state)
+// })
 
 function debounce (func, wait, immediate) {
   var timeout

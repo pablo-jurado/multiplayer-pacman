@@ -43,7 +43,7 @@ function weakenAllPlayers (id) {
 
 function movePlayer (id, direction, x, y, hasPower, board) {
   let collisionVal = checkCollision(x, y, direction)
-
+  // TODO: need to update this logic with new data structure
   if (collisionVal === 'p0' || collisionVal === 'p1' ||
       collisionVal === 'p2' || collisionVal === 'p3') {
     if (hasPower) {

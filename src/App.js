@@ -10,7 +10,7 @@ import io from 'socket.io-client'
 import playerSrc from './img/player.png'
 import './App.css'
 
-const numberOfPlayers = 1
+const numberOfPlayers = 2
 
 let isGameReady = null
 let isColorSelected = null
@@ -20,15 +20,14 @@ function selectPlayer (instance, event) {
   let color = event.target.id
   if (isColorSelected || color === 'grey') return
   isColorSelected = true
-  window.mainUserColor = color
   instance.setState({ color: color })
   // save user data on server
   let userData = JSON.stringify(instance.state)
   socket.emit('registerUser', userData)
   // gets users data and unique ID from server
   socket.on('gotUser', function (user) {
-    // console.log('got', JSON.parse(user))
-    // TODO: need to add key event listener here
+    const player = JSON.parse(user)
+    addKeyListener(player)
   })
 }
 
@@ -46,16 +45,15 @@ function getAllColors (color) {
   return <img id='grey' src={playerSrc} alt={color} />
 }
 
-function startGame (userData) {
-  let players = userData.players
+function startGame (players) {
   let statePlayers = {}
 
   for (var key in players) {
     const newPlayer = createPlayer(players[key].id, players[key].index, players[key].name, players[key].color)
     statePlayers[key] = newPlayer
+    socket.emit('sendUserMove', JSON.stringify(newPlayer))
   }
   // TODO: need to save user on server
-  window.appState = mori.assoc(window.appState, 'players', mori.toClj(statePlayers))
   isGameReady = true
 }
 
@@ -73,8 +71,8 @@ class HomePage extends Component {
     socket.emit('getCurrentUsers')
     socket.on('gotAllUser', function (users) {
       let userCount = 0
-      let userData = JSON.parse(users)
-      let players = userData.players
+      let players = JSON.parse(users)
+      // let players = userData.players
       // if a color is used will erase from colorsLeft
       for (var key in players) {
         let color = players[key].color
@@ -84,7 +82,7 @@ class HomePage extends Component {
       }
       // checks num of players to start the game
       // TODO: need to add timer to start the games anyways
-      if (userCount === numberOfPlayers) startGame(userData)
+      if (userCount === numberOfPlayers) startGame(players)
     })
     if (!this.state.isNameSet) {
       return (

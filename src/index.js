@@ -1,6 +1,7 @@
 import { render } from 'inferno'
-import App from './App'
 import { deepCopy } from './helpers'
+import { socket } from './Socket'
+import App from './App'
 import mori from 'mori'
 
 // -----------------------------------------------------------------------------
@@ -130,6 +131,13 @@ let initialState = {
 }
 
 window.appState = mori.toClj(initialState)
+
+socket.on('gotUserMove', function (data) {
+  // let player = mori.toClj(JSON.parse(data))
+  // let id = mori.get(player, 'id')
+  let players = mori.toClj(JSON.parse(data))
+  window.appState = mori.assocIn(window.appState, ['players'], players)
+})
 
 // -----------------------------------------------------------------------------
 // Render Loop
