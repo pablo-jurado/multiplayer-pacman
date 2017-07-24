@@ -123,8 +123,8 @@ export function createPlayer (id, index, name, color) {
 }
 
 let initialState = {
-  board: deepCopy(board1),
-  // board: deepCopy(emptyBoard),
+  // board: deepCopy(board1),
+  board: deepCopy(emptyBoard),
   players: {},
   powerTimer: 0,
   isPowerMode: false

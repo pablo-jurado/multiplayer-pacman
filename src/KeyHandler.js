@@ -1,9 +1,23 @@
+/* global localStorage */
 import mori from 'mori'
 import { socket } from './Socket'
 import { log } from './helpers'
 
+
+function savePlayer (player) {
+  localStorage.player = JSON.stringify(player)
+}
+
+function getSavedPlayer () {
+  if (typeof (localStorage.player) !== 'undefined') {
+    console.log(JSON.parse(localStorage.player))
+  }
+}
+
 export function addKeyListener (player) {
   // TODO save user data on local storage to keep game data when closing browser
+  // if (typeof player === 'undefined') return
+  // savePlayer(player)
   const id = player.id
   window.addEventListener('keydown', checkArrow)
 
@@ -33,11 +47,6 @@ export function addKeyListener (player) {
 var socketDebounceCall = debounce(function (player) {
   socket.emit('updateUser', JSON.stringify(player))
 }, 50)
-
-// socket.on('gotUserMove', function (data) {
-//   let state = JSON.parse(data)
-//   console.log(state)
-// })
 
 function debounce (func, wait, immediate) {
   var timeout

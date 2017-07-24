@@ -43,14 +43,13 @@ function weakenAllPlayers (id) {
   })
 }
 
-function movePlayer (id, direction, x, y, hasPower, board) {
+function movePlayer (index, id, direction, x, y, hasPower, board) {
   let collisionVal = checkCollision(x, y, direction)
   // TODO: need to update this logic with new data structure
   if (collisionVal === 'p0' || collisionVal === 'p1' ||
       collisionVal === 'p2' || collisionVal === 'p3') {
     if (hasPower) {
-      const num = parseInt(collisionVal.slice(1))
-      window.appState = mori.assocIn(window.appState, ['players', num, 'isDead'], true)
+      window.appState = mori.assocIn(window.appState, ['players', id, 'isDead'], true)
     } else {
       return
     }
@@ -86,7 +85,7 @@ function movePlayer (id, direction, x, y, hasPower, board) {
     }
 
     // updates next tile
-    window.appState = mori.assocIn(window.appState, ['board', y, x], 'p' + id)
+    window.appState = mori.assocIn(window.appState, ['board', y, x], 'p' + index)
     // update player x and y
     window.appState = mori.assocIn(window.appState, ['players', id, 'x'], x)
     window.appState = mori.assocIn(window.appState, ['players', id, 'y'], y)
@@ -95,6 +94,7 @@ function movePlayer (id, direction, x, y, hasPower, board) {
 
 function Player (player, board) {
   const id = mori.get(player, 'id')
+  const index = mori.get(player, 'index')
   const color = mori.get(player, 'color')
   const direction = mori.get(player, 'direction')
   const speed = mori.get(player, 'speed')
@@ -107,8 +107,8 @@ function Player (player, board) {
   let classVal = 'player ' + color
   const yMax = mori.count(board)
   const xRow = mori.count(mori.get(board, 0))
-  
-  if (count === speed) movePlayer(id, direction, x, y, hasPower, board)
+
+  if (count === speed) movePlayer(index, id, direction, x, y, hasPower, board)
   updateRenderFrame(id, count, speed)
 
   // change player speed depending on is status
