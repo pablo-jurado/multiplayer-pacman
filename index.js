@@ -29,11 +29,8 @@ io.on('connection', function (socket) {
     let newUser = JSON.parse(user)
     numOfUsers += 1
     if (numOfUsers < 5) {
-      const newUserKey = uuid()
       newUser.index = numOfUsers
-      newUser.id = newUserKey
-      players[newUserKey] = newUser
-      socket.emit('gotUser', JSON.stringify(newUser))
+      players[newUser.id] = newUser
     }
   })
 
@@ -49,7 +46,9 @@ io.on('connection', function (socket) {
 
   socket.on('updateUser', function (data) {
     let user = JSON.parse(data)
-    players[user.id] = user
+    if (user) {
+      players[user.id] = user
+    }
   })
 
   function sendUpdate () {

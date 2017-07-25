@@ -16,19 +16,26 @@ let isGameReady = null
 let isColorSelected = null
 let colorsLeft = ['green', 'red', 'blue', 'purple']
 
+function uuid () {
+  function s4 () {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1)
+  }
+  return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+    s4() + '-' + s4() + s4() + s4()
+}
+
 function selectPlayer (instance, event) {
   let color = event.target.id
   if (isColorSelected || color === 'grey') return
   isColorSelected = true
-  instance.setState({ color: color })
+  instance.setState({ color: color, id: uuid() })
   // save user data on server
-  let userData = JSON.stringify(instance.state)
+  let player = instance.state
+  addKeyListener(player)
+  let userData = JSON.stringify(player)
   socket.emit('registerUser', userData)
-  // gets users data and unique ID from server
-  socket.on('gotUser', function (user) {
-    const player = JSON.parse(user)
-    addKeyListener(player)
-  })
 }
 
 function updateName (instance, event) {

@@ -3,21 +3,23 @@ import mori from 'mori'
 import { socket } from './Socket'
 import { log } from './helpers'
 
-
 function savePlayer (player) {
-  localStorage.player = JSON.stringify(player)
+  if (typeof (localStorage.player) !== 'undefined') {
+    localStorage.removeItem('player')
+    localStorage.player = JSON.stringify(player)
+  }
 }
 
 function getSavedPlayer () {
   if (typeof (localStorage.player) !== 'undefined') {
-    console.log(JSON.parse(localStorage.player))
+    addKeyListener(JSON.parse(localStorage.player))
   }
 }
 
+getSavedPlayer()
+
 export function addKeyListener (player) {
-  // TODO save user data on local storage to keep game data when closing browser
-  // if (typeof player === 'undefined') return
-  // savePlayer(player)
+  savePlayer(player)
   const id = player.id
   window.addEventListener('keydown', checkArrow)
 
@@ -37,8 +39,7 @@ export function addKeyListener (player) {
     if (keyValue === up) newState = mori.assocIn(currentState, ['players', id, 'direction'], 'top')
     if (keyValue === down) newState = mori.assocIn(currentState, ['players', id, 'direction'], 'bottom')
 
-    // TODO: in each move it should fetch data to server
-    // change debounced to throttle
+    // TODO: change debounced to throttle
     newState = mori.toJs(newState)
     socketDebounceCall(newState.players[id])
   }
