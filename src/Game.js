@@ -6,7 +6,7 @@ import Board from './Board'
 import Score from './Score'
 
 function resetAllPlayers () {
-  let players = mori.get(window.appState, 'players')
+  let players = mori.vals(mori.get(window.appState, 'players'))
   mori.each(players, function (p) {
     const id = mori.get(p, 'id')
     window.appState = mori.assocIn(window.appState, ['players', id, 'isWeak'], false)
@@ -28,6 +28,7 @@ function updatePowerTimer (powerTimer, isPowerMode) {
 }
 
 function Game (state) {
+  // TODO: add timer to finish game
   let gameClass = 'game'
   const players = mori.get(state, 'players')
   const powerTimer = mori.get(state, 'powerTimer')

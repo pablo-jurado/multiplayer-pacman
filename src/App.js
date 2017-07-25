@@ -115,7 +115,14 @@ class HomePage extends Component {
   }
 }
 
+function checkCurrentPlayers (state) {
+  const players = mori.get(state, 'players')
+  return mori.count(players)
+}
+
 function App (state) {
+  // let currentPlayers = checkCurrentPlayers(state)
+  // TODO: show game when for people who is not playing
   if (isGameReady) return Game(state)
   return <HomePage />
 }

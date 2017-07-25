@@ -34,7 +34,7 @@ function extraPoints (v) {
 }
 
 function weakenAllPlayers (id) {
-  let players = mori.get(window.appState, 'players')
+  let players = mori.vals(mori.get(window.appState, 'players'))
   mori.each(players, function (p) {
     const currentPlayerID = mori.get(p, 'id')
     if (currentPlayerID !== id) {
