@@ -183,6 +183,11 @@ body {
   opacity: 0.5;
 }
 
+.reset {
+  width: 50px;
+  margin: 20px auto;
+}
+
 @keyframes animate-maze {
   0%   {fill: purple;}
   50%  {fill: yellow;}

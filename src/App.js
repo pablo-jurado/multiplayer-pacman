@@ -4,7 +4,7 @@ import mori from 'mori'
 import Game from './Game'
 import { socket } from './Socket'
 import { addKeyListener } from './KeyHandler'
-import { createPlayer } from './index'
+import { createPlayer, resetGame } from './index'
 import { log } from './helpers'
 import io from 'socket.io-client'
 import playerSrc from './img/player.png'
@@ -98,6 +98,7 @@ class HomePage extends Component {
             <input value={this.state.name} onInput={linkEvent(this, updateName)} />
             <button onClick={linkEvent(this, savetUserName)}>Start Game</button>
           </form>
+          <button className='reset' onClick={resetGame}>Reset</button>
         </div>
       )
     } else {
@@ -109,6 +110,7 @@ class HomePage extends Component {
           <div className='preview' onClick={linkEvent(this, selectPlayer)}>
             {allColors}
           </div>
+          <button className='reset' onClick={resetGame}>Reset</button>
         </div>
       )
     }

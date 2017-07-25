@@ -130,6 +130,10 @@ let initialState = {
   isPowerMode: false
 }
 
+export function resetGame () {
+  window.appState = deepCopy(initialState)
+}
+
 window.appState = mori.toClj(initialState)
 
 socket.on('updateAllPlayers', function (playersServer) {

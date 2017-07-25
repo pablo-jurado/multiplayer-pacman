@@ -2,6 +2,7 @@ import { version } from 'inferno'
 import Component from 'inferno-component'
 import mori from 'mori'
 import { log } from './helpers'
+import { resetGame } from './index'
 import Board from './Board'
 import Score from './Score'
 
@@ -44,6 +45,7 @@ function Game (state) {
         {Score(players)}
         {Board(state)}
       </div>
+      <button className='reset' onClick={resetGame}>Reset</button>
     </div>
   )
 }
