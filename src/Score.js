@@ -4,6 +4,7 @@ import { log } from './helpers'
 import mori from 'mori'
 
 function Score (players) {
+  return
   const playerVal = mori.vals(players)
   let playersArr = []
 

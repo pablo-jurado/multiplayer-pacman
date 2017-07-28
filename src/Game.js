@@ -45,7 +45,6 @@ function Game (state) {
         {Score(players)}
         {Board(state)}
       </div>
-      <button className='reset' onClick={resetGame}>Reset</button>
     </div>
   )
 }

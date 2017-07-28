@@ -21,7 +21,6 @@ function Board (state) {
   return (
     <div className='board-wrapper'>
       <div className='board'>
-        {playersArr}
         {rows}
       </div>
       {maze}

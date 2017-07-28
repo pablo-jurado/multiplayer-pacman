@@ -13,7 +13,7 @@
     "inferno-scripts": "4.1.0"
   },
   "scripts": {
-    "start": "nodemon index.js",
+    "start": "nodemon app.js",
     "webpack": "inferno-scripts start",
     "build": "inferno-scripts build",
     "test": "inferno-scripts test --env=jsdom",

@@ -24,11 +24,6 @@ function checkTunnel (x, y, dir, board, id) {
   if (x === (xMax) && dir === 'right') window.appState = mori.assocIn(window.appState, ['players', id, 'x'], 0)
 }
 
-function updateRenderFrame (id, count, speed) {
-  if (count === speed) window.appState = mori.assocIn(window.appState, ['players', id, 'count'], 0)
-  window.appState = mori.updateIn(window.appState, ['players', id, 'count'], mori.inc)
-}
-
 function extraPoints (v) {
   return v + 100
 }
@@ -93,6 +88,7 @@ function movePlayer (index, id, direction, x, y, hasPower, board) {
 }
 
 function Player (player, board) {
+  return
   const id = mori.get(player, 'id')
   const index = mori.get(player, 'index')
   const color = mori.get(player, 'color')
@@ -109,7 +105,7 @@ function Player (player, board) {
   const xRow = mori.count(mori.get(board, 0))
 
   if (count === speed) movePlayer(index, id, direction, x, y, hasPower, board)
-  updateRenderFrame(id, count, speed)
+  // updateRenderFrame(id, count, speed)
 
   // change player speed depending on is status
   if (isWeak) window.appState = mori.assocIn(window.appState, ['players', id, 'speed'], 4)

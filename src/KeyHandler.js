@@ -16,10 +16,11 @@ function getSavedPlayer () {
   }
 }
 
-getSavedPlayer()
+// getSavedPlayer()
 
 export function addKeyListener (player) {
-  savePlayer(player)
+  return
+  // savePlayer(player)
   const id = player.id
   window.addEventListener('keydown', checkArrow)
 
