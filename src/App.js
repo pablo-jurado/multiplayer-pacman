@@ -88,11 +88,11 @@ function HomePage (state) {
 
 function App (state) {
   const page = mori.get(state, 'page')
-  const isGameReady = mori.get(state, 'isGameReady')
+  const isGameReady = mori.getIn(state, ['game', 'isGameReady'])
 
-  if (page === 'home') return HomePage(state)
+  if (isGameReady) return Game(state)
+  else if (page === 'home') return HomePage(state)
   else if (page === 'select') return SelectPlayer(state)
-  else if (isGameReady) return Game(state)
 }
 
 export default App

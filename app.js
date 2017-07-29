@@ -85,7 +85,8 @@ const initialState = {
     board: emptyBoard,
     powerTimer: 0,
     isPowerMode: false,
-    numberOfPlayers: 0,
+    numberOfPlayers: 1,
+    currentPlayers: 0,
     isGameReady: null,
     colors: ['green', 'red', 'blue', 'purple']
   }
@@ -140,14 +141,24 @@ function createPlayer (name, color, id, index) {
   }
 }
 
+function checkIsGameReady () {
+  const currentPlayers = mori.getIn(gameState, ['game', 'currentPlayers'])
+  const numberOfPlayers = mori.getIn(gameState, ['game', 'numberOfPlayers'])
+
+  if (currentPlayers === numberOfPlayers) {
+    gameState = mori.assocIn(gameState, ['game', 'isGameReady'], true)
+  }
+}
+
 function receiveNewPlayer (player) {
   // TODO: update gameState here with the new player information
   const playerData = JSON.parse(player)
-  const index = mori.getIn(gameState, ['game', 'numberOfPlayers'])
+  const index = mori.getIn(gameState, ['game', 'currentPlayers'])
   const newPlayer = createPlayer(playerData.name, playerData.color, playerData.id, index)
 
   gameState = mori.assocIn(gameState, ['game', 'players', playerData.id], newPlayer)
-  gameState = mori.updateIn(gameState, ['game', 'numberOfPlayers'], mori.inc)
+  gameState = mori.updateIn(gameState, ['game', 'currentPlayers'], mori.inc)
+  checkIsGameReady()
 }
 
 function receivedKeyPress (playerId, keyId) {
