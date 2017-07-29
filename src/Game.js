@@ -31,10 +31,10 @@ function updatePowerTimer (powerTimer, isPowerMode) {
 function Game (state) {
   // TODO: add timer to finish game
   let gameClass = 'game'
-  const players = mori.get(state, 'players')
-  const powerTimer = mori.get(state, 'powerTimer')
-  const isPowerMode = mori.get(state, 'isPowerMode')
-  updatePowerTimer(powerTimer, isPowerMode)
+  const players = mori.getIn(state, ['game', 'players'])
+  const powerTimer = mori.getIn(state, ['game', 'powerTimer'])
+  const isPowerMode = mori.getIn(state, ['game', 'isPowerMode'])
+  // updatePowerTimer(powerTimer, isPowerMode)
 
   if (isPowerMode) gameClass = 'game power-mode'
 

@@ -82,7 +82,7 @@ const board1 =
 const initialState = {
   game: {
     players: {},
-    board: emptyBoard,
+    board: board1,
     powerTimer: 0,
     isPowerMode: false,
     numberOfPlayers: 1,
@@ -137,7 +137,7 @@ function createPlayer (name, color, id, index) {
     isWeak: false,
     hasPower: false,
     isDead: false,
-    count: 1
+    ticCount: 1
   }
 }
 
@@ -171,10 +171,16 @@ function receivedNewColors (state) {
   gameState = mori.assocIn(gameState, ['game', 'colors'], colors)
 }
 
+function receiveNewState (state) {
+  const newState = mori.toClj(JSON.parse(state))
+  gameState = mori.assocIn(gameState, ['game', 'colors'], colors)
+}
+
 function onConnection (socket) {
   console.log('A user connected!')
 
   socket.on('newPlayer', receiveNewPlayer)
+  socket.on('newState', receiveNewState)
   socket.on('keyPress', receivedKeyPress)
   socket.on('updateNewColors', receivedNewColors)
 }
@@ -187,13 +193,18 @@ io.on('connection', onConnection)
 
 function gameTick () {
   // TODO: update the game (ie: moves, powerups, etc)
-
+  updatePlayersTic()
   // send the current game state to all clients
   io.sockets.emit('newGameState', JSON.stringify(mori.toJs(gameState)))
 }
 
-const GAME_TICK_MS = 100
+const GAME_TICK_MS = 1000
 setInterval(gameTick, GAME_TICK_MS)
+
+function updatePlayersTic () {
+  let playersId = mori.vals(mori.getIn(gameState, ['game', 'players']))
+
+}
 
 // -----------------------------------------------------------------------------
 // Express Server

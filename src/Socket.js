@@ -21,3 +21,7 @@ export function sendNewColors (state) {
 export function createNewPlayer (player) {
   socket.emit('newPlayer', JSON.stringify(mori.toJs((player))))
 }
+
+export function sendNewState (state) {
+  socket.emit('newState', JSON.stringify(mori.toJs((state))))
+}

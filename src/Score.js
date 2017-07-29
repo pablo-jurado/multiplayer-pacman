@@ -4,7 +4,6 @@ import { log } from './helpers'
 import mori from 'mori'
 
 function Score (players) {
-  return
   const playerVal = mori.vals(players)
   let playersArr = []
 
@@ -14,7 +13,7 @@ function Score (players) {
 
     playersArr.push(
       <div className='score'>
-        <div>Player{name}</div><div>Score: {score}</div>
+        <div>Player {name}</div><div>Score: {score}</div>
       </div>
     )
   })
