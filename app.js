@@ -160,6 +160,28 @@ function checkCollision (x, y, direction, board) {
   return value
 }
 
+function extraPoints (v) {
+  return v + 100
+}
+
+function checkTunnel (x, y, dir, board, id) {
+  const xrow = mori.get(board, 0)
+  const xMax = mori.count(xrow) - 1
+
+  if (x === 0 && dir === 'left') gameState = mori.assocIn(gameState, ['game', 'players', id, 'x'], xMax)
+  if (x === (xMax) && dir === 'right') gameState = mori.assocIn(gameState, ['game', 'players', id, 'x'], 0)
+}
+
+function weakenAllPlayers (id) {
+  const players = mori.vals(mori.getIn(gameState, ['game', 'players']))
+  mori.each(players, function (p) {
+    const currentPlayerID = mori.get(p, 'id')
+    if (currentPlayerID !== id) {
+      gameState = mori.assocIn(gameState, ['players', currentPlayerID, 'isWeak'], true)
+    }
+  })
+}
+
 function movePlayer (color, id, direction, x, y, board) {
   let newGameState = gameState
   // board limits
@@ -195,14 +217,15 @@ function movePlayer (color, id, direction, x, y, board) {
     }
 
     // number 3 is a power dot
-    // if (collisionVal === 3) {
-    //   // if the player eats a power dot gets extra points and eating power
-    //   newGameState = mori.updateIn(newGameState, ['players', id, 'score'], extraPoints)
-    //   newGameState = mori.assocIn(newGameState, ['players', id, 'hasPower'], true)
-    //   // start game power mode
-    //   newGameState = mori.assoc(newGameState, 'isPowerMode', true)
-    //   weakenAllPlayers(id)
-    // }
+    if (collisionVal === 3) {
+      // if the player eats a power dot gets extra points and eating power
+      newGameState = mori.updateIn(newGameState, ['game', 'players', id, 'score'], extraPoints)
+      newGameState = mori.assocIn(newGameState, ['game', 'players', id, 'hasPower'], true)
+      // newGameState = mori.assocIn(newGameState, ['game', 'players', id, 'speed'], 2)
+      // start game power mode
+      newGameState = mori.assocIn(newGameState, ['game', 'isPowerMode'], true)
+      weakenAllPlayers(id)
+    }
 
     // updates next tile
     newGameState = mori.assocIn(newGameState, ['game', 'board', y, x], color)
@@ -211,18 +234,26 @@ function movePlayer (color, id, direction, x, y, board) {
     newGameState = mori.assocIn(newGameState, ['game', 'players', id, 'y'], y)
 
     gameState = newGameState
+
+    checkTunnel(x, y, direction, board, id)
   }
 }
 
-function updatePlayerTic () {
+function updatePlayersSpeed () {
   const players = mori.vals(mori.getIn(gameState, ['game', 'players']))
   mori.each(players, function (p) {
     const id = mori.get(p, 'id')
     const speed = mori.get(p, 'speed')
     const tic = mori.get(p, 'tic')
+    const hasPower = mori.get(p, 'hasPower')
+    const isWeak = mori.get(p, 'isWeak')
 
     if (speed === tic) gameState = mori.assocIn(gameState, ['game', 'players', id, 'tic'], 0)
     gameState = mori.updateIn(gameState, ['game', 'players', id, 'tic'], mori.inc)
+
+    if (hasPower) gameState = mori.assocIn(gameState, ['game', 'players', id, 'speed'], 2)
+    if (isWeak) gameState = mori.assocIn(gameState, ['game', 'players', id, 'speed'], 4)
+    if (!isWeak && !hasPower) gameState = mori.assocIn(gameState, ['game', 'players', id, 'speed'], 3)
   })
 }
 
@@ -243,6 +274,21 @@ function updatePlayersPosition () {
       movePlayer(color, id, direction, x, y, board)
     }
   })
+}
+
+function updatePowerTimer () {
+  const isPowerMode = mori.getIn(gameState, ['game', 'isPowerMode'])
+  const powerTimer = mori.getIn(gameState, ['game', 'powerTimer'])
+  if (isPowerMode) gameState = mori.updateIn(gameState, ['game', 'powerTimer'], mori.inc)
+  if (powerTimer === 50) {
+    const players = mori.vals(mori.getIn(gameState, ['game', 'players']))
+    mori.each(players, function (p) {
+      const id = mori.get(p, 'id')
+      gameState = mori.assocIn(gameState, ['game', 'players', id, 'isWeak'], false)
+      gameState = mori.assocIn(gameState, ['game', 'players', id, 'hasPower'], false)
+    })
+    gameState = mori.assocIn(gameState, ['game', 'isPowerMode'], false)
+  }
 }
 
 function receiveNewPlayer (player) {
@@ -295,8 +341,9 @@ io.on('connection', onConnection)
 function gameTick () {
   // TODO: update the game (ie: moves, powerups, etc)
 
-  updatePlayerTic()
+  updatePlayersSpeed()
   updatePlayersPosition()
+  updatePowerTimer()
 
   // send the current game state to all clients
   io.sockets.emit('newGameState', JSON.stringify(mori.toJs(gameState)))
