@@ -85,7 +85,7 @@ const initialState = {
     board: board1,
     powerTimer: 0,
     isPowerMode: false,
-    numberOfPlayers: 1,
+    numberOfPlayers: 2,
     currentPlayers: 0,
     isGameReady: null,
     colors: ['green', 'red', 'blue', 'purple']
@@ -181,7 +181,7 @@ function movePlayer (color, id, direction, x, y, board) {
   // if the value is not a wall
   if (collisionVal !== 1) {
     // reset previous board value to empty
-    newGameState = mori.assocIn(newGameState, ['board', y, x], 0)
+    newGameState = mori.assocIn(newGameState, ['game', 'board', y, x], 0)
 
     // increase x and y value
     if (direction === 'right' && x < xMax) x += 1
@@ -191,7 +191,7 @@ function movePlayer (color, id, direction, x, y, board) {
 
     // number 2 is a regular dot
     if (collisionVal === 2) {
-      newGameState = mori.updateIn(newGameState, ['players', id, 'score'], mori.inc)
+      newGameState = mori.updateIn(newGameState, ['game', 'players', id, 'score'], mori.inc)
     }
 
     // number 3 is a power dot
@@ -253,11 +253,17 @@ function receiveNewPlayer (player) {
 
   gameState = mori.assocIn(gameState, ['game', 'players', playerData.id], mori.toClj(newPlayer))
   gameState = mori.updateIn(gameState, ['game', 'currentPlayers'], mori.inc)
+
+  io.sockets.emit('registerNewPlayer', JSON.stringify(mori.toJs(mori.getIn(gameState, ['game', 'players']))))
+
   checkIsGameReady()
 }
 
-function receivedKeyPress (playerId, keyId) {
-  // TODO: update gameState here based on the keyPress
+function receivedKeyPress (state) {
+  const user = JSON.parse(state)
+  const id = user.id
+  const direction = user.direction
+  gameState = mori.assocIn(gameState, ['game', 'players', id, 'direction'], direction)
 }
 
 function receivedNewColors (state) {
