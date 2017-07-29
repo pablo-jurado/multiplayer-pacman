@@ -85,7 +85,8 @@ const initialState = {
     board: emptyBoard,
     powerTimer: 0,
     isPowerMode: false,
-    numberOfPlayers: null,
+    numberOfPlayers: 0,
+    isGameReady: null,
     colors: ['green', 'red', 'blue', 'purple']
   }
 }
@@ -94,8 +95,59 @@ let gameState = mori.toClj(initialState)
 
 app.use(express.static(path.join(__dirname, '/build/')))
 
-function receiveNewPlayer (newPlayer) {
+const log = (...args) => {
+  console.log(...args.map(mori.toJs))
+}
+
+function createPlayer (name, color, id, index) {
+  let direction, x, y = null
+
+  if (index === 0) {
+    direction = 'right'
+    x = 2
+    y = 1
+  }
+  if (index === 1) {
+    direction = 'left'
+    x = 26
+    y = 1
+  }
+  if (index === 2) {
+    direction = 'right'
+    x = 1
+    y = 29
+  }
+  if (index === 3) {
+    direction = 'left'
+    x = 26
+    y = 29
+  }
+
+  return {
+    direction,
+    x,
+    y,
+    id,
+    index,
+    name,
+    color,
+    speed: 3,
+    score: 0,
+    isWeak: false,
+    hasPower: false,
+    isDead: false,
+    count: 1
+  }
+}
+
+function receiveNewPlayer (player) {
   // TODO: update gameState here with the new player information
+  const playerData = JSON.parse(player)
+  const index = mori.getIn(gameState, ['game', 'numberOfPlayers'])
+  const newPlayer = createPlayer(playerData.name, playerData.color, playerData.id, index)
+
+  gameState = mori.assocIn(gameState, ['game', 'players', playerData.id], newPlayer)
+  gameState = mori.updateIn(gameState, ['game', 'numberOfPlayers'], mori.inc)
 }
 
 function receivedKeyPress (playerId, keyId) {

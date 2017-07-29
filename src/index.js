@@ -8,60 +8,19 @@ import mori from 'mori'
 // App State
 // -----------------------------------------------------------------------------
 
-export function createPlayer (id, index, name, color) {
-  let direction, x, y = null
-
-  if (index === 0) {
-    direction = 'right'
-    x = 2
-    y = 1
-  }
-  if (index === 1) {
-    direction = 'left'
-    x = 26
-    y = 1
-  }
-  if (index === 2) {
-    direction = 'right'
-    x = 1
-    y = 29
-  }
-  if (index === 3) {
-    direction = 'left'
-    x = 26
-    y = 29
-  }
-
-  return {
-    direction,
-    x,
-    y,
-    id,
-    index,
-    name,
-    color,
-    speed: 3,
-    score: 0,
-    isWeak: false,
-    hasPower: false,
-    isDead: false,
-    count: 1,
-    isGameReady: false
-  }
-}
-
 let initialState = {
   page: 'home', // ['home', 'select', 'game'],
-  isGameReady: null,
   colorSelected: null,
   name: '',
+  id: null,
   game: {
     // board: [],
     // players: {},
     // powerTimer: 0,
     // isPowerMode: false,
     // numberOfPlayers: null,
-    // colors: []
+    // colors: [],
+    // isGameReady: null
   }
 }
 

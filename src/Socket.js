@@ -17,3 +17,7 @@ socket.on('newGameState', receiveNewGameState)
 export function sendNewColors (state) {
   socket.emit('updateNewColors', JSON.stringify(mori.toJs(state)))
 }
+
+export function createNewPlayer (player) {
+  socket.emit('newPlayer', JSON.stringify(mori.toJs((player))))
+}

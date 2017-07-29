@@ -2,27 +2,15 @@ import { version, linkEvent } from 'inferno'
 import Component from 'inferno-component'
 import mori from 'mori'
 import Game from './Game'
-import { sendNewColors } from './Socket'
+import { sendNewColors, createNewPlayer } from './Socket'
 // import { addKeyListener } from './KeyHandler'
 // import { createPlayer } from './index'
 import { log } from './helpers'
 import playerSrc from './img/player.png'
 import './App.css'
 
-function uuid () {
-  function s4 () {
-    return Math.floor((1 + Math.random()) * 0x10000)
-      .toString(16)
-      .substring(1)
-  }
-  return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-    s4() + '-' + s4() + s4() + s4()
-}
-
 function selectColor (colorSelected, event) {
-  // let serverState = mori.get(window.appState, 'game')
   const color = event.target.id
-  console.log(colorSelected)
   if (color === 'grey' || colorSelected) return
   const colors = mori.getIn(window.appState, ['game', 'colors'])
   let newColors = mori.map(function (c) {
@@ -43,10 +31,29 @@ function savetUserName (e) {
   window.appState = mori.assocIn(window.appState, ['page'], 'select')
 }
 
+function uuid () {
+  function s4 () {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1)
+  }
+  return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+    s4() + '-' + s4() + s4() + s4()
+}
+
+function createPlayer (name, colorSelected) {
+  const id = uuid()
+  createNewPlayer({name: name, color: colorSelected, id: id})
+  window.appState = mori.assoc(window.appState, 'id', id)
+}
+
 function SelectPlayer (state) {
   const name = mori.get(state, 'name')
-  const colors = mori.getIn(state, ['game', 'colors'])
+  const id = mori.get(state, 'id')
   const colorSelected = mori.get(state, 'colorSelected')
+  const colors = mori.getIn(state, ['game', 'colors'])
+
+  if (colorSelected && !id) createPlayer(name, colorSelected)
 
   let colorsCollection = []
 
