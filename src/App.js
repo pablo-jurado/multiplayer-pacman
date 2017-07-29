@@ -19,15 +19,18 @@ function uuid () {
     s4() + '-' + s4() + s4() + s4()
 }
 
-function selectColor (event) {
+function selectColor (colorSelected, event) {
   // let serverState = mori.get(window.appState, 'game')
   const color = event.target.id
+  console.log(colorSelected)
+  if (color === 'grey' || colorSelected) return
   const colors = mori.getIn(window.appState, ['game', 'colors'])
-  if (color === 'grey') return
-  const newColors = mori.filter(function (c) {
-    return c !== color
+  let newColors = mori.map(function (c) {
+    if (c === color) return null
+    else return c
   }, colors)
-  window.appState = mori.assoc(window.appState, 'color', color)
+
+  window.appState = mori.assoc(window.appState, 'colorSelected', color)
   sendNewColors(newColors)
 }
 
@@ -43,7 +46,7 @@ function savetUserName (e) {
 function SelectPlayer (state) {
   const name = mori.get(state, 'name')
   const colors = mori.getIn(state, ['game', 'colors'])
-  // const colorSelected = mori.get(state, 'colorSelected')
+  const colorSelected = mori.get(state, 'colorSelected')
 
   let colorsCollection = []
 
@@ -56,7 +59,7 @@ function SelectPlayer (state) {
     <div className='home'>
       <h2>Welcome {name}</h2>
       <p>Please select your player</p>
-      <div className='preview' onClick={selectColor} >
+      <div className='preview' onClick={linkEvent(colorSelected, selectColor)}>
         {colorsCollection}
       </div>
     </div>

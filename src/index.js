@@ -53,7 +53,7 @@ export function createPlayer (id, index, name, color) {
 let initialState = {
   page: 'home', // ['home', 'select', 'game'],
   isGameReady: null,
-  color: null,
+  colorSelected: null,
   name: '',
   game: {
     // board: [],
