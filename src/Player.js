@@ -36,39 +36,35 @@ function weakenAllPlayers (id) {
     }
   })
 }
+//
+// function movePlayer (index, id, direction, x, y, hasPower, board) {
+//   let newGameState = window.appState
+//   const yMax = mori.count(board) - 1
+//   const xRow = mori.get(board, 0)
+//   const xMax = mori.count(xRow) - 1
+//
+//   if (direction === 'right' && x < xMax) x += 1
+//   if (direction === 'left' && x > 0) x -= 1
+//   if (direction === 'bottom' && y < yMax) y += 1
+//   if (direction === 'top' && y > 0) y -= 1
+//
+//   // updates next tile
+//   newGameState = mori.assocIn(newGameState, ['game', 'board', y, x], 'p' + index)
+//   // update player x and y
+//   newGameState = mori.assocIn(newGameState, ['game', 'players', id, 'x'], x)
+//   newGameState = mori.assocIn(newGameState, ['game', 'players', id, 'y'], y)
+//   sendNewState(newGameState)
+// }
 
-function movePlayer (index, id, direction, x, y, hasPower, board) {
-  let newGameState = window.appState
-  const yMax = mori.count(board) - 1
-  const xRow = mori.get(board, 0)
-  const xMax = mori.count(xRow) - 1
-
-  if (direction === 'right' && x < xMax) x += 1
-  if (direction === 'left' && x > 0) x -= 1
-  if (direction === 'bottom' && y < yMax) y += 1
-  if (direction === 'top' && y > 0) y -= 1
-
-  // updates next tile
-  newGameState = mori.assocIn(newGameState, ['game', 'board', y, x], 'p' + index)
-  // update player x and y
-  newGameState = mori.assocIn(newGameState, ['game', 'players', id, 'x'], x)
-  newGameState = mori.assocIn(newGameState, ['game', 'players', id, 'y'], y)
-  sendNewState(newGameState)
-}
-
-function Player (player, board) {
-  const id = mori.get(player, 'id')
-  const tic = mori.get(player, 'ticCount')
+function Player (player, tic, board) {
+  // const id = mori.get(player, 'id')
   const color = mori.get(player, 'color')
-  const direction = mori.get(player, 'direction')
   const speed = mori.get(player, 'speed')
   let x = mori.get(player, 'x')
   let y = mori.get(player, 'y')
   let classVal = 'player ' + color
   const yMax = mori.count(board)
   const xRow = mori.count(mori.get(board, 0))
-
-  // if (tic === speed) movePlayer(id, direction, x, y, board)
 
   var xPercent = x * 100 / xRow
   var yPercent = y * 100 / yMax

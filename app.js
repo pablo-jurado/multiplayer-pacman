@@ -88,6 +88,7 @@ const initialState = {
     numberOfPlayers: 1,
     currentPlayers: 0,
     isGameReady: null,
+    tic: 0,
     colors: ['green', 'red', 'blue', 'purple']
   }
 }
@@ -136,8 +137,7 @@ function createPlayer (name, color, id, index) {
     score: 0,
     isWeak: false,
     hasPower: false,
-    isDead: false,
-    ticCount: 1
+    isDead: false
   }
 }
 
@@ -148,6 +148,30 @@ function checkIsGameReady () {
   if (currentPlayers === numberOfPlayers) {
     gameState = mori.assocIn(gameState, ['game', 'isGameReady'], true)
   }
+}
+
+
+function movePlayer (index, id, direction, x, y, hasPower, board) {
+  let newGameState = window.appState
+  const yMax = mori.count(board) - 1
+  const xRow = mori.get(board, 0)
+  const xMax = mori.count(xRow) - 1
+
+  if (direction === 'right' && x < xMax) x += 1
+  if (direction === 'left' && x > 0) x -= 1
+  if (direction === 'bottom' && y < yMax) y += 1
+  if (direction === 'top' && y > 0) y -= 1
+
+  // updates next tile
+  newGameState = mori.assocIn(newGameState, ['game', 'board', y, x], 'p' + index)
+  // update player x and y
+  newGameState = mori.assocIn(newGameState, ['game', 'players', id, 'x'], x)
+  newGameState = mori.assocIn(newGameState, ['game', 'players', id, 'y'], y)
+  sendNewState(newGameState)
+}
+
+function updatePlayersPosition () {
+
 }
 
 function receiveNewPlayer (player) {
@@ -193,18 +217,18 @@ io.on('connection', onConnection)
 
 function gameTick () {
   // TODO: update the game (ie: moves, powerups, etc)
-  updatePlayersTic()
+
+  updatePlayersPosition()
+
+  // update game tic
+  gameState = mori.updateIn(gameState, ['game', 'tic'], mori.inc)
+
   // send the current game state to all clients
   io.sockets.emit('newGameState', JSON.stringify(mori.toJs(gameState)))
 }
 
 const GAME_TICK_MS = 1000
 setInterval(gameTick, GAME_TICK_MS)
-
-function updatePlayersTic () {
-  let playersId = mori.vals(mori.getIn(gameState, ['game', 'players']))
-
-}
 
 // -----------------------------------------------------------------------------
 // Express Server
