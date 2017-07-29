@@ -50,20 +50,12 @@ body {
 .player.purple { background-image: url('img/player3.svg');}
 .player.blue { background-image: url('img/player4.svg');}
 
-.player.isWeak { opacity: 0.3;}
-.player.isWeak { opacity: 0.3;}
-.player.isWeak { opacity: 0.3;}
-.player.isWeak { opacity: 0.3;}
+.player.isWeak { opacity: 0.3; transform: scale(0.5);}
 
-.player.hasPower { animation-name: power-animation; animation-duration: 1.5s; animation-iteration-count: infinite;}
-.player.hasPower { animation-name: power-animation; animation-duration: 1.5s; animation-iteration-count: infinite;}
-.player.hasPower { animation-name: power-animation; animation-duration: 1.5s; animation-iteration-count: infinite;}
-.player.hasPower { animation-name: power-animation; animation-duration: 1.5s; animation-iteration-count: infinite;}
+.player.hasPower { transform: scale(1.5);}
 
 .player.dead { display: none;}
-.player.dead { display: none;}
-.player.dead { display: none;}
-.player.dead { display: none;}
+
 
 @keyframes power-animation {
     0%   {box-shadow: 0px 0px 0px #fff;}

@@ -11,7 +11,7 @@ function receiveNewGameState (state) {
   const newState = JSON.parse(state)
 
   window.appState = mori.assoc(window.appState, 'game', mori.toClj(newState.game))
-  // log(mori.getIn(window.appState, ['game', 'board']))
+  // log(mori.getIn(window.appState, ['game', 'players']))
 }
 
 function receiveNewPlayer (state) {

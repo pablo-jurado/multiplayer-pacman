@@ -177,7 +177,7 @@ function weakenAllPlayers (id) {
   mori.each(players, function (p) {
     const currentPlayerID = mori.get(p, 'id')
     if (currentPlayerID !== id) {
-      gameState = mori.assocIn(gameState, ['players', currentPlayerID, 'isWeak'], true)
+      gameState = mori.assocIn(gameState, ['game', 'players', currentPlayerID, 'isWeak'], true)
     }
   })
 }
@@ -224,7 +224,6 @@ function movePlayer (color, id, direction, x, y, board) {
       // newGameState = mori.assocIn(newGameState, ['game', 'players', id, 'speed'], 2)
       // start game power mode
       newGameState = mori.assocIn(newGameState, ['game', 'isPowerMode'], true)
-      weakenAllPlayers(id)
     }
 
     // updates next tile
@@ -279,7 +278,18 @@ function updatePlayersPosition () {
 function updatePowerTimer () {
   const isPowerMode = mori.getIn(gameState, ['game', 'isPowerMode'])
   const powerTimer = mori.getIn(gameState, ['game', 'powerTimer'])
-  if (isPowerMode) gameState = mori.updateIn(gameState, ['game', 'powerTimer'], mori.inc)
+
+  if (isPowerMode) {
+    gameState = mori.updateIn(gameState, ['game', 'powerTimer'], mori.inc)
+    const players = mori.vals(mori.getIn(gameState, ['game', 'players']))
+    mori.each(players, function (p) {
+      const id = mori.get(p, 'id')
+      const hasPower = mori.get(p, 'hasPower')
+
+      if (!hasPower) gameState = mori.assocIn(gameState, ['game', 'players', id, 'isWeak'], true)
+    })
+  }
+
   if (powerTimer === 50) {
     const players = mori.vals(mori.getIn(gameState, ['game', 'players']))
     mori.each(players, function (p) {
@@ -339,11 +349,13 @@ io.on('connection', onConnection)
 // -----------------------------------------------------------------------------
 
 function gameTick () {
-  // TODO: update the game (ie: moves, powerups, etc)
-
-  updatePlayersSpeed()
-  updatePlayersPosition()
-  updatePowerTimer()
+  const isGameReady = mori.getIn(gameState, ['game', 'isGameReady'])
+  // TODO: add countdown when game starts
+  if (isGameReady) {
+    updatePlayersSpeed()
+    updatePlayersPosition()
+    updatePowerTimer()
+  }
 
   // send the current game state to all clients
   io.sockets.emit('newGameState', JSON.stringify(mori.toJs(gameState)))
