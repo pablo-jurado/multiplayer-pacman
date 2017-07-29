@@ -82,7 +82,11 @@ const board1 =
 const initialState = {
   game: {
     players: {},
-    board: board1
+    board: emptyBoard,
+    powerTimer: 0,
+    isPowerMode: false,
+    numberOfPlayers: null,
+    colors: ['green', 'red', 'blue', 'purple']
   }
 }
 
@@ -98,11 +102,18 @@ function receivedKeyPress (playerId, keyId) {
   // TODO: update gameState here based on the keyPress
 }
 
+function receivedNewColors (state) {
+  // TODO: update gameState here based on the keyPress
+  const colors = mori.toClj(JSON.parse(state))
+  gameState = mori.assocIn(gameState, ['game', 'colors'], colors)
+}
+
 function onConnection (socket) {
   console.log('A user connected!')
 
   socket.on('newPlayer', receiveNewPlayer)
   socket.on('keyPress', receivedKeyPress)
+  socket.on('updateNewColors', receivedNewColors)
 }
 
 io.on('connection', onConnection)

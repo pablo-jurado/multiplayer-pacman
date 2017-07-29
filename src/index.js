@@ -52,16 +52,16 @@ export function createPlayer (id, index, name, color) {
 
 let initialState = {
   page: 'home', // ['home', 'select', 'game'],
-  numberOfPlayers: null,
   isGameReady: null,
-  colorSelected: null,
+  color: null,
   name: '',
   game: {
-    board: [],
-    players: {},
-    colors: ['green', 'red', 'blue', 'purple'],
-    powerTimer: 0,
-    isPowerMode: false
+    // board: [],
+    // players: {},
+    // powerTimer: 0,
+    // isPowerMode: false,
+    // numberOfPlayers: null,
+    // colors: []
   }
 }
 
@@ -69,22 +69,22 @@ window.PLAYER_ID = null
 
 window.appState = mori.toClj(initialState)
 
-socket.on('updateAllPlayers', function (playersServer) {
-  const players = mori.toClj(JSON.parse(playersServer))
-  window.appState = mori.assocIn(window.appState, ['players'], players)
-})
-
-socket.on('serverUpdate', function (playersServer) {
-  const players = JSON.parse(playersServer)
-
-  for (var key in players) {
-    let id = players[key].id
-    let direction = players[key].direction
-
-    window.appState = mori.assocIn(window.appState, ['players', id, 'direction'], direction)
-  }
-  renderNow(window.appState)
-})
+// socket.on('updateAllPlayers', function (playersServer) {
+//   const players = mori.toClj(JSON.parse(playersServer))
+//   window.appState = mori.assocIn(window.appState, ['players'], players)
+// })
+//
+// socket.on('serverUpdate', function (playersServer) {
+//   const players = JSON.parse(playersServer)
+//
+//   for (var key in players) {
+//     let id = players[key].id
+//     let direction = players[key].direction
+//
+//     window.appState = mori.assocIn(window.appState, ['players', id, 'direction'], direction)
+//   }
+//   renderNow(window.appState)
+// })
 
 // -----------------------------------------------------------------------------
 // Render Loop

@@ -2,11 +2,10 @@ import { version, linkEvent } from 'inferno'
 import Component from 'inferno-component'
 import mori from 'mori'
 import Game from './Game'
-import { socket } from './Socket'
-import { addKeyListener } from './KeyHandler'
-import { createPlayer } from './index'
+import { sendNewColors } from './Socket'
+// import { addKeyListener } from './KeyHandler'
+// import { createPlayer } from './index'
 import { log } from './helpers'
-import io from 'socket.io-client'
 import playerSrc from './img/player.png'
 import './App.css'
 
@@ -20,18 +19,16 @@ function uuid () {
     s4() + '-' + s4() + s4() + s4()
 }
 
-function selectPlayer (event, colorSelected) {
-  let color = event.target.id
-  if (color === 'grey' || !colorSelected) return
-  console.log(color)
-  // isColorSelected = true
-  // window.PLAYER_ID = uuid()
-  // instance.setState({ color: color, id: window.PLAYER_ID })
-  // // save user data on server
-  // let player = instance.state
-  // addKeyListener(player)
-  // let userData = JSON.stringify(player)
-  // socket.emit('registerUser', userData)
+function selectColor (event) {
+  // let serverState = mori.get(window.appState, 'game')
+  const color = event.target.id
+  const colors = mori.getIn(window.appState, ['game', 'colors'])
+  if (color === 'grey') return
+  const newColors = mori.filter(function (c) {
+    return c !== color
+  }, colors)
+  window.appState = mori.assoc(window.appState, 'color', color)
+  sendNewColors(newColors)
 }
 
 function updateName (event) {
@@ -46,7 +43,7 @@ function savetUserName (e) {
 function SelectPlayer (state) {
   const name = mori.get(state, 'name')
   const colors = mori.getIn(state, ['game', 'colors'])
-  const colorSelected = mori.get(state, 'colorSelected')
+  // const colorSelected = mori.get(state, 'colorSelected')
 
   let colorsCollection = []
 
@@ -59,7 +56,7 @@ function SelectPlayer (state) {
     <div className='home'>
       <h2>Welcome {name}</h2>
       <p>Please select your player</p>
-      <div className='preview' onClick={linkEvent(selectPlayer, colorSelected)} >
+      <div className='preview' onClick={selectColor} >
         {colorsCollection}
       </div>
     </div>
