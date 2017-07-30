@@ -7,7 +7,6 @@ import SelectColor from './SelectColor'
 import { log } from './helpers'
 import './App.css'
 
-
 function App (state) {
   const page = mori.get(state, 'page')
   const isGameReady = mori.getIn(state, ['game', 'isGameReady'])

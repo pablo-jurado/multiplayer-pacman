@@ -15,8 +15,10 @@ const initialState = {
     powerTimer: 0,
     isPowerMode: false,
     numberOfPlayers: 0,
-    countdown: 150,
+    countdown: 50, // 150
+    gameTimer: 100, // 1500
     isGameReady: null,
+    isGameOver: null,
     colors: ['green', 'red', 'blue', 'purple']
   }
 }
@@ -209,6 +211,18 @@ function updatePlayersPosition () {
   })
 }
 
+function updateGameTimer () {
+  const time = mori.getIn(gameState, ['game', 'gameTimer'])
+  let newState = gameState
+
+  if (time === 0) {
+    newState = mori.assocIn(newState, ['game', 'isGameOver'], true)
+  } else {
+    newState = mori.updateIn(newState, ['game', 'gameTimer'], mori.dec)
+  }
+  gameState = newState
+}
+
 function updatePowerTimer () {
   const isPowerMode = mori.getIn(gameState, ['game', 'isPowerMode'])
   const powerTimer = mori.getIn(gameState, ['game', 'powerTimer'])
@@ -283,11 +297,14 @@ io.on('connection', onConnection)
 
 function gameTick () {
   const isGameReady = mori.getIn(gameState, ['game', 'isGameReady'])
+  const isGameOver = mori.getIn(gameState, ['game', 'isGameOver'])
   checkIsGameReady()
+  if (isGameOver) return
   if (isGameReady) {
     updatePlayersSpeed()
     updatePlayersPosition()
     updatePowerTimer()
+    updateGameTimer()
   }
 
   // send the current game state to all clients

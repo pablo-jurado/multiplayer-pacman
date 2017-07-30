@@ -21,8 +21,7 @@ function Countdown (state) {
   if (countdown && countdown !== 150) {
     let strCountdown = countdown.toString()
     let seconds = strCountdown.slice(0, strCountdown.length - 1)
-    let milliseconds = strCountdown.slice(strCountdown.length - 1, strCountdown.length + 1)
-    time = addZero(seconds) + ':' + addZero(milliseconds)
+    time = '00:' + addZero(seconds)
   }
   return (
     <div>

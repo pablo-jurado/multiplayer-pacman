@@ -9,18 +9,21 @@ import mori from 'mori'
 // -----------------------------------------------------------------------------
 
 let initialState = {
-  page: 'home', // ['home', 'select', 'game'],
+  page: 'home', // ['home', 'select', 'game', 'winner'],
   colorSelected: null,
   name: '',
   id: null,
   game: {
-    // board: [],
     // players: {},
+    // board: boards.board1,
     // powerTimer: 0,
     // isPowerMode: false,
-    // numberOfPlayers: null,
-    // colors: [],
-    // isGameReady: null
+    // numberOfPlayers: 0,
+    // countdown: 50, // 150
+    // gameTimer: 150, // 1500
+    // isGameReady: null,
+    // isGameOver: null,
+    // colors: ['green', 'red', 'blue', 'purple']
   }
 }
 
