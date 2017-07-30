@@ -16,7 +16,7 @@ const initialState = {
     isPowerMode: false,
     numberOfPlayers: 0,
     currentPlayers: 0,
-    gameCountdown: null,
+    countdown: 150,
     isGameReady: null,
     colors: ['green', 'red', 'blue', 'purple']
   }
@@ -72,12 +72,17 @@ function createPlayer (name, color, id, index) {
 }
 
 function checkIsGameReady () {
-  const currentPlayers = mori.getIn(gameState, ['game', 'currentPlayers'])
   const numberOfPlayers = mori.getIn(gameState, ['game', 'numberOfPlayers'])
+  const countdown = mori.getIn(gameState, ['game', 'countdown'])
+  let newState = gameState
 
-  if (currentPlayers === numberOfPlayers) {
-    gameState = mori.assocIn(gameState, ['game', 'isGameReady'], true)
+  if (numberOfPlayers !== 0) {
+    newState = mori.updateIn(newState, ['game', 'countdown'], mori.dec)
   }
+  if (countdown === 0) {
+    newState = mori.assocIn(newState, ['game', 'isGameReady'], true)
+  }
+  gameState = newState
 }
 
 function checkCollision (x, y, direction, board) {
@@ -232,17 +237,16 @@ function updatePowerTimer () {
 }
 
 function receiveNewPlayer (player) {
-  // TODO: update gameState here with the new player information
   const playerData = JSON.parse(player)
-  const index = mori.getIn(gameState, ['game', 'currentPlayers'])
+  const index = mori.getIn(gameState, ['game', 'numberOfPlayers'])
   const newPlayer = createPlayer(playerData.name, playerData.color, playerData.id, index)
+  let newState = gameState
 
-  gameState = mori.assocIn(gameState, ['game', 'players', playerData.id], mori.toClj(newPlayer))
-  gameState = mori.updateIn(gameState, ['game', 'currentPlayers'], mori.inc)
+  newState = mori.assocIn(newState, ['game', 'players', playerData.id], mori.toClj(newPlayer))
+  newState = mori.updateIn(newState, ['game', 'numberOfPlayers'], mori.inc)
+  gameState = newState
 
   io.sockets.emit('registerNewPlayer', JSON.stringify(mori.toJs(mori.getIn(gameState, ['game', 'players']))))
-
-  checkIsGameReady()
 }
 
 function receivedKeyPress (state) {
@@ -280,7 +284,7 @@ io.on('connection', onConnection)
 
 function gameTick () {
   const isGameReady = mori.getIn(gameState, ['game', 'isGameReady'])
-  // TODO: add countdown when game starts
+  checkIsGameReady()
   if (isGameReady) {
     updatePlayersSpeed()
     updatePlayersPosition()

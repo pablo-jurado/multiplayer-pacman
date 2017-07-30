@@ -17,6 +17,7 @@ function HomePage (state) {
   return (
     <div className='home'>
       <h1>Welcome to aMazeBattle</h1>
+      <h4>Enter your name</h4>
       <form>
         <input value={name} onInput={updateName} />
         <button onClick={savetUserName}>Next</button>
