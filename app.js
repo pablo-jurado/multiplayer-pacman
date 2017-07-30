@@ -15,7 +15,6 @@ const initialState = {
     powerTimer: 0,
     isPowerMode: false,
     numberOfPlayers: 0,
-    currentPlayers: 0,
     countdown: 150,
     isGameReady: null,
     colors: ['green', 'red', 'blue', 'purple']

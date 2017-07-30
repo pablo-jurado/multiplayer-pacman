@@ -2,6 +2,7 @@ import { version, linkEvent } from 'inferno'
 import Component from 'inferno-component'
 import mori from 'mori'
 import { sendNewColors, createNewPlayer } from './Socket'
+import Countdown from './Countdown'
 import { log } from './helpers'
 import playerSrc from './img/player.png'
 
@@ -34,29 +35,11 @@ function handleColorSelection (colorSelected, event) {
   sendNewColors(newColors)
 }
 
-function addZero (str) {
-  let newString = str
-  if (str.length === 1) newString = '0' + str
-  if (str.length === 0) newString = '00' + str
-  return newString
-}
-
 function SelectColor (state) {
   const name = mori.get(state, 'name')
   const id = mori.get(state, 'id')
   const colorSelected = mori.get(state, 'colorSelected')
   const colors = mori.getIn(state, ['game', 'colors'])
-  const numberOfPlayers = mori.getIn(state, ['game', 'numberOfPlayers'])
-  const countdown = mori.getIn(state, ['game', 'countdown'])
-  // countdown unit is 300-- every 100ms
-  let time = null
-
-  if (countdown !== 150) {
-    let strCountdown = countdown.toString()
-    let seconds = strCountdown.slice(0, strCountdown.length - 1)
-    let milliseconds = strCountdown.slice(strCountdown.length - 1, strCountdown.length + 1)
-    time = addZero(seconds) + ':' + addZero(milliseconds)
-  }
 
   if (colorSelected && !id) createPlayer(name, colorSelected)
 
@@ -74,8 +57,7 @@ function SelectColor (state) {
       <div className='preview' onClick={linkEvent(colorSelected, handleColorSelection)}>
         {colorsCollection}
       </div>
-      <h4>Next Game will start in: {time}</h4>
-      <h4>Players online: {numberOfPlayers}</h4>
+      {Countdown(state)}
     </div>
   )
 }

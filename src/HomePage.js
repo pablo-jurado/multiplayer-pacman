@@ -1,6 +1,7 @@
 import { version, linkEvent } from 'inferno'
 import Component from 'inferno-component'
 import mori from 'mori'
+import Countdown from './Countdown'
 import { log } from './helpers'
 
 function savetUserName (e) {
@@ -22,6 +23,7 @@ function HomePage (state) {
         <input value={name} onInput={updateName} />
         <button onClick={savetUserName}>Next</button>
       </form>
+      {Countdown(state)}
     </div>
   )
 }
