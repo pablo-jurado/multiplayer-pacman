@@ -14,8 +14,9 @@ const initialState = {
     board: boards.board1,
     powerTimer: 0,
     isPowerMode: false,
-    numberOfPlayers: 1,
+    numberOfPlayers: 0,
     currentPlayers: 0,
+    gameCountdown: null,
     isGameReady: null,
     colors: ['green', 'red', 'blue', 'purple']
   }
