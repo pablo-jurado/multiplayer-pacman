@@ -11,7 +11,6 @@ function receiveNewGameState (state) {
   const newState = JSON.parse(state)
 
   window.appState = mori.assoc(window.appState, 'game', mori.toClj(newState.game))
-  // log(mori.getIn(window.appState, ['game', 'players']))
 }
 
 function receiveNewPlayer (state) {
@@ -36,10 +35,14 @@ export function createNewPlayer (player) {
   socket.emit('newPlayer', JSON.stringify(mori.toJs((player))))
 }
 
-export function sendNewState (state) {
-  socket.emit('newState', JSON.stringify(mori.toJs((state))))
-}
+// export function sendNewState (state) {
+//   socket.emit('newState', JSON.stringify(mori.toJs((state))))
+// }
 
 export function sendKeyPress (state) {
   socket.emit('keyPress', JSON.stringify(mori.toJs((state))))
+}
+
+export function sendRestartGame () {
+  socket.emit('restartGame')
 }

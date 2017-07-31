@@ -6,6 +6,7 @@ function Player (player, tic, board) {
   const color = mori.get(player, 'color')
   const speed = mori.get(player, 'speed')
   const isWeak = mori.get(player, 'isWeak')
+  const isDead = mori.get(player, 'isDead')
   const hasPower = mori.get(player, 'hasPower')
   let x = mori.get(player, 'x')
   let y = mori.get(player, 'y')
@@ -24,7 +25,7 @@ function Player (player, tic, board) {
 
   if (hasPower) classVal += ' hasPower'
   if (isWeak) classVal += ' isWeak'
-  // if (isDead) classVal += ' dead'
+  if (isDead) classVal += ' dead'
 
   if (x <= 0 || x >= xRow - 1) styles.display = 'none'
   return (

@@ -8,28 +8,39 @@ var port = process.env.PORT || 3100
 const mori = require('mori')
 const boards = require('./boards')
 
-const initialState = {
-  game: {
-    players: {},
-    board: boards.board1,
-    powerTimer: 0,
-    isPowerMode: false,
-    numberOfPlayers: 0,
-    countdown: 50, // 150
-    gameTimer: 100, // 1500
-    isGameReady: null,
-    isGameOver: null,
-    colors: ['green', 'red', 'blue', 'purple']
-  }
-}
-
-let gameState = mori.toClj(initialState)
-
 app.use(express.static(path.join(__dirname, '/build/')))
+
+const COUNTDOWN = 150
+const GAME_TIMER = 1500
+
+// for test
+// const COUNTDOWN = 50
+// const GAME_TIMER = 50
 
 const log = (...args) => {
   console.log(...args.map(mori.toJs))
 }
+
+function deepCopy (thing) {
+  return JSON.parse(JSON.stringify(thing))
+}
+
+const initialState = {
+  game: {
+    players: {},
+    numberOfPlayers: 0,
+    colors: ['green', 'red', 'blue', 'purple'],
+    board: deepCopy(boards.board1),
+    countdown: deepCopy(COUNTDOWN),
+    gameTimer: deepCopy(GAME_TIMER),
+    powerTimer: 0,
+    isPowerMode: false,
+    isGameReady: null,
+    isGameOver: null
+  }
+}
+
+let gameState = mori.toClj(deepCopy(initialState))
 
 function createPlayer (name, color, id, index) {
   let direction, x, y = null
@@ -108,16 +119,6 @@ function checkTunnel (x, y, dir, board, id) {
   if (x === (xMax) && dir === 'right') gameState = mori.assocIn(gameState, ['game', 'players', id, 'x'], 0)
 }
 
-function weakenAllPlayers (id) {
-  const players = mori.vals(mori.getIn(gameState, ['game', 'players']))
-  mori.each(players, function (p) {
-    const currentPlayerID = mori.get(p, 'id')
-    if (currentPlayerID !== id) {
-      gameState = mori.assocIn(gameState, ['game', 'players', currentPlayerID, 'isWeak'], true)
-    }
-  })
-}
-
 function movePlayer (color, id, direction, x, y, board) {
   let newGameState = gameState
   // board limits
@@ -129,11 +130,18 @@ function movePlayer (color, id, direction, x, y, board) {
 
   if (collisionVal === 'red' || collisionVal === 'green' ||
       collisionVal === 'blue' || collisionVal === 'purple') {
-    // if (hasPower) {
-    //   window.appState = mori.assocIn(window.appState, ['players', id, 'isDead'], true)
-    // } else {
-    //   return
-    // }
+    const hasPower = mori.getIn(gameState, ['game', 'players', id, 'hasPower'])
+    if (hasPower) {
+      const players = mori.vals(mori.getIn(gameState, ['game', 'players']))
+      mori.each(players, function (p) {
+        const otherId = mori.get(p, 'id')
+        const color = mori.get(p, 'color')
+        if (color === collisionVal) {
+          // TODO: needs to erase from board and maybe put on the ghost house
+          gameState = mori.assocIn(gameState, ['game', 'players', otherId, 'isDead'], true)
+        }
+      })
+    }
     return
   }
   // if the value is not a wall
@@ -233,7 +241,7 @@ function updatePowerTimer () {
     mori.each(players, function (p) {
       const id = mori.get(p, 'id')
       const hasPower = mori.get(p, 'hasPower')
-
+      // is power mode in on will make weak rest of players
       if (!hasPower) gameState = mori.assocIn(gameState, ['game', 'players', id, 'isWeak'], true)
     })
   }
@@ -250,10 +258,10 @@ function updatePowerTimer () {
 }
 
 function receiveNewPlayer (player) {
+  let newState = gameState
   const playerData = JSON.parse(player)
   const index = mori.getIn(gameState, ['game', 'numberOfPlayers'])
   const newPlayer = createPlayer(playerData.name, playerData.color, playerData.id, index)
-  let newState = gameState
 
   newState = mori.assocIn(newState, ['game', 'players', playerData.id], mori.toClj(newPlayer))
   newState = mori.updateIn(newState, ['game', 'numberOfPlayers'], mori.inc)
@@ -270,23 +278,22 @@ function receivedKeyPress (state) {
 }
 
 function receivedNewColors (state) {
-  // TODO: update gameState here based on the keyPress
   const colors = mori.toClj(JSON.parse(state))
   gameState = mori.assocIn(gameState, ['game', 'colors'], colors)
 }
 
-function receiveNewState (state) {
-  // const newState = mori.toClj(JSON.parse(state))
-  // gameState = mori.assocIn(gameState, ['game', 'colors'], colors)
+function receivedRestartGame () {
+  // TODO: need to restart Game
 }
 
 function onConnection (socket) {
   console.log('A user connected!')
 
+  // socket.on('newState', receiveNewState)
   socket.on('newPlayer', receiveNewPlayer)
-  socket.on('newState', receiveNewState)
   socket.on('keyPress', receivedKeyPress)
   socket.on('updateNewColors', receivedNewColors)
+  socket.on('restartGame', receivedRestartGame)
 }
 
 io.on('connection', onConnection)
@@ -298,6 +305,7 @@ io.on('connection', onConnection)
 function gameTick () {
   const isGameReady = mori.getIn(gameState, ['game', 'isGameReady'])
   const isGameOver = mori.getIn(gameState, ['game', 'isGameOver'])
+
   checkIsGameReady()
   if (isGameOver) return
   if (isGameReady) {
