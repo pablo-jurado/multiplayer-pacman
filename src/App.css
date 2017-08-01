@@ -189,17 +189,17 @@ body {
 
 
 @media (max-width:600px)  {
-
+  body {
+    background: darkgreen;
+  }
   .board-wrapper svg {
     width: 420px;
     height: 466px;
   }
-
   .board-wrapper svg:last-child{
     width: 420px;
     height: 466px;
   }
-
   .player {
     height: 20px;
     width: 15px;
@@ -212,13 +212,11 @@ body {
     height: 15px;
     width: 15px;
   }
-
   .square.dot {
     height: 5px;
     width: 5px;
     margin: 5px;
   }
-
   .square.power-dot {
     height: 10px;
     width: 10px;
@@ -228,12 +226,21 @@ body {
 }
 
 @media (max-width:480px)  {
+  body {
+    background: darkblue;
+  }
+  .game h2 {
+    font-size: 1.5em;
+    margin: 0.5em;
+  }
+  .score-board p {
+    font-size: 1em;
+    margin: 0.5em;
+  }
   .board-wrapper svg {
     width: 280px;
     height: 310px;
-
   }
-
   .board-wrapper svg:last-child{
     width: 280px;
     height: 310px;
@@ -255,7 +262,6 @@ body {
     width: 10px;
     display: inline-block;
   }
-
   .square.dot {
     background: #fff;
     height: 5px;
@@ -267,4 +273,61 @@ body {
     width: 7.5px;
     margin: 1px;
   }
+}
+
+/* Landscape */
+@media only screen
+  and (max-device-width: 736px)
+  and (orientation: landscape) {
+    body {
+      background: grey;
+    }
+    .game {
+      justify-content: flex-start;
+    }
+    .game h2, .timer {
+      font-size: 1em;
+      position: absolute;
+      right: 5px;
+    }
+    .score-board {
+      display: none;
+    }
+    .board-wrapper svg {
+      width: 280px;
+      height: 310px;
+      margin: none;
+    }
+    .board-wrapper svg:last-child{
+      width: 280px;
+      height: 310px;
+    }
+    .board-wrapper {
+      width: 280px;
+      margin: 0 auto;
+    }
+    .board {
+      width: 280px;
+      height: 310px;
+    }
+    .player {
+      height: 15px;
+      width: 10px;
+    }
+    .square {
+      height: 10px;
+      width: 10px;
+      display: inline-block;
+    }
+    .square.dot {
+      background: #fff;
+      height: 5px;
+      width: 5px;
+      margin: 2.5px;
+    }
+    .square.power-dot {
+      height: 7.5px;
+      width: 7.5px;
+      margin: 1px;
+    }
 }
