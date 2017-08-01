@@ -10,12 +10,12 @@ const boards = require('./boards')
 
 app.use(express.static(path.join(__dirname, '/build/')))
 
-const COUNTDOWN = 150
-const GAME_TIMER = 1500
+// const COUNTDOWN = 150
+// const GAME_TIMER = 1500
 
-// for test
-// const COUNTDOWN = 50
-// const GAME_TIMER = 50
+// fast speed for testing
+const COUNTDOWN = 50
+const GAME_TIMER = 50
 
 const log = (...args) => {
   console.log(...args.map(mori.toJs))

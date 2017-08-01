@@ -1,9 +1,32 @@
+#app {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 100vh;
+}
+
 body {
   margin: 0;
   padding: 0;
   font-family: "Open Sans", "lucida grande", "Segoe UI", arial, verdana, "lucida sans unicode", tahoma, sans-serif;
   background: #2b2b2b;
   color: #fff;
+}
+
+button {
+  background: white;
+  color: black;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  margin: 5px;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 
 .home {
@@ -17,9 +40,29 @@ body {
   margin: 0 auto;
 }
 
+header {
+  text-align: center;
+}
+
 .game {
   display: flex;
   justify-content: center;
+}
+
+.feedback {
+  background: rgba(0,0,0,0.6);
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: none;
+}
+
+.phone-items {
+  padding: 2%;
+  border: solid 1px white;
+  display: none;
 }
 
 .game:focus{
@@ -116,8 +159,12 @@ body {
 
 .score-board {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   margin: 10px 0;
+}
+
+.timer {
+  text-align: center;
 }
 
 .board-wrapper svg {
@@ -229,14 +276,6 @@ body {
   body {
     background: darkblue;
   }
-  .game h2 {
-    font-size: 1.5em;
-    margin: 0.5em;
-  }
-  .score-board p {
-    font-size: 1em;
-    margin: 0.5em;
-  }
   .board-wrapper svg {
     width: 280px;
     height: 310px;
@@ -282,16 +321,16 @@ body {
     body {
       background: grey;
     }
+    .game header, .game .score-board, .game .timer {
+      display: none;
+    }
     .game {
       justify-content: flex-start;
     }
-    .game h2, .timer {
-      font-size: 1em;
-      position: absolute;
-      right: 5px;
-    }
-    .score-board {
-      display: none;
+    .phone-items {
+      border: solid 1px white;
+      display: flex;
+      flex-direction: column;
     }
     .board-wrapper svg {
       width: 280px;
