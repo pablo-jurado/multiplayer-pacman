@@ -35,10 +35,6 @@ export function createNewPlayer (player) {
   socket.emit('newPlayer', JSON.stringify(mori.toJs((player))))
 }
 
-export function sendExitGame (state) {
-  socket.emit('exitGame', JSON.stringify(mori.toJs((state))))
-}
-
 export function sendKeyPress (state) {
   socket.emit('keyPress', JSON.stringify(mori.toJs((state))))
 }

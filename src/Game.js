@@ -26,10 +26,10 @@ function Game (state) {
           {Score(players)}
           {Board(state)}
           {Timer(timer)}
-          {Feedback(state)}
         </div>
       </div>
       {PhoneItems(state)}
+      {Feedback(state)}
     </div>
   )
 }

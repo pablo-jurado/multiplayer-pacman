@@ -11,11 +11,11 @@ const boards = require('./boards')
 app.use(express.static(path.join(__dirname, '/build/')))
 
 // const COUNTDOWN = 150
-// const GAME_TIMER = 1500
+// const GAME_TIMER = 1000
 
 // fast speed for testing
-const COUNTDOWN = 1
-const GAME_TIMER = 50
+const COUNTDOWN = 50
+const GAME_TIMER = 10
 
 const log = (...args) => {
   console.log(...args.map(mori.toJs))
@@ -81,20 +81,6 @@ function createPlayer (name, color, id, index) {
     isDead: false,
     tic: 0
   }
-}
-
-function checkIsGameReady () {
-  const numberOfPlayers = mori.getIn(gameState, ['game', 'numberOfPlayers'])
-  const countdown = mori.getIn(gameState, ['game', 'countdown'])
-  let newState = gameState
-
-  if (numberOfPlayers !== 0) {
-    newState = mori.updateIn(newState, ['game', 'countdown'], mori.dec)
-  }
-  if (countdown === 0) {
-    newState = mori.assocIn(newState, ['game', 'isGameReady'], true)
-  }
-  gameState = newState
 }
 
 function checkCollision (x, y, direction, board) {
@@ -224,7 +210,10 @@ function updateGameTimer () {
   let newState = gameState
 
   if (time === 0) {
+    // the game is over need to reset state to replay game
     newState = mori.assocIn(newState, ['game', 'isGameOver'], true)
+    // newState = mori.assocIn(newState, ['game', 'countdown'], deepCopy(COUNTDOWN))
+    // newState = mori.assocIn(newState, ['game', 'gameTimer'], deepCopy(GAME_TIMER))
   } else {
     newState = mori.updateIn(newState, ['game', 'gameTimer'], mori.dec)
   }
@@ -255,6 +244,22 @@ function updatePowerTimer () {
     })
     gameState = mori.assocIn(gameState, ['game', 'isPowerMode'], false)
   }
+}
+
+function checkIsGameReady () {
+  const numberOfPlayers = mori.getIn(gameState, ['game', 'numberOfPlayers'])
+  const countdown = mori.getIn(gameState, ['game', 'countdown'])
+  let newState = gameState
+
+  // TODO: create replay countdown
+
+  if (numberOfPlayers !== 0) {
+    newState = mori.updateIn(newState, ['game', 'countdown'], mori.dec)
+  }
+  if (countdown === 0) {
+    newState = mori.assocIn(newState, ['game', 'isGameReady'], true)
+  }
+  gameState = newState
 }
 
 function receiveNewPlayer (player) {
@@ -288,12 +293,6 @@ function receivedRestartGame (state) {
   console.log(data)
 }
 
-function receivedExitGame (state) {
-  // TODO:
-  const data = JSON.parse(state)
-  console.log(data)
-}
-
 function onConnection (socket) {
   console.log('A user connected!')
 
@@ -302,7 +301,6 @@ function onConnection (socket) {
   socket.on('keyPress', receivedKeyPress)
   socket.on('updateNewColors', receivedNewColors)
   socket.on('restartGame', receivedRestartGame)
-  socket.on('exitGame', receivedExitGame)
 }
 
 io.on('connection', onConnection)
