@@ -14,7 +14,7 @@ app.use(express.static(path.join(__dirname, '/build/')))
 // const GAME_TIMER = 1500
 
 // fast speed for testing
-const COUNTDOWN = 50
+const COUNTDOWN = 1
 const GAME_TIMER = 50
 
 const log = (...args) => {
@@ -282,8 +282,16 @@ function receivedNewColors (state) {
   gameState = mori.assocIn(gameState, ['game', 'colors'], colors)
 }
 
-function receivedRestartGame () {
+function receivedRestartGame (state) {
   // TODO: need to restart Game
+  const data = JSON.parse(state)
+  console.log(data)
+}
+
+function receivedExitGame (state) {
+  // TODO:
+  const data = JSON.parse(state)
+  console.log(data)
 }
 
 function onConnection (socket) {
@@ -294,6 +302,7 @@ function onConnection (socket) {
   socket.on('keyPress', receivedKeyPress)
   socket.on('updateNewColors', receivedNewColors)
   socket.on('restartGame', receivedRestartGame)
+  socket.on('exitGame', receivedExitGame)
 }
 
 io.on('connection', onConnection)

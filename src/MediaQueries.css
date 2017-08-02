@@ -1,0 +1,147 @@
+
+
+/* ///////////////////
+  Media Queries
+///////////////////// */
+
+
+@media (max-width:600px)  {
+  body {
+    background: darkgreen;
+  }
+  .board-wrapper svg {
+    width: 420px;
+    height: 466px;
+  }
+  .board-wrapper svg:last-child{
+    width: 420px;
+    height: 466px;
+  }
+  .player {
+    height: 20px;
+    width: 15px;
+  }
+  .board {
+    width: 420px;
+    height: 466px;
+  }
+  .square {
+    height: 15px;
+    width: 15px;
+  }
+  .square.dot {
+    height: 5px;
+    width: 5px;
+    margin: 5px;
+  }
+  .square.power-dot {
+    height: 10px;
+    width: 10px;
+    margin: 2.5px;
+  }
+
+}
+
+@media (max-width:480px)  {
+  body {
+    background: darkblue;
+  }
+  .board-wrapper svg {
+    width: 280px;
+    height: 310px;
+  }
+  .board-wrapper svg:last-child{
+    width: 280px;
+    height: 310px;
+  }
+  .board-wrapper {
+    width: 280px;
+    margin: 0 auto;
+  }
+  .board {
+    width: 280px;
+    height: 310px;
+  }
+  .player {
+    height: 15px;
+    width: 10px;
+  }
+  .square {
+    height: 10px;
+    width: 10px;
+    display: inline-block;
+  }
+  .square.dot {
+    background: #fff;
+    height: 5px;
+    width: 5px;
+    margin: 2.5px;
+  }
+  .square.power-dot {
+    height: 7.5px;
+    width: 7.5px;
+    margin: 1px;
+  }
+}
+
+/* Landscape */
+@media only screen
+  and (max-device-width: 736px)
+  and (orientation: landscape) {
+    body {
+      background: grey;
+    }
+    .game header, .game .score-board, .game .timer {
+      display: none;
+    }
+    .game {
+      justify-content: flex-start;
+    }
+    .phone-items {
+      display: flex;
+      flex-direction: column;
+    }
+    .phone-items h2 {
+      margin: 0;
+    }
+    .phone-items p {
+      font-size: 0.8em;
+    }
+    .board-wrapper svg {
+      width: 280px;
+      height: 310px;
+      margin: none;
+    }
+    .board-wrapper svg:last-child{
+      width: 280px;
+      height: 310px;
+    }
+    .board-wrapper {
+      width: 280px;
+      margin: 0 auto;
+    }
+    .board {
+      width: 280px;
+      height: 310px;
+    }
+    .player {
+      height: 15px;
+      width: 10px;
+    }
+    .square {
+      height: 10px;
+      width: 10px;
+      display: inline-block;
+    }
+    .square.dot {
+      background: #fff;
+      height: 5px;
+      width: 5px;
+      margin: 2.5px;
+    }
+    .square.power-dot {
+      height: 7.5px;
+      width: 7.5px;
+      margin: 1px;
+    }
+}

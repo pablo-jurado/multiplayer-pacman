@@ -5,6 +5,7 @@ import { log } from './helpers'
 import Board from './Board'
 import Score from './Score'
 import Timer from './Timer'
+import Controller from './Controller'
 
 function PhoneItems (state) {
   const players = mori.getIn(state, ['game', 'players'])
@@ -16,8 +17,8 @@ function PhoneItems (state) {
         <h2>Multiplayer Pacman</h2>
       </header>
       {Score(players)}
-      <div>CONTROLLER</div>
       {Timer(timer)}
+      {Controller()}
     </div>
   )
 }

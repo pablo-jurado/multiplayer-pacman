@@ -2,7 +2,7 @@ import { version } from 'inferno'
 import Component from 'inferno-component'
 import mori from 'mori'
 import { log } from './helpers'
-import { sendRestartGame } from './Socket'
+import { sendRestartGame, sendExitGame } from './Socket'
 
 function getWinner (a, b) {
   const scoreA = mori.get(a, 'score')
@@ -23,8 +23,11 @@ function Feedback (state) {
   const name = mori.get(winner, 'name')
   return (
     <div className='feedback'>
-      <h2>The winner is {name}, with {score} points.</h2>
-      <button onClick={sendRestartGame}>Play Again</button>
+      <div className='feedback-body'>
+        <h2>The winner is {name}, with {score} points.</h2>
+        <button onClick={sendRestartGame}>Play Again</button>
+        <button onClick={sendExitGame}>Leave Game</button>
+      </div>
     </div>
   )
 }

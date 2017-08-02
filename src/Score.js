@@ -13,7 +13,9 @@ function Score (players) {
 
     playersArr.push(
       <div className='score'>
-        <div>Player {name}</div><div>Score: {score}</div>
+        <div>
+          <p>Player {name}<br />Score: {score}</p>
+        </div>
       </div>
     )
   })
