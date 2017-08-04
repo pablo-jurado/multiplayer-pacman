@@ -17,19 +17,21 @@ function Game (state) {
   if (isPowerMode) gameClass = 'game power-mode'
 
   return (
-    <div className='wrapper'>
-      <div className={gameClass}>
-        <div>
-          <header>
-            <h2>Multiplayer Pacman</h2>
-          </header>
-          {Score(players)}
-          {Board(state)}
-          {Timer(timer)}
+    <div className='main-wrapper'>
+      <div className='game-wrapper'>
+        <div className={gameClass}>
+          <div>
+            <header>
+              <h2>Multiplayer Pacman</h2>
+            </header>
+            {Score(players)}
+            {Board(state)}
+            {Timer(timer)}
+          </div>
         </div>
+        {PhoneItems(state)}
+        {Feedback(state)}
       </div>
-      {PhoneItems(state)}
-      {Feedback(state)}
     </div>
   )
 }

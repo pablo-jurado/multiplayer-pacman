@@ -7,8 +7,9 @@ import { sendKeyPress } from './Socket'
 function handleController (event) {
   const id = mori.get(window.appState, 'id')
   const direction = event.target.id
-
-  if (direction) sendKeyPress({id: id, direction: direction})
+  if (id) {
+    if (direction) sendKeyPress({id: id, direction: direction})
+  }
 }
 
 function Controller () {

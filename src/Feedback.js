@@ -14,7 +14,6 @@ function getWinner (a, b) {
 }
 
 function Feedback (state) {
-  console.log(state)
   const players = mori.vals(mori.getIn(state, ['game', 'players']))
   const isGameOver = mori.getIn(state, ['game', 'isGameOver'])
 

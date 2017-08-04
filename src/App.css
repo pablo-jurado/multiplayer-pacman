@@ -1,7 +1,8 @@
 #app {
-  display: flex;
+  /*display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-around;*/
+
   height: 100vh;
 }
 
@@ -31,17 +32,24 @@ button:focus {
   outline: none;
 }
 
-.wrapper {
+.main-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+
+.game-wrapper {
   display: flex;
   flex-direction: row;
   justify-content: center;
 }
 
 .home {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }
 
 .home form {
@@ -78,7 +86,7 @@ header h2 {
 }
 
 .phone-items {
-  padding: 2%;
+  padding: 0 2%;
   display: none;
 }
 

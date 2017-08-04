@@ -18,6 +18,8 @@ export function addKeyListener (id) {
     if (keyValue === up) direction = 'top'
     if (keyValue === down) direction = 'bottom'
 
-    if (direction) sendKeyPress({id: id, direction: direction})
+    if (id) {
+      if (direction) sendKeyPress({id: id, direction: direction})
+    }
   }
 }
