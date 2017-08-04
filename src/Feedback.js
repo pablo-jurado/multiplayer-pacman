@@ -27,7 +27,7 @@ function Feedback (state) {
     <div className='feedback'>
       <div className='feedback-body'>
         <h2>The winner is {name}, with {score} points.</h2>
-        {Countdown(state)}
+        <button onClick={sendRestartGame}>Play Again</button>
       </div>
     </div>
   )

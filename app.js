@@ -15,7 +15,8 @@ app.use(express.static(path.join(__dirname, '/build/')))
 
 // fast speed for testing
 const COUNTDOWN = 50
-const GAME_TIMER = 10
+const GAME_TIMER = 150
+let players_backup = {}
 
 const log = (...args) => {
   console.log(...args.map(mori.toJs))
@@ -212,8 +213,6 @@ function updateGameTimer () {
   if (time === 0) {
     // the game is over need to reset state to replay game
     newState = mori.assocIn(newState, ['game', 'isGameOver'], true)
-    // newState = mori.assocIn(newState, ['game', 'countdown'], deepCopy(COUNTDOWN))
-    // newState = mori.assocIn(newState, ['game', 'gameTimer'], deepCopy(GAME_TIMER))
   } else {
     newState = mori.updateIn(newState, ['game', 'gameTimer'], mori.dec)
   }
@@ -251,8 +250,6 @@ function checkIsGameReady () {
   const countdown = mori.getIn(gameState, ['game', 'countdown'])
   let newState = gameState
 
-  // TODO: create replay countdown
-
   if (numberOfPlayers !== 0) {
     newState = mori.updateIn(newState, ['game', 'countdown'], mori.dec)
   }
@@ -267,6 +264,8 @@ function receiveNewPlayer (player) {
   const playerData = JSON.parse(player)
   const index = mori.getIn(gameState, ['game', 'numberOfPlayers'])
   const newPlayer = createPlayer(playerData.name, playerData.color, playerData.id, index)
+  // save player to restart game later
+  players_backup[playerData.id] = deepCopy(newPlayer)
 
   newState = mori.assocIn(newState, ['game', 'players', playerData.id], mori.toClj(newPlayer))
   newState = mori.updateIn(newState, ['game', 'numberOfPlayers'], mori.inc)
@@ -287,10 +286,13 @@ function receivedNewColors (state) {
   gameState = mori.assocIn(gameState, ['game', 'colors'], colors)
 }
 
-function receivedRestartGame (state) {
-  // TODO: need to restart Game
-  const data = JSON.parse(state)
-  console.log(data)
+function receivedRestartGame () {
+  let newState = mori.toClj(deepCopy(initialState))
+  newState = mori.assocIn(newState, ['game', 'players'], mori.toClj(deepCopy(players_backup)))
+  newState = mori.assocIn(newState, ['game', 'numberOfPlayers'], mori.getIn(gameState, ['game', 'numberOfPlayers']))
+  newState = mori.assocIn(newState, ['game', 'colors'], mori.getIn(gameState, ['game', 'colors']))
+
+  gameState = newState
 }
 
 function onConnection (socket) {

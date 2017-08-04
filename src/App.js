@@ -5,8 +5,7 @@ import Game from './Game'
 import HomePage from './HomePage'
 import SelectColor from './SelectColor'
 import { log } from './helpers'
-import './css/App.css'
-import './css/MediaQueries.css'
+import './App.css'
 
 function App (state) {
   const page = mori.get(state, 'page')
