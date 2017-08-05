@@ -1,10 +1,4 @@
-#app {
-  /*display: flex;
-  flex-direction: column;
-  justify-content: space-around;*/
-
-  height: 100vh;
-}
+#app { height: 100vh; }
 
 body {
   margin: 0;
@@ -108,19 +102,10 @@ header h2 {
 .player.purple { background-image: url('img/player3.svg'); background-size: contain; background-repeat: no-repeat;}
 .player.blue { background-image: url('img/player4.svg'); background-size: contain; background-repeat: no-repeat;}
 
-.player.isWeak { opacity: 0.3;}
-.player.isWeak { opacity: 0.3;}
-.player.isWeak { opacity: 0.3;}
-.player.isWeak { opacity: 0.3;}
+.player.isWeak { transform: scale(0.6); opacity: 0.5; }
 
-.player.hasPower { animation-name: power-animation; animation-duration: 1.5s; animation-iteration-count: infinite;}
-.player.hasPower { animation-name: power-animation; animation-duration: 1.5s; animation-iteration-count: infinite;}
-.player.hasPower { animation-name: power-animation; animation-duration: 1.5s; animation-iteration-count: infinite;}
-.player.hasPower { animation-name: power-animation; animation-duration: 1.5s; animation-iteration-count: infinite;}
+.player.hasPower { transform: scale(1.5); }
 
-.player.dead { display: none;}
-.player.dead { display: none;}
-.player.dead { display: none;}
 .player.dead { display: none;}
 
 @keyframes power-animation {
@@ -140,10 +125,6 @@ header h2 {
   width: 560px;
   height: 620px;
 }
-
-/*.is3d .board, .is3d .board-wrapper svg, .is3d .board-wrapper svg:last-child{
-  transform: rotateX(30deg);
-}*/
 
 .row {
   line-height: 0;
@@ -251,8 +232,6 @@ header h2 {
   100% {fill: purple;}
 }
 
-
-
 .phone-items button {
   border-radius: 0;
   width: 80px;
@@ -267,31 +246,29 @@ header h2 {
   position: relative;
 }
 
-.controller .circle {
-  position: absolute;
-  height: 60px;
-  width: 60px;
-  background: grey;
-  border-radius: 50%;
-  top: 60px;
-  left: 60px;
-  z-index: 10;
+.phone-items button {
+  background: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 0 10px black;
 }
 
-.phone-items #up {
+.phone-items #top {
   border-top-left-radius: 100%;
+  border-bottom-right-radius: 30%;
 }
 
 .phone-items #bottom {
   border-bottom-right-radius: 100%;
+  border-top-left-radius: 30%;
 }
 
 .phone-items #right {
   border-top-right-radius: 100%;
+  border-bottom-left-radius: 30%;
 }
 
 .phone-items #left {
   border-bottom-left-radius: 100%;
+  border-top-right-radius: 30%;
 }
 
 /* ///////////////////
@@ -300,9 +277,6 @@ header h2 {
 
 
 @media (max-width:600px)  {
-  body {
-    background: darkgreen;
-  }
   .board-wrapper svg {
     width: 420px;
     height: 466px;
@@ -337,9 +311,6 @@ header h2 {
 }
 
 @media (max-width:480px)  {
-  body {
-    background: darkblue;
-  }
   .board-wrapper svg {
     width: 280px;
     height: 310px;
@@ -378,13 +349,10 @@ header h2 {
   }
 }
 
-/* Landscape */
+/* Landscape  big phone */
 @media only screen
   and (max-device-width: 736px)
   and (orientation: landscape) {
-    body {
-      background: grey;
-    }
     .game header, .game .score-board, .game .timer {
       display: none;
     }
@@ -395,6 +363,8 @@ header h2 {
       display: flex;
       flex-direction: column;
     }
+    .phone-items header { font-size: 1em; }
+
     .phone-items h2 {
       margin: 0;
     }
@@ -437,5 +407,61 @@ header h2 {
       height: 7.5px;
       width: 7.5px;
       margin: 1px;
+    }
+}
+
+/* Landscape small phone */
+@media only screen
+  and (max-device-width: 568px)
+  and (orientation: landscape) {
+
+    .home h1 { font-size: 1.5em; }
+    .home h2 { font-size: 1.2em; }
+    .home h4 { font-size: 1em; margin: 0.3em; }
+    .home p { font-size: 0.9em; margin: 0.2em; }
+
+    .phone-items header { display: none; }
+
+    .score-board p { margin: 2px;}
+
+    .controller button {
+      width: 50px;
+      height: 50px;
+    }
+    .board-wrapper svg {
+      width: 196px;
+      height: 217px;
+      margin: none;
+    }
+    .board-wrapper svg:last-child{
+      width: 196px;
+      height: 217px;
+    }
+    .board-wrapper {
+      width: 196px;
+      margin: 0 auto;
+    }
+    .board {
+      width: 196px;
+      height: 217px;
+    }
+    .player {
+      height: 14px;
+      width: 7px;
+    }
+    .square {
+      height: 7px;
+      width: 7px;
+      margin: 0px;
+    }
+    .square.dot {
+      height: 4px;
+      width: 4px;
+      margin: 1.5px;
+    }
+    .square.power-dot {
+      height: 6px;
+      width: 6px;
+      margin: 0.5px;
     }
 }

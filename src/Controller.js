@@ -14,15 +14,14 @@ function handleController (event) {
 
 function Controller () {
   return (
-    <div className='controller' onClick={handleController} >
-      <div className='circle' />
+    <div className='controller'>
       <div>
-        <button id='up' />
-        <button id='right' />
+        <button onClick={handleController} id='top' />
+        <button onClick={handleController} id='right' />
       </div>
       <div>
-        <button id='left' />
-        <button id='bottom' />
+        <button onClick={handleController} id='left' />
+        <button onClick={handleController} id='bottom' />
       </div>
     </div>
   )
