@@ -15,7 +15,7 @@ app.use(express.static(path.join(__dirname, '/build/')))
 
 // fast speed for testing
 const COUNTDOWN = 50
-const GAME_TIMER = 50
+const GAME_TIMER = 150
 let players_backup = {}
 
 const log = (...args) => {
@@ -106,7 +106,7 @@ function checkTunnel (x, y, dir, board, id) {
   if (x === (xMax) && dir === 'right') gameState = mori.assocIn(gameState, ['game', 'players', id, 'x'], 0)
 }
 
-function movePlayer (color, id, direction, x, y, board) {
+function movePlayer (color, id, direction, hasPower, x, y, board) {
   let newGameState = gameState
   // board limits
   const yMax = mori.count(board) - 1
@@ -117,14 +117,12 @@ function movePlayer (color, id, direction, x, y, board) {
 
   if (collisionVal === 'red' || collisionVal === 'green' ||
       collisionVal === 'blue' || collisionVal === 'purple') {
-    const hasPower = mori.getIn(gameState, ['game', 'players', id, 'hasPower'])
     if (hasPower) {
       const players = mori.vals(mori.getIn(gameState, ['game', 'players']))
       mori.each(players, function (p) {
         const otherId = mori.get(p, 'id')
         const color = mori.get(p, 'color')
         if (color === collisionVal) {
-          // TODO: needs to erase from board and maybe put on the ghost house
           gameState = mori.assocIn(gameState, ['game', 'players', otherId, 'isDead'], true)
         }
       })
@@ -195,13 +193,17 @@ function updatePlayersPosition () {
     const id = mori.get(p, 'id')
     const color = mori.get(p, 'color')
     const speed = mori.get(p, 'speed')
+    const hasPower = mori.get(p, 'hasPower')
+    const isDead = mori.get(p, 'isDead')
     const direction = mori.get(p, 'direction')
     const x = mori.get(p, 'x')
     const y = mori.get(p, 'y')
     const tic = mori.get(p, 'tic')
 
-    if (tic === speed) {
-      movePlayer(color, id, direction, x, y, board)
+    if (isDead) {
+      gameState = mori.assocIn(gameState, ['game', 'board', y, x], 0)
+    } else if (tic === speed) {
+      movePlayer(color, id, direction, hasPower, x, y, board)
     }
   })
 }

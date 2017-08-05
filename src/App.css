@@ -188,7 +188,7 @@ header h2 {
 }
 
 .maze path {
-  transition: all 1s;
+  /*transition: all 1s;*/
 }
 
 .power-mode .maze path {
@@ -239,11 +239,14 @@ header h2 {
   display: inline-block;
 }
 
+/*.phone-items {
+  position: relative;
+}*/
+
 .phone-items .controller {
-  display: table;
-  margin: auto;
   transform: rotate(45deg);
-  /*position: relative;*/
+  margin: auto;
+  /*position: absolute;*/
 }
 
 .phone-items button {
@@ -276,93 +279,164 @@ header h2 {
 ///////////////////// */
 
 
-@media (max-width:600px)
-   and (orientation: portrait)   {
-  header h2 { margin: 0px; }
-  .score p { margin: 0.5em; }
-  .game-wrapper { flex-direction: column; }
+@media (max-width:414px) and (orientation: portrait) {
+  .main-wrapper {
+    justify-content: center;
+  }
+
+  header h2 {
+    margin: 0px;
+  }
+
+  .score p {
+    margin: 0.5em;
+  }
+
+  .game-wrapper {
+    flex-direction: column;
+  }
 
   .phone-items {
     display: flex;
-    flex-direction: column;
   }
-  .phone-items header, .phone-items .score-board, .phone-items .timer {
+
+  .game header, .phone-items header, .phone-items .score-board, .phone-items .timer {
     display: none;
   }
 
-  .board-wrapper svg {
-    width: 420px;
-    height: 466px;
+  .board, .board-wrapper svg, .board-wrapper svg:last-child {
+    width: 336px;
+    height: 372px;
   }
-  .board-wrapper svg:last-child{
-    width: 420px;
-    height: 466px;
-  }
+
   .player {
-    height: 20px;
-    width: 15px;
-  }
-  .board {
-    width: 420px;
-    height: 466px;
-  }
-  .square {
     height: 15px;
-    width: 15px;
+    width: 12px;
   }
+
+  .square {
+    height: 12px;
+    width: 12px;
+  }
+
   .square.dot {
-    height: 5px;
-    width: 5px;
-    margin: 5px;
+    height: 6px;
+    width: 6px;
+    margin: 3px;
   }
+
   .square.power-dot {
     height: 10px;
     width: 10px;
-    margin: 2.5px;
+    margin: 1px;
   }
-
 }
 
-@media (max-width:480px)
-   and (orientation: portrait) {
-  body {
-    background: blue;
+@media (max-width:320px) and (orientation: portrait) {
+  header, .score-board {
+    display: none;
   }
-  header { display: none; }
-  .board-wrapper svg {
+
+  .main-wrapper {
+    justify-content: end;
+    margin-top: 10px;
+  }
+
+  .board, .board-wrapper svg, .board-wrapper svg:last-child  {
     width: 280px;
     height: 310px;
   }
+
   .phone-items button {
     width: 60px;
     height: 60px;
   }
-  .game p { font-size: 0.85em; }
-  .game .timer p { margin: 0.5em; }
 
-  .board-wrapper svg:last-child {
-    width: 280px;
-    height: 310px;
+  .game p {
+    font-size: 0.85em;
   }
+
+  .game .timer p {
+    margin: 0.5em;
+  }
+
   .board-wrapper {
     width: 280px;
     margin: 0 auto;
   }
-  .board {
-    width: 280px;
-    height: 310px;
-  }
+
   .player {
     height: 15px;
     width: 10px;
   }
+
   .square {
     height: 10px;
     width: 10px;
     display: inline-block;
   }
+
   .square.dot {
-    background: #fff;
+    height: 5px;
+    width: 5px;
+    margin: 2.5px;
+  }
+
+  .square.power-dot {
+    height: 7.5px;
+    width: 7.5px;
+    margin: 1px;
+  }
+}
+
+/* Landscape big phone */
+@media only screen and (max-device-width: 736px) and (orientation: landscape) {
+  .game header, .game .score-board, .game .timer {
+    display: none;
+  }
+
+  .phone-items {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .phone-items header h2 {
+    font-size: 1em;
+  }
+
+  .phone-items h2 {
+    margin: 0;
+  }
+
+  .phone-items p {
+    font-size: 0.8em;
+  }
+
+  .board-wrapper svg {
+    margin: none;
+  }
+
+  .board,  .board-wrapper svg:last-child, .board-wrapper svg{
+    width: 280px;
+    height: 310px;
+  }
+
+  .board-wrapper {
+    width: 280px;
+    margin: 0 auto;
+  }
+
+  .player {
+    height: 15px;
+    width: 10px;
+  }
+
+  .square {
+    height: 10px;
+    width: 10px;
+  }
+
+  .square.dot {
     height: 5px;
     width: 5px;
     margin: 2.5px;
@@ -374,116 +448,67 @@ header h2 {
   }
 }
 
-/* Landscape  big phone */
-@media only screen
-  and (max-device-width: 736px)
-  and (orientation: landscape) {
-    .game header, .game .score-board, .game .timer {
-      display: none;
-    }
-    .phone-items {
-      display: flex;
-      flex-direction: column;
-    }
-    .phone-items header { font-size: 1em; }
-
-    .phone-items h2 {
-      margin: 0;
-    }
-    .phone-items p {
-      font-size: 0.8em;
-    }
-    .board-wrapper svg {
-      width: 280px;
-      height: 310px;
-      margin: none;
-    }
-    .board-wrapper svg:last-child{
-      width: 280px;
-      height: 310px;
-    }
-    .board-wrapper {
-      width: 280px;
-      margin: 0 auto;
-    }
-    .board {
-      width: 280px;
-      height: 310px;
-    }
-    .player {
-      height: 15px;
-      width: 10px;
-    }
-    .square {
-      height: 10px;
-      width: 10px;
-      display: inline-block;
-    }
-    .square.dot {
-      background: #fff;
-      height: 5px;
-      width: 5px;
-      margin: 2.5px;
-    }
-    .square.power-dot {
-      height: 7.5px;
-      width: 7.5px;
-      margin: 1px;
-    }
-}
-
 /* Landscape small phone */
-@media only screen
-  and (max-device-width: 568px)
-  and (orientation: landscape) {
+@media only screen and (max-device-width: 568px) and (orientation: landscape) {
+  .home h1 {
+    font-size: 1.5em;
+  }
 
-    .home h1 { font-size: 1.5em; }
-    .home h2 { font-size: 1.2em; }
-    .home h4 { font-size: 1em; margin: 0.3em; }
-    .home p { font-size: 0.9em; margin: 0.2em; }
+  .home h2 {
+    font-size: 1.2em;
+  }
 
-    .phone-items header { display: none; }
+  .home h4 {
+    font-size: 1em; margin: 0.3em;
+  }
 
-    .score-board p { margin: 2px;}
+  .home p {
+    font-size: 0.9em; margin: 0.2em;
+  }
 
-    .controller button {
-      width: 50px;
-      height: 50px;
-    }
-    .board-wrapper svg {
-      width: 196px;
-      height: 217px;
-      margin: none;
-    }
-    .board-wrapper svg:last-child{
-      width: 196px;
-      height: 217px;
-    }
-    .board-wrapper {
-      width: 196px;
-      margin: 0 auto;
-    }
-    .board {
-      width: 196px;
-      height: 217px;
-    }
-    .player {
-      height: 14px;
-      width: 7px;
-    }
-    .square {
-      height: 7px;
-      width: 7px;
-      margin: 0px;
-    }
-    .square.dot {
-      height: 4px;
-      width: 4px;
-      margin: 1.5px;
-    }
-    .square.power-dot {
-      height: 6px;
-      width: 6px;
-      margin: 0.5px;
-    }
+  .phone-items header {
+    display: none;
+  }
+
+  .score-board p {
+    margin: 2px;
+  }
+
+  .controller button {
+    width: 50px;
+    height: 50px;
+    display: inline-block;
+  }
+
+  .board, .board-wrapper svg, .board-wrapper svg:last-child{
+    width: 196px;
+    height: 217px;
+  }
+
+  .board-wrapper {
+    width: 196px;
+    margin: 0 auto;
+  }
+
+  .player {
+    height: 14px;
+    width: 7px;
+  }
+
+  .square {
+    height: 7px;
+    width: 7px;
+  }
+
+  .square.dot {
+    height: 4px;
+    width: 4px;
+    margin: 1.5px;
+  }
+
+  .square.power-dot {
+    height: 6px;
+    width: 6px;
+    margin: 0.5px;
+  }
 }
