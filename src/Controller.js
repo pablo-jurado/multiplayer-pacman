@@ -13,18 +13,21 @@ function handleController (event) {
 }
 
 function Controller () {
-  return (
-    <div className='controller'>
-      <div>
-        <button onClick={handleController} id='top' />
-        <button onClick={handleController} id='right' />
+  const id = mori.get(window.appState, 'id')
+  if (id) {
+    return (
+      <div className='controller'>
+        <div>
+          <button onClick={handleController} id='top' />
+          <button onClick={handleController} id='right' />
+        </div>
+        <div>
+          <button onClick={handleController} id='left' />
+          <button onClick={handleController} id='bottom' />
+        </div>
       </div>
-      <div>
-        <button onClick={handleController} id='left' />
-        <button onClick={handleController} id='bottom' />
-      </div>
-    </div>
-  )
+    )
+  }
 }
 
 export default Controller

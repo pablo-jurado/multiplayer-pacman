@@ -243,7 +243,7 @@ header h2 {
   display: table;
   margin: auto;
   transform: rotate(45deg);
-  position: relative;
+  /*position: relative;*/
 }
 
 .phone-items button {
@@ -276,7 +276,20 @@ header h2 {
 ///////////////////// */
 
 
-@media (max-width:600px)  {
+@media (max-width:600px)
+   and (orientation: portrait)   {
+  header h2 { margin: 0px; }
+  .score p { margin: 0.5em; }
+  .game-wrapper { flex-direction: column; }
+
+  .phone-items {
+    display: flex;
+    flex-direction: column;
+  }
+  .phone-items header, .phone-items .score-board, .phone-items .timer {
+    display: none;
+  }
+
   .board-wrapper svg {
     width: 420px;
     height: 466px;
@@ -310,12 +323,24 @@ header h2 {
 
 }
 
-@media (max-width:480px)  {
+@media (max-width:480px)
+   and (orientation: portrait) {
+  body {
+    background: blue;
+  }
+  header { display: none; }
   .board-wrapper svg {
     width: 280px;
     height: 310px;
   }
-  .board-wrapper svg:last-child{
+  .phone-items button {
+    width: 60px;
+    height: 60px;
+  }
+  .game p { font-size: 0.85em; }
+  .game .timer p { margin: 0.5em; }
+
+  .board-wrapper svg:last-child {
     width: 280px;
     height: 310px;
   }
@@ -355,9 +380,6 @@ header h2 {
   and (orientation: landscape) {
     .game header, .game .score-board, .game .timer {
       display: none;
-    }
-    .game {
-      justify-content: flex-start;
     }
     .phone-items {
       display: flex;
