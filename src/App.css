@@ -80,7 +80,7 @@ header h2 {
 }
 
 .phone-items {
-  padding: 0 2%;
+  padding: 0 5px;
   display: none;
 }
 
@@ -239,19 +239,15 @@ header h2 {
   display: inline-block;
 }
 
-/*.phone-items {
-  position: relative;
-}*/
-
 .phone-items .controller {
   transform: rotate(45deg);
   margin: auto;
-  /*position: absolute;*/
 }
 
 .phone-items button {
   background: rgba(255, 255, 255, 0.18);
   box-shadow: 0 0 10px black;
+  display: inline-block;
 }
 
 .phone-items #top {
@@ -412,10 +408,6 @@ header h2 {
     font-size: 0.8em;
   }
 
-  .board-wrapper svg {
-    margin: none;
-  }
-
   .board,  .board-wrapper svg:last-child, .board-wrapper svg{
     width: 280px;
     height: 310px;
@@ -477,7 +469,6 @@ header h2 {
   .controller button {
     width: 50px;
     height: 50px;
-    display: inline-block;
   }
 
   .board, .board-wrapper svg, .board-wrapper svg:last-child{
