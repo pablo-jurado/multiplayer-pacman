@@ -40,7 +40,7 @@ function SelectColor (state) {
   const id = mori.get(state, 'id')
   const colorSelected = mori.get(state, 'colorSelected')
   const colors = mori.getIn(state, ['game', 'colors'])
-  
+
   if (colorSelected && !id) createPlayer(name, colorSelected)
 
   let colorsCollection = []
