@@ -15,7 +15,7 @@ app.use(express.static(path.join(__dirname, '/build/')))
 
 // fast speed for testing
 const COUNTDOWN = 50
-const GAME_TIMER = 150
+const GAME_TIMER = 50
 let players_backup = {}
 
 const log = (...args) => {
@@ -295,6 +295,14 @@ function receivedRestartGame () {
   gameState = newState
 }
 
+function receivedEndGame () {
+  // reset server state
+  players_backup = {}
+  gameState = mori.toClj(deepCopy(initialState))
+
+  io.sockets.emit('resetLocalState')
+}
+
 function onConnection (socket) {
   console.log('A user connected!')
 
@@ -303,6 +311,7 @@ function onConnection (socket) {
   socket.on('keyPress', receivedKeyPress)
   socket.on('updateNewColors', receivedNewColors)
   socket.on('restartGame', receivedRestartGame)
+  socket.on('endGame', receivedEndGame)
 }
 
 io.on('connection', onConnection)

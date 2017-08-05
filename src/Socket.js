@@ -1,6 +1,7 @@
 import io from 'socket.io-client'
 import mori from 'mori'
-import { addKeyListener } from './KeyHandler'
+import { addKeyListener, removeKeyListener } from './KeyHandler'
+import { resetInitialState } from './index'
 import { log } from './helpers'
 
 export const socket = io('http://localhost:3100')
@@ -20,12 +21,18 @@ function receiveNewPlayer (state) {
     const id = mori.get(p, 'id')
     const localPlayer = mori.get(window.appState, 'id')
 
-    if (id === localPlayer) addKeyListener(id)
+    if (id === localPlayer) addKeyListener()
   })
+}
+
+function receiveResetLocalState () {
+  removeKeyListener()
+  resetInitialState()
 }
 
 socket.on('newGameState', receiveNewGameState)
 socket.on('registerNewPlayer', receiveNewPlayer)
+socket.on('resetLocalState', receiveResetLocalState)
 
 export function sendNewColors (state) {
   socket.emit('updateNewColors', JSON.stringify(mori.toJs(state)))
@@ -41,4 +48,8 @@ export function sendKeyPress (state) {
 
 export function sendRestartGame () {
   socket.emit('restartGame')
+}
+
+export function sendEndGame () {
+  socket.emit('endGame')
 }

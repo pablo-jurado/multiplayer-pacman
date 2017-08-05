@@ -29,6 +29,10 @@ let initialState = {
 
 window.appState = mori.toClj(initialState)
 
+export function resetInitialState () {
+  window.appState = mori.toClj(deepCopy(initialState))
+}
+
 // -----------------------------------------------------------------------------
 // Render Loop
 // -----------------------------------------------------------------------------
