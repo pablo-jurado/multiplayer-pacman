@@ -16,7 +16,7 @@ app.use(express.static(path.join(__dirname, '/build/')))
 // fast speed for testing
 const COUNTDOWN = 50
 const GAME_TIMER = 150
-let players_backup = {}
+let _playersBackup = {}
 
 const log = (...args) => {
   console.log(...args.map(mori.toJs))
@@ -44,24 +44,23 @@ const initialState = {
 let gameState = mori.toClj(deepCopy(initialState))
 
 function createPlayer (name, color, id, index) {
-  let direction, x, y = null
+  let direction = null
+  let x = null
+  let y = null
 
   if (index === 0) {
     direction = 'right'
     x = 2
     y = 1
-  }
-  if (index === 1) {
+  } else if (index === 1) {
     direction = 'left'
     x = 26
     y = 1
-  }
-  if (index === 2) {
+  } else if (index === 2) {
     direction = 'right'
     x = 1
     y = 29
-  }
-  if (index === 3) {
+  } else if (index === 3) {
     direction = 'left'
     x = 26
     y = 29
@@ -98,6 +97,25 @@ function extraPoints (v) {
   return v + 100
 }
 
+function updatePosition (x, y, direction, board, id, color) {
+  let newGameState = gameState
+  // board limits
+  const yMax = mori.count(board) - 1
+  const xRow = mori.get(board, 0)
+  const xMax = mori.count(xRow) - 1
+  // increase x and y value
+  if (direction === 'right' && x < xMax) x += 1
+  if (direction === 'left' && x > 0) x -= 1
+  if (direction === 'bottom' && y < yMax) y += 1
+  if (direction === 'top' && y > 0) y -= 1
+  // updates next tile
+  newGameState = mori.assocIn(newGameState, ['game', 'board', y, x], color)
+  // update player x and y
+  newGameState = mori.assocIn(newGameState, ['game', 'players', id, 'x'], x)
+  newGameState = mori.assocIn(newGameState, ['game', 'players', id, 'y'], y)
+  gameState = newGameState
+}
+
 function checkTunnel (x, y, dir, board, id) {
   const xrow = mori.get(board, 0)
   const xMax = mori.count(xrow) - 1
@@ -106,39 +124,30 @@ function checkTunnel (x, y, dir, board, id) {
   if (x === (xMax) && dir === 'right') gameState = mori.assocIn(gameState, ['game', 'players', id, 'x'], 0)
 }
 
+function killPlayer (collisionVal) {
+  const players = mori.vals(mori.getIn(gameState, ['game', 'players']))
+  mori.each(players, function (p) {
+    const otherId = mori.get(p, 'id')
+    const color = mori.get(p, 'color')
+    if (color === collisionVal) {
+      gameState = mori.assocIn(gameState, ['game', 'players', otherId, 'isDead'], true)
+    }
+  })
+}
+
 function movePlayer (color, id, direction, hasPower, x, y, board) {
   let newGameState = gameState
-  // board limits
-  const yMax = mori.count(board) - 1
-  const xRow = mori.get(board, 0)
-  const xMax = mori.count(xRow) - 1
-
   const collisionVal = checkCollision(x, y, direction, board)
 
   if (collisionVal === 'red' || collisionVal === 'green' ||
-      collisionVal === 'blue' || collisionVal === 'purple') {
-    if (hasPower) {
-      const players = mori.vals(mori.getIn(gameState, ['game', 'players']))
-      mori.each(players, function (p) {
-        const otherId = mori.get(p, 'id')
-        const color = mori.get(p, 'color')
-        if (color === collisionVal) {
-          gameState = mori.assocIn(gameState, ['game', 'players', otherId, 'isDead'], true)
-        }
-      })
-    }
+     collisionVal === 'blue' || collisionVal === 'purple') {
+    if (hasPower) killPlayer(collisionVal)
     return
   }
   // if the value is not a wall
   if (collisionVal !== 1) {
     // reset previous board value to empty
     newGameState = mori.assocIn(newGameState, ['game', 'board', y, x], 0)
-
-    // increase x and y value
-    if (direction === 'right' && x < xMax) x += 1
-    if (direction === 'left' && x > 0) x -= 1
-    if (direction === 'bottom' && y < yMax) y += 1
-    if (direction === 'top' && y > 0) y -= 1
 
     // number 2 is a regular dot
     if (collisionVal === 2) {
@@ -150,61 +159,51 @@ function movePlayer (color, id, direction, hasPower, x, y, board) {
       // if the player eats a power dot gets extra points and eating power
       newGameState = mori.updateIn(newGameState, ['game', 'players', id, 'score'], extraPoints)
       newGameState = mori.assocIn(newGameState, ['game', 'players', id, 'hasPower'], true)
-      // newGameState = mori.assocIn(newGameState, ['game', 'players', id, 'speed'], 2)
       // start game power mode
       newGameState = mori.assocIn(newGameState, ['game', 'isPowerMode'], true)
     }
 
-    // updates next tile
-    newGameState = mori.assocIn(newGameState, ['game', 'board', y, x], color)
-    // update player x and y
-    newGameState = mori.assocIn(newGameState, ['game', 'players', id, 'x'], x)
-    newGameState = mori.assocIn(newGameState, ['game', 'players', id, 'y'], y)
-
     gameState = newGameState
 
+    updatePosition(x, y, direction, board, id, color)
     checkTunnel(x, y, direction, board, id)
   }
 }
 
-function updatePlayersSpeed () {
-  const players = mori.vals(mori.getIn(gameState, ['game', 'players']))
-  mori.each(players, function (p) {
-    const id = mori.get(p, 'id')
-    const speed = mori.get(p, 'speed')
-    const tic = mori.get(p, 'tic')
-    const hasPower = mori.get(p, 'hasPower')
-    const isWeak = mori.get(p, 'isWeak')
+function updatePlayersSpeed (id, speed, tic, hasPower, isWeak) {
+  if (speed === tic) gameState = mori.assocIn(gameState, ['game', 'players', id, 'tic'], 0)
+  gameState = mori.updateIn(gameState, ['game', 'players', id, 'tic'], mori.inc)
 
-    if (speed === tic) gameState = mori.assocIn(gameState, ['game', 'players', id, 'tic'], 0)
-    gameState = mori.updateIn(gameState, ['game', 'players', id, 'tic'], mori.inc)
-
-    if (hasPower) gameState = mori.assocIn(gameState, ['game', 'players', id, 'speed'], 2)
-    if (isWeak) gameState = mori.assocIn(gameState, ['game', 'players', id, 'speed'], 4)
-    if (!isWeak && !hasPower) gameState = mori.assocIn(gameState, ['game', 'players', id, 'speed'], 3)
-  })
+  if (hasPower) gameState = mori.assocIn(gameState, ['game', 'players', id, 'speed'], 2)
+  if (isWeak) gameState = mori.assocIn(gameState, ['game', 'players', id, 'speed'], 4)
+  if (!isWeak && !hasPower) gameState = mori.assocIn(gameState, ['game', 'players', id, 'speed'], 3)
 }
 
-function updatePlayersPosition () {
+function updatePlayersPosition (id, x, y, direction, color, hasPower, isDead, tic, speed, board) {
+  if (isDead) {
+    gameState = mori.assocIn(gameState, ['game', 'board', y, x], 0)
+  } else if (tic === speed) {
+    movePlayer(color, id, direction, hasPower, x, y, board)
+  }
+}
+
+function updateAllPlayers () {
   const players = mori.vals(mori.getIn(gameState, ['game', 'players']))
   const board = mori.getIn(gameState, ['game', 'board'])
-
   mori.each(players, function (p) {
     const id = mori.get(p, 'id')
     const color = mori.get(p, 'color')
     const speed = mori.get(p, 'speed')
     const hasPower = mori.get(p, 'hasPower')
     const isDead = mori.get(p, 'isDead')
+    const isWeak = mori.get(p, 'isWeak')
     const direction = mori.get(p, 'direction')
     const x = mori.get(p, 'x')
     const y = mori.get(p, 'y')
     const tic = mori.get(p, 'tic')
 
-    if (isDead) {
-      gameState = mori.assocIn(gameState, ['game', 'board', y, x], 0)
-    } else if (tic === speed) {
-      movePlayer(color, id, direction, hasPower, x, y, board)
-    }
+    updatePlayersPosition(id, x, y, direction, color, hasPower, isDead, tic, speed, board)
+    updatePlayersSpeed(id, speed, tic, hasPower, isWeak)
   })
 }
 
@@ -221,28 +220,34 @@ function updateGameTimer () {
   gameState = newState
 }
 
+function makeAllPlayersWeak (players) {
+  mori.each(players, function (p) {
+    const id = mori.get(p, 'id')
+    const hasPower = mori.get(p, 'hasPower')
+    // is power mode in on will make weak rest of players
+    if (!hasPower) gameState = mori.assocIn(gameState, ['game', 'players', id, 'isWeak'], true)
+  })
+}
+
+function playersBackToNormal (players) {
+  mori.each(players, function (p) {
+    const id = mori.get(p, 'id')
+    gameState = mori.assocIn(gameState, ['game', 'players', id, 'isWeak'], false)
+    gameState = mori.assocIn(gameState, ['game', 'players', id, 'hasPower'], false)
+  })
+}
+
 function updatePowerTimer () {
+  const players = mori.vals(mori.getIn(gameState, ['game', 'players']))
   const isPowerMode = mori.getIn(gameState, ['game', 'isPowerMode'])
   const powerTimer = mori.getIn(gameState, ['game', 'powerTimer'])
 
-  if (isPowerMode) {
-    gameState = mori.updateIn(gameState, ['game', 'powerTimer'], mori.inc)
-    const players = mori.vals(mori.getIn(gameState, ['game', 'players']))
-    mori.each(players, function (p) {
-      const id = mori.get(p, 'id')
-      const hasPower = mori.get(p, 'hasPower')
-      // is power mode in on will make weak rest of players
-      if (!hasPower) gameState = mori.assocIn(gameState, ['game', 'players', id, 'isWeak'], true)
-    })
-  }
+  if (powerTimer === 1) makeAllPlayersWeak(players)
+
+  if (isPowerMode) gameState = mori.updateIn(gameState, ['game', 'powerTimer'], mori.inc)
 
   if (powerTimer === 50) {
-    const players = mori.vals(mori.getIn(gameState, ['game', 'players']))
-    mori.each(players, function (p) {
-      const id = mori.get(p, 'id')
-      gameState = mori.assocIn(gameState, ['game', 'players', id, 'isWeak'], false)
-      gameState = mori.assocIn(gameState, ['game', 'players', id, 'hasPower'], false)
-    })
+    playersBackToNormal(players)
     gameState = mori.assocIn(gameState, ['game', 'isPowerMode'], false)
   }
 }
@@ -267,7 +272,7 @@ function receiveNewPlayer (player) {
   const index = mori.getIn(gameState, ['game', 'numberOfPlayers'])
   const newPlayer = createPlayer(playerData.name, playerData.color, playerData.id, index)
   // save player to restart game later
-  players_backup[playerData.id] = deepCopy(newPlayer)
+  _playersBackup[playerData.id] = deepCopy(newPlayer)
 
   newState = mori.assocIn(newState, ['game', 'players', playerData.id], mori.toClj(newPlayer))
   newState = mori.updateIn(newState, ['game', 'numberOfPlayers'], mori.inc)
@@ -290,7 +295,7 @@ function receivedNewColors (state) {
 
 function receivedRestartGame () {
   let newState = mori.toClj(deepCopy(initialState))
-  newState = mori.assocIn(newState, ['game', 'players'], mori.toClj(deepCopy(players_backup)))
+  newState = mori.assocIn(newState, ['game', 'players'], mori.toClj(deepCopy(_playersBackup)))
   newState = mori.assocIn(newState, ['game', 'numberOfPlayers'], mori.getIn(gameState, ['game', 'numberOfPlayers']))
   newState = mori.assocIn(newState, ['game', 'colors'], mori.getIn(gameState, ['game', 'colors']))
 
@@ -299,7 +304,7 @@ function receivedRestartGame () {
 
 function receivedEndGame () {
   // reset server state
-  players_backup = {}
+  _playersBackup = {}
   gameState = mori.toClj(deepCopy(initialState))
 
   io.sockets.emit('resetLocalState')
@@ -329,8 +334,7 @@ function gameTick () {
   checkIsGameReady()
   if (isGameOver) return
   if (isGameReady) {
-    updatePlayersSpeed()
-    updatePlayersPosition()
+    updateAllPlayers()
     updatePowerTimer()
     updateGameTimer()
   }
