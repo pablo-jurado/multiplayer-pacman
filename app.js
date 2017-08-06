@@ -285,7 +285,15 @@ function receivedKeyPress (state) {
   const user = JSON.parse(state)
   const id = user.id
   const direction = user.direction
-  gameState = mori.assocIn(gameState, ['game', 'players', id, 'direction'], direction)
+
+  const x = mori.getIn(gameState, ['game', 'players', id, 'x'])
+  const y = mori.getIn(gameState, ['game', 'players', id, 'y'])
+  const board = mori.getIn(gameState, ['game', 'board'])
+
+  // check wall collision so player keep moving if wrong direction
+  if (checkCollision(x, y, direction, board) !== 1) {
+    gameState = mori.assocIn(gameState, ['game', 'players', id, 'direction'], direction)
+  }
 }
 
 function receivedNewColors (state) {
