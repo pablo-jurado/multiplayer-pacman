@@ -14,8 +14,8 @@ app.use(express.static(path.join(__dirname, '/build/')))
 // const GAME_TIMER = 1000
 
 // fast speed for testing
-const COUNTDOWN = 50
-const GAME_TIMER = 150
+const COUNTDOWN = 1
+const GAME_TIMER = 1500
 let _playersBackup = {}
 
 const log = (...args) => {
@@ -64,6 +64,10 @@ function createPlayer (name, color, id, index) {
     direction = 'left'
     x = 26
     y = 29
+  } else if (index === -1) {
+    direction = 'left'
+    x = 9
+    y = 14
   }
 
   return {
@@ -135,12 +139,35 @@ function killPlayer (collisionVal) {
   })
 }
 
+function moveGhost (color, id, direction, hasPower, x, y, board) {
+  let newGameState = gameState
+  const collisionVal = checkCollision(x, y, direction, board)
+
+  if (collisionVal === 'red' || collisionVal === 'green' ||
+     collisionVal === 'blue' || collisionVal === 'purple') {
+    // TODO: check for ghost
+    if (hasPower) killPlayer(collisionVal)
+    return
+  }
+  // if the value is not a wall
+  if (collisionVal !== 1) {
+    // save previous board value
+    newGameState = mori.assocIn(newGameState, ['game', 'board', y, x], collisionVal)
+
+    gameState = newGameState
+
+    updatePosition(x, y, direction, board, id, color)
+    checkTunnel(x, y, direction, board, id)
+  }
+}
+
 function movePlayer (color, id, direction, hasPower, x, y, board) {
   let newGameState = gameState
   const collisionVal = checkCollision(x, y, direction, board)
 
   if (collisionVal === 'red' || collisionVal === 'green' ||
      collisionVal === 'blue' || collisionVal === 'purple') {
+    // TODO: check for ghost
     if (hasPower) killPlayer(collisionVal)
     return
   }
@@ -183,7 +210,11 @@ function updatePlayersPosition (id, x, y, direction, color, hasPower, isDead, ti
   if (isDead) {
     gameState = mori.assocIn(gameState, ['game', 'board', y, x], 0)
   } else if (tic === speed) {
-    movePlayer(color, id, direction, hasPower, x, y, board)
+    if (color === 'ghost') {
+      moveGhost(color, id, direction, hasPower, x, y, board)
+    } else {
+      movePlayer(color, id, direction, hasPower, x, y, board)
+    }
   }
 }
 
@@ -261,6 +292,8 @@ function checkIsGameReady () {
     newState = mori.updateIn(newState, ['game', 'countdown'], mori.dec)
   }
   if (countdown === 0) {
+    const ghost = createPlayer('ghost', 'ghost', 'ghost', -1)
+    newState = mori.assocIn(newState, ['game', 'players', 'ghost'], mori.toClj(ghost))
     newState = mori.assocIn(newState, ['game', 'isGameReady'], true)
   }
   gameState = newState
