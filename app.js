@@ -124,8 +124,12 @@ function checkTunnel (x, y, dir, board, id) {
   const xrow = mori.get(board, 0)
   const xMax = mori.count(xrow) - 1
 
-  if (x === 0 && dir === 'left') gameState = mori.assocIn(gameState, ['game', 'players', id, 'x'], xMax)
-  if (x === (xMax) && dir === 'right') gameState = mori.assocIn(gameState, ['game', 'players', id, 'x'], 0)
+  if (x === 0 && dir === 'left') {
+    gameState = mori.assocIn(gameState, ['game', 'players', id, 'x'], xMax)
+  }
+  if (x === (xMax) && dir === 'right') {
+    gameState = mori.assocIn(gameState, ['game', 'players', id, 'x'], 0)
+  }
 }
 
 function killPlayer (collisionVal) {
@@ -139,26 +143,43 @@ function killPlayer (collisionVal) {
   })
 }
 
-function moveGhost (color, id, direction, hasPower, x, y, board) {
-  let newGameState = gameState
+function getRandomNum (max) {
+  return Math.floor(Math.random() * max)
+}
+
+function getGhostDirection (direction, x, y, board) {
+  const allDirections = ['left', 'right', 'top', 'bottom']
+  const filterDirections = allDirections.filter(function (d) {
+    return (d !== direction)
+  })
+  const newDirection = filterDirections[getRandomNum(3)]
+
+  if (checkCollision(x, y, newDirection, board) !== 1) {
+    return newDirection
+  } else {
+    getGhostDirection(newDirection, x, y, board)
+  }
+}
+
+function moveGhost (x, y, direction, board) {
   const collisionVal = checkCollision(x, y, direction, board)
 
   if (collisionVal === 'red' || collisionVal === 'green' ||
      collisionVal === 'blue' || collisionVal === 'purple') {
-    // TODO: check for ghost
-    if (hasPower) killPlayer(collisionVal)
+    // killPlayer(collisionVal)
     return
   }
-  // if the value is not a wall
   if (collisionVal !== 1) {
     // save previous board value
-    newGameState = mori.assocIn(newGameState, ['game', 'board', y, x], collisionVal)
-
-    gameState = newGameState
-
-    updatePosition(x, y, direction, board, id, color)
-    checkTunnel(x, y, direction, board, id)
+    gameState = mori.assocIn(gameState, ['game', 'board', y, x], collisionVal)
+    updatePosition(x, y, direction, board, 'ghost', 'ghost')
+  } else {
+    // TODO: this needs a lot of improvement
+    const newDirection = getGhostDirection(direction, x, y, board)
+    moveGhost(x, y, newDirection, board)
   }
+  // TODO: need to fix tunnel for ghost
+  checkTunnel(x, y, direction, board, 'ghost')
 }
 
 function movePlayer (color, id, direction, hasPower, x, y, board) {
@@ -211,7 +232,7 @@ function updatePlayersPosition (id, x, y, direction, color, hasPower, isDead, ti
     gameState = mori.assocIn(gameState, ['game', 'board', y, x], 0)
   } else if (tic === speed) {
     if (color === 'ghost') {
-      moveGhost(color, id, direction, hasPower, x, y, board)
+      moveGhost(x, y, direction, board)
     } else {
       movePlayer(color, id, direction, hasPower, x, y, board)
     }

@@ -11,13 +11,15 @@ function Score (players) {
     let name = mori.get(p, 'name')
     let score = mori.get(p, 'score')
 
-    playersArr.push(
-      <div className='score'>
-        <div>
-          <p>Player {name}<br />Score: {score}</p>
+    if (name !== 'ghost') {
+      playersArr.push(
+        <div className='score'>
+          <div>
+            <p>Player {name}<br />Score: {score}</p>
+          </div>
         </div>
-      </div>
-    )
+      )
+    }
   })
 
   return (
