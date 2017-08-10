@@ -113,7 +113,12 @@ function updatePosition (x, y, direction, board, id, color) {
   if (direction === 'bottom' && y < yMax) y += 1
   if (direction === 'top' && y > 0) y -= 1
   // updates next tile
-  newGameState = mori.assocIn(newGameState, ['game', 'board', y, x], color)
+  if (color !== 'ghost') {
+    newGameState = mori.assocIn(newGameState, ['game', 'board', y, x], color)
+  } else {
+    // update direction for ghost
+    newGameState = mori.assocIn(newGameState, ['game', 'players', 'ghost', 'direction'], direction)
+  }
   // update player x and y
   newGameState = mori.assocIn(newGameState, ['game', 'players', id, 'x'], x)
   newGameState = mori.assocIn(newGameState, ['game', 'players', id, 'y'], y)
@@ -147,38 +152,50 @@ function getRandomNum (max) {
   return Math.floor(Math.random() * max)
 }
 
-function getGhostDirection (direction, x, y, board) {
-  const allDirections = ['left', 'right', 'top', 'bottom']
-  const filterDirections = allDirections.filter(function (d) {
-    return (d !== direction)
-  })
-  const newDirection = filterDirections[getRandomNum(3)]
+function moveGhostRandom (x, y, direction, board) {
+  const allDirections = ['top', 'right', 'bottom', 'left']
 
-  if (checkCollision(x, y, newDirection, board) !== 1) {
-    return newDirection
+  const newDirection = allDirections[getRandomNum(4)]
+  const collisionVal = checkCollision(x, y, newDirection, board)
+  if (collisionVal !== 1 && newDirection !== getOpositeDirection(direction)) {
+    updatePosition(x, y, newDirection, board, 'ghost', 'ghost')
+    checkTunnel(x, y, newDirection, board, 'ghost')
   } else {
-    getGhostDirection(newDirection, x, y, board)
+    moveGhostRandom(x, y, direction, board)
   }
 }
 
-function moveGhost (x, y, direction, board) {
-  const collisionVal = checkCollision(x, y, direction, board)
+function getOpositeDirection (d) {
+  if (d === 'top') return 'bottom'
+  if (d === 'right') return 'left'
+  if (d === 'bottom') return 'top'
+  if (d === 'left') return 'right'
+}
 
-  if (collisionVal === 'red' || collisionVal === 'green' ||
-     collisionVal === 'blue' || collisionVal === 'purple') {
-    // killPlayer(collisionVal)
-    return
-  }
-  if (collisionVal !== 1) {
-    // save previous board value
-    gameState = mori.assocIn(gameState, ['game', 'board', y, x], collisionVal)
+function moveGhost (x, y, direction, board) {
+  const allDirections = ['top', 'right', 'bottom', 'left']
+  const collisionVal = checkCollision(x, y, direction, board)
+  let clearPathCount = 0
+
+  // checks for a 4 way intersection
+  allDirections.forEach(function (d) {
+    if (checkCollision(x, y, d, board) !== 1) clearPathCount += 1
+  })
+
+  if (clearPathCount === 4 || clearPathCount === 3) {
+    moveGhostRandom(x, y, direction, board)
+  } else if (collisionVal !== 1) {
     updatePosition(x, y, direction, board, 'ghost', 'ghost')
-  } else {
-    // TODO: this needs a lot of improvement
-    const newDirection = getGhostDirection(direction, x, y, board)
-    moveGhost(x, y, newDirection, board)
+  } else if (clearPathCount === 2 && collisionVal === 1) {
+    // find the proper corner turn
+    for (var i = 0; i < allDirections.length; i++) {
+      const collisionVal = checkCollision(x, y, allDirections[i], board)
+      if (collisionVal !== 1 && allDirections[i] !== direction && allDirections[i] !== getOpositeDirection(direction)) {
+        updatePosition(x, y, allDirections[i], board, 'ghost', 'ghost')
+        return
+      }
+    }
   }
-  // TODO: need to fix tunnel for ghost
   checkTunnel(x, y, direction, board, 'ghost')
 }
 
