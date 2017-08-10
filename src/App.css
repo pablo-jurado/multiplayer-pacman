@@ -97,6 +97,7 @@ header h2 {
   left: 20px;
 }
 
+.player.ghost { background: white;}
 .player.red { background-image: url('img/player1.svg'); background-size: contain; background-repeat: no-repeat;}
 .player.green { background-image: url('img/player2.svg'); background-size: contain; background-repeat: no-repeat;}
 .player.purple { background-image: url('img/player3.svg'); background-size: contain; background-repeat: no-repeat;}

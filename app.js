@@ -14,8 +14,8 @@ app.use(express.static(path.join(__dirname, '/build/')))
 // const GAME_TIMER = 1000
 
 // fast speed for testing
-const COUNTDOWN = 50
-const GAME_TIMER = 150
+const COUNTDOWN = 1
+const GAME_TIMER = 1500
 let _playersBackup = {}
 
 const log = (...args) => {
@@ -64,6 +64,10 @@ function createPlayer (name, color, id, index) {
     direction = 'left'
     x = 26
     y = 29
+  } else if (index === -1) {
+    direction = 'left'
+    x = 9
+    y = 14
   }
 
   return {
@@ -109,7 +113,12 @@ function updatePosition (x, y, direction, board, id, color) {
   if (direction === 'bottom' && y < yMax) y += 1
   if (direction === 'top' && y > 0) y -= 1
   // updates next tile
-  newGameState = mori.assocIn(newGameState, ['game', 'board', y, x], color)
+  if (color !== 'ghost') {
+    newGameState = mori.assocIn(newGameState, ['game', 'board', y, x], color)
+  } else {
+    // update direction for ghost
+    newGameState = mori.assocIn(newGameState, ['game', 'players', 'ghost', 'direction'], direction)
+  }
   // update player x and y
   newGameState = mori.assocIn(newGameState, ['game', 'players', id, 'x'], x)
   newGameState = mori.assocIn(newGameState, ['game', 'players', id, 'y'], y)
@@ -120,8 +129,12 @@ function checkTunnel (x, y, dir, board, id) {
   const xrow = mori.get(board, 0)
   const xMax = mori.count(xrow) - 1
 
-  if (x === 0 && dir === 'left') gameState = mori.assocIn(gameState, ['game', 'players', id, 'x'], xMax)
-  if (x === (xMax) && dir === 'right') gameState = mori.assocIn(gameState, ['game', 'players', id, 'x'], 0)
+  if (x === 0 && dir === 'left') {
+    gameState = mori.assocIn(gameState, ['game', 'players', id, 'x'], xMax)
+  }
+  if (x === (xMax) && dir === 'right') {
+    gameState = mori.assocIn(gameState, ['game', 'players', id, 'x'], 0)
+  }
 }
 
 function killPlayer (collisionVal) {
@@ -135,12 +148,64 @@ function killPlayer (collisionVal) {
   })
 }
 
+function getRandomNum (max) {
+  return Math.floor(Math.random() * max)
+}
+
+function moveGhostRandom (x, y, direction, board) {
+  const allDirections = ['top', 'right', 'bottom', 'left']
+
+  const newDirection = allDirections[getRandomNum(4)]
+  const collisionVal = checkCollision(x, y, newDirection, board)
+  if (collisionVal !== 1 && newDirection !== getOpositeDirection(direction)) {
+    updatePosition(x, y, newDirection, board, 'ghost', 'ghost')
+    checkTunnel(x, y, newDirection, board, 'ghost')
+  } else {
+    moveGhostRandom(x, y, direction, board)
+  }
+}
+
+function getOpositeDirection (d) {
+  if (d === 'top') return 'bottom'
+  if (d === 'right') return 'left'
+  if (d === 'bottom') return 'top'
+  if (d === 'left') return 'right'
+}
+
+function moveGhost (x, y, direction, board) {
+  const allDirections = ['top', 'right', 'bottom', 'left']
+  const collisionVal = checkCollision(x, y, direction, board)
+  let clearPathCount = 0
+
+  // checks for a 4 way intersection
+  allDirections.forEach(function (d) {
+    if (checkCollision(x, y, d, board) !== 1) clearPathCount += 1
+  })
+
+  if (clearPathCount === 4 || clearPathCount === 3) {
+    moveGhostRandom(x, y, direction, board)
+  } else if (collisionVal !== 1) {
+    updatePosition(x, y, direction, board, 'ghost', 'ghost')
+  } else if (clearPathCount === 2 && collisionVal === 1) {
+    // find the proper corner turn
+    for (var i = 0; i < allDirections.length; i++) {
+      const collisionVal = checkCollision(x, y, allDirections[i], board)
+      if (collisionVal !== 1 && allDirections[i] !== direction && allDirections[i] !== getOpositeDirection(direction)) {
+        updatePosition(x, y, allDirections[i], board, 'ghost', 'ghost')
+        return
+      }
+    }
+  }
+  checkTunnel(x, y, direction, board, 'ghost')
+}
+
 function movePlayer (color, id, direction, hasPower, x, y, board) {
   let newGameState = gameState
   const collisionVal = checkCollision(x, y, direction, board)
 
   if (collisionVal === 'red' || collisionVal === 'green' ||
      collisionVal === 'blue' || collisionVal === 'purple') {
+    // TODO: check for ghost
     if (hasPower) killPlayer(collisionVal)
     return
   }
@@ -183,7 +248,11 @@ function updatePlayersPosition (id, x, y, direction, color, hasPower, isDead, ti
   if (isDead) {
     gameState = mori.assocIn(gameState, ['game', 'board', y, x], 0)
   } else if (tic === speed) {
-    movePlayer(color, id, direction, hasPower, x, y, board)
+    if (color === 'ghost') {
+      moveGhost(x, y, direction, board)
+    } else {
+      movePlayer(color, id, direction, hasPower, x, y, board)
+    }
   }
 }
 
@@ -261,6 +330,8 @@ function checkIsGameReady () {
     newState = mori.updateIn(newState, ['game', 'countdown'], mori.dec)
   }
   if (countdown === 0) {
+    const ghost = createPlayer('ghost', 'ghost', 'ghost', -1)
+    newState = mori.assocIn(newState, ['game', 'players', 'ghost'], mori.toClj(ghost))
     newState = mori.assocIn(newState, ['game', 'isGameReady'], true)
   }
   gameState = newState

@@ -1,6 +1,7 @@
 import { version } from 'inferno'
 import Component from 'inferno-component'
 import mori from 'mori'
+import { log } from './helpers'
 
 function Player (player, tic, board) {
   const color = mori.get(player, 'color')
@@ -13,7 +14,7 @@ function Player (player, tic, board) {
   let classVal = 'player ' + color
   const yMax = mori.count(board)
   const xRow = mori.count(mori.get(board, 0))
-
+  // log(color)
   var xPercent = x * 100 / xRow
   var yPercent = y * 100 / yMax
 
