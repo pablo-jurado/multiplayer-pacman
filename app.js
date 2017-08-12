@@ -50,8 +50,10 @@ function createPlayer (name, color, id, index) {
 
   if (index === 0) {
     direction = 'right'
-    x = 2
-    y = 1
+    // x = 2
+    // y = 1
+    x = 1
+    y = 29
   } else if (index === 1) {
     direction = 'left'
     x = 26
@@ -68,8 +70,8 @@ function createPlayer (name, color, id, index) {
     direction = 'top'
     // x = 13
     // y = 12
-    x = 1
-    y = 8
+    x = 20
+    y = 29
   }
 
   return {
@@ -128,7 +130,7 @@ function updatePosition (x, y, direction, board, id, color) {
   gameState = newGameState
 }
 
-function checkTunnel (x, y, dir, board, id) {
+function checkTunnel (x, y, dir, board, id, color) {
   const xrow = mori.get(board, 0)
   const xMax = mori.count(xrow) - 1
 
@@ -162,7 +164,6 @@ function setRandomGhostDirection (x, y, direction, board) {
   const collisionVal = checkCollision(x, y, newDirection, board)
   if (collisionVal !== 1 && newDirection !== getOpositeDirection(direction)) {
     updatePosition(x, y, newDirection, board, 'ghost', 'ghost')
-    checkTunnel(x, y, newDirection, board, 'ghost')
   } else {
     setRandomGhostDirection(x, y, direction, board)
   }
@@ -229,21 +230,21 @@ function getTargetPlayer (x, y, board, players) {
       return value
     }
   }
-  for (let i = y; i < yMax; i--) {
+  for (let i = y; i > 0; i--) {
     const value = mori.getIn(board, [i, x])
     if (value === 1) break
     if (value === 'red' || value === 'green' || value === 'blue' || value === 'purple') {
       return value
     }
   }
-  for (let i = y; i < xMax; i++) {
+  for (let i = x; i < xMax; i++) {
     const value = mori.getIn(board, [y, i])
     if (value === 1) break
     if (value === 'red' || value === 'green' || value === 'blue' || value === 'purple') {
       return value
     }
   }
-  for (let i = y; i < xMax; i--) {
+  for (let i = x; i > 0; i--) {
     const value = mori.getIn(board, [y, i])
     if (value === 1) break
     if (value === 'red' || value === 'green' || value === 'blue' || value === 'purple') {
@@ -261,15 +262,11 @@ function chasePlayer (x, y, direction, targetPlayer, players, board) {
       const playerY = mori.get(p, 'y')
       let newDirection = null
 
-      if (playerX < x && playerY === y) {
-        newDirection = 'left'
-      } else if (playerX > x && playerY === y) {
-        newDirection = 'right'
-      } else if (playerY < y && playerX === x) {
-        newDirection = 'top'
-      } else if (playerY > y && playerX === x) {
-        newDirection = 'bottom'
-      }
+      if (playerX < x && playerY === y) newDirection = 'left'
+      if (playerX > x && playerY === y) newDirection = 'right'
+      if (playerY < y && playerX === x) newDirection = 'top'
+      if (playerY > y && playerX === x) newDirection = 'bottom'
+
       // update new direction
       updatePosition(x, y, newDirection, board, 'ghost', 'ghost')
       return
@@ -278,7 +275,7 @@ function chasePlayer (x, y, direction, targetPlayer, players, board) {
 }
 
 function moveGhost (x, y, direction, board, players) {
-  checkTunnel(x, y, direction, board, 'ghost')
+  // checkTunnel(x, y, direction, board, 'ghost', 'ghost')
   checkPlayerCollision(x, y, players, board)
   // ghost will check if a player is close
   const targetPlayer = getTargetPlayer(x, y, board, players)
@@ -320,7 +317,7 @@ function movePlayer (color, id, direction, hasPower, x, y, board, players) {
     gameState = newGameState
 
     updatePosition(x, y, direction, board, id, color)
-    checkTunnel(x, y, direction, board, id)
+    checkTunnel(x, y, direction, board, id, color)
   }
 }
 
