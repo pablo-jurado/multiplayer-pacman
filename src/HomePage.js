@@ -17,7 +17,7 @@ function HomePage (state) {
   let name = mori.get(state, 'name')
   return (
     <div className='home'>
-      <h1>Welcome to aMazeBattle</h1>
+      <h1>Welcome to multiplayer pacman</h1>
       <h4>Enter your name</h4>
       <form>
         <input value={name} onInput={updateName} />

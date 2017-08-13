@@ -1,9 +1,30 @@
+@font-face {
+    font-family: gameTitle;
+    src: url(./fonts/3B.ttf);
+}
+
+@font-face {
+    font-family: pixel;
+    src: url(./fonts/pixel.ttf);
+}
+
+body {
+  font-family: pixel;
+}
+
+body h1{
+  font-family: gameTitle;
+  font-weight: 100;
+  font-size: 3em;
+  color: #3247d0;
+  text-shadow: 2px 2px 0px #fff;
+}
+
 #app { height: 100vh; }
 
 body {
   margin: 0;
   padding: 0;
-  font-family: "Open Sans", "lucida grande", "Segoe UI", arial, verdana, "lucida sans unicode", tahoma, sans-serif;
   background: #2b2b2b;
   color: #fff;
 }
@@ -96,6 +117,11 @@ header h2 {
   top: 20px;
   left: 20px;
 }
+
+.red { color: red; }
+.green { color: green; }
+.purple { color: purple; }
+.blue { color: blue; }
 
 .player.ghost { background: white;}
 .player.red { background-image: url('img/player1.svg'); background-size: contain; background-repeat: no-repeat;}

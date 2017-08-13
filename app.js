@@ -52,8 +52,8 @@ function createPlayer (name, color, id, index) {
     direction = 'right'
     // x = 2
     // y = 1
-    x = 6
-    y = 2
+    x = 5
+    y = 14
   } else if (index === 1) {
     direction = 'left'
     x = 26
@@ -68,10 +68,8 @@ function createPlayer (name, color, id, index) {
     y = 29
   } else if (index === -1) {
     direction = 'top'
-    // x = 13
-    // y = 12
-    x = 6
-    y = 18
+    x = 13
+    y = 12
   }
 
   return {
@@ -119,6 +117,9 @@ function updatePosition (x, y, direction, board, id, color) {
   if (direction === 'left' && x > 0) x -= 1
   if (direction === 'bottom' && y < yMax) y += 1
   if (direction === 'top' && y > 0) y -= 1
+  // check for tunnel
+  if (x === 0 && direction === 'left') x = xMax
+  if (x === (xMax) && direction === 'right') x = 0
   // updates next tile
   if (color !== 'ghost') {
     newGameState = mori.assocIn(newGameState, ['game', 'board', y, x], color)
@@ -130,18 +131,6 @@ function updatePosition (x, y, direction, board, id, color) {
   newGameState = mori.assocIn(newGameState, ['game', 'players', id, 'x'], x)
   newGameState = mori.assocIn(newGameState, ['game', 'players', id, 'y'], y)
   gameState = newGameState
-}
-
-function checkTunnel (x, y, dir, board, id, color) {
-  const xrow = mori.get(board, 0)
-  const xMax = mori.count(xrow) - 1
-
-  if (x === 0 && dir === 'left') {
-    gameState = mori.assocIn(gameState, ['game', 'players', id, 'x'], xMax)
-  }
-  if (x === (xMax) && dir === 'right') {
-    gameState = mori.assocIn(gameState, ['game', 'players', id, 'x'], 0)
-  }
 }
 
 function killPlayer (id) {
@@ -324,9 +313,7 @@ function movePlayer (color, id, direction, hasPower, x, y, board, players) {
     }
 
     gameState = newGameState
-
     updatePosition(x, y, direction, board, id, color)
-    checkTunnel(x, y, direction, board, id, color)
   }
 }
 

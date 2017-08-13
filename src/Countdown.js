@@ -25,8 +25,8 @@ function Countdown (state) {
   }
   return (
     <div>
-      <h4>Next Game will start in: {time}</h4>
-      <h4>Players online: {numberOfPlayers}</h4>
+      <p>Next game will start in: {time}</p>
+      <p>Players online: {numberOfPlayers}</p>
     </div>
   )
 }
