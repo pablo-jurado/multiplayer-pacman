@@ -247,7 +247,8 @@ function chasePlayer (x, y, direction, targetPlayer, players, board) {
   })
 }
 
-function getPlayerId (collisionVal, players) {
+function getPlayerId (collisionVal) {
+  const players = mori.vals(mori.getIn(gameState, ['game', 'players']))
   let result = null
   mori.each(players, function (p) {
     const id = mori.get(p, 'id')
@@ -262,7 +263,7 @@ function getPlayerId (collisionVal, players) {
 function checkGhostCollision (x, y, direction, board, players) {
   const collisionVal = checkCollision(x, y, direction, board)
   if (collisionVal === 'red' || collisionVal === 'green' || collisionVal === 'blue' || collisionVal === 'purple') {
-    const playerId = getPlayerId(collisionVal, players)
+    const playerId = getPlayerId(collisionVal)
     if (playerHasPower(playerId)) {
       // kill ghost
       killPlayer('ghost')
@@ -279,6 +280,7 @@ function moveGhost (x, y, direction, board, players) {
   const targetPlayer = getTargetPlayer(x, y, board, players)
 
   if (targetPlayer) {
+    // const id = getPlayerId(targetPlayer)
     chasePlayer(x, y, direction, targetPlayer, players, board)
   } else {
     moveGhostRandom(x, y, direction, board)
@@ -290,7 +292,7 @@ function movePlayer (color, id, direction, hasPower, x, y, board, players) {
   const collisionVal = checkCollision(x, y, direction, board)
 
   if (collisionVal === 'red' || collisionVal === 'green' || collisionVal === 'blue' || collisionVal === 'purple') {
-    if (hasPower) killPlayer(getPlayerId(collisionVal, players))
+    if (hasPower) killPlayer(getPlayerId(collisionVal))
     return
   }
   // if the value is not a wall
