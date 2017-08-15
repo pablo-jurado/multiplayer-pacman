@@ -247,6 +247,35 @@ function chasePlayer (x, y, direction, targetPlayer, players, board) {
   })
 }
 
+function runAwayFromPlayer (x, y, direction, targetPlayer, players, board) {
+  mori.each(players, function (p) {
+    const playerColor = mori.get(p, 'color')
+    if (playerColor === targetPlayer) {
+      const playerX = mori.get(p, 'x')
+      const playerY = mori.get(p, 'y')
+      let newDirection = null
+
+      if (playerX === x && playerY === y) {
+        killPlayer('ghost')
+      }
+
+      if (playerX < x && playerY === y) newDirection = 'right'
+      if (playerX > x && playerY === y) newDirection = 'left'
+      if (playerY < y && playerX === x) newDirection = 'bottom'
+      if (playerY > y && playerX === x) newDirection = 'top'
+
+      const collisionVal = checkCollision(x, y, newDirection, board)
+      if (collisionVal === 1) {
+        setRandomGhostDirection(x, y, newDirection, board)
+      } else {
+        // update new direction
+        updatePosition(x, y, newDirection, board, 'ghost', 'ghost')
+      }
+      return
+    }
+  })
+}
+
 function getPlayerId (collisionVal) {
   const players = mori.vals(mori.getIn(gameState, ['game', 'players']))
   let result = null
@@ -278,10 +307,14 @@ function checkGhostCollision (x, y, direction, board, players) {
 function moveGhost (x, y, direction, board, players) {
   // ghost will check if a player is close
   const targetPlayer = getTargetPlayer(x, y, board, players)
+  const id = getPlayerId(targetPlayer)
 
   if (targetPlayer) {
-    // const id = getPlayerId(targetPlayer)
-    chasePlayer(x, y, direction, targetPlayer, players, board)
+    if (playerHasPower(id)) {
+      runAwayFromPlayer(x, y, direction, targetPlayer, players, board)
+    } else {
+      chasePlayer(x, y, direction, targetPlayer, players, board)
+    }
   } else {
     moveGhostRandom(x, y, direction, board)
   }
@@ -329,6 +362,8 @@ function updatePlayersSpeed (id, speed, tic, hasPower, isWeak) {
 }
 
 function updatePlayersPosition (id, x, y, direction, color, hasPower, isDead, tic, speed, board, players) {
+  // needs to check for ghost colision separeted becasuse he is not on board
+  checkGhostCollision(x, y, direction, board, players)
   if (isDead) {
     gameState = mori.assocIn(gameState, ['game', 'board', y, x], 0)
     return
@@ -340,8 +375,6 @@ function updatePlayersPosition (id, x, y, direction, color, hasPower, isDead, ti
       movePlayer(color, id, direction, hasPower, x, y, board, players)
     }
   }
-  // needs to check for ghost colision separeted becasuse he is not on board
-  checkGhostCollision(x, y, direction, board, players)
 }
 
 function updateAllPlayers (players, board) {
