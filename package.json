@@ -3,18 +3,23 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "express": "^4.15.2",
     "inferno": "^3.6.4",
     "inferno-component": "^3.6.4",
     "mori": "^0.3.2",
-    "express": "^4.15.2",
+    "node-sass-chokidar": "0.0.3",
+    "npm-run-all": "^4.0.2",
     "socket.io": "^1.7.3"
   },
   "devDependencies": {
     "inferno-scripts": "4.1.0"
   },
   "scripts": {
+    "build-css": "node-sass-chokidar src/ -o src/",
+    "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
     "start": "nodemon app.js",
-    "webpack": "inferno-scripts start",
+    "webpack": "npm-run-all -p watch-css start-js",
+    "start-js": "inferno-scripts start",
     "build": "inferno-scripts build",
     "test": "inferno-scripts test --env=jsdom",
     "eject": "inferno-scripts eject"
