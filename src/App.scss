@@ -1,3 +1,47 @@
+
+//------------------------------------------------------------------------------
+//  Variables
+//------------------------------------------------------------------------------
+
+$background-color: #3F51B5;
+
+$green-color: #8bc34a;
+$red-color: #f44336;
+$purple-color: #c935e2;
+$blue-color: #03a9f4;
+$grey-color: #8e8e8e;
+
+
+//------------------------------------------------------------------------------
+//  Mixins
+//------------------------------------------------------------------------------
+
+@mixin text-shadow($color) {
+  $darkColor: darken($color, 30%);
+  text-shadow:
+    0 1px 0 opacify($darkColor, 0.8),
+    0 2px 0 opacify($darkColor, 0.75),
+    0 3px 0 opacify($darkColor, 0.7),
+    0 4px 0 opacify($darkColor, 0.65),
+    0 5px 0 opacify($darkColor, 0.6),
+    0 6px 0 opacify($darkColor, 0.55),
+    0 7px 0 opacify($darkColor, 0.50),
+    0 8px 0 opacify($darkColor, 0.30),
+
+    0 0 5px rgba(0,0,0,.05),
+    0 1px 3px rgba(0,0,0,.2),
+    0 3px 5px rgba(0,0,0,.2),
+    0 5px 10px rgba(0,0,0,.2),
+    0 10px 10px rgba(0,0,0,.2),
+    0 20px 20px rgba(0,0,0,.3);
+}
+
+
+
+//------------------------------------------------------------------------------
+//  Styles
+//------------------------------------------------------------------------------
+
 @font-face {
   font-family: '8-bit';
   src: url(./fonts/8-bit.ttf);
@@ -6,7 +50,11 @@
 body {
   font-family: '8-bit';
   text-transform: uppercase;
-   font-size: 0.7em;
+  font-size: 0.7em;
+  margin: 0;
+  padding: 0;
+  background: $background-color;
+  color: #fff;
 }
 
 body h1{
@@ -14,20 +62,11 @@ body h1{
   text-transform: uppercase;
   font-weight: 100;
   font-size: 5em;
-  color: #3247d0;
   text-shadow: 6px 6px 0px #000;
   letter-spacing: 5px;
 }
 
 #app { height: 100vh; }
-
-body {
-  margin: 0;
-  padding: 0;
-  /*background: #2b2b2b;*/
-  background: #3F51B5;
-  color: #fff;
-}
 
 button {
   background: white;
@@ -130,12 +169,6 @@ header h2 {
 
 .player.dead { display: none;}
 
-@keyframes power-animation {
-  0%   {box-shadow: 0px 0px 0px #fff;}
-  50%  {box-shadow: 0px 0px 10px #ffeb3b;}
-  100% {box-shadow: 0px 0px 0px #fff;}
-}
-
 .board-wrapper {
   position: relative;
   width: 100%;
@@ -177,12 +210,6 @@ header h2 {
   animation-name: animate-dot;
   animation-duration: 1.5s;
   animation-iteration-count: infinite;
-}
-
-@keyframes animate-dot {
-  0%   {background: #ffeb3b; box-shadow: 0px 0px 0px #fff;}
-  50%  {background: #fff; box-shadow: 0px 0px 10px #ffeb3b;}
-  100% {background: #ffeb3b; box-shadow: 0px 0px 0px #fff;}
 }
 
 .score-board {
@@ -234,86 +261,34 @@ header h2 {
 }
 
 .red {
-  color: rgb(244, 67, 54);
-  text-shadow: 0 1px 0 rgba(183, 28, 28, 0.8),
-               0 2px 0 rgba(183, 28, 28, 0.75),
-               0 3px 0 rgba(183, 28, 28, 0.7),
-               0 4px 0 rgba(183, 28, 28, 0.65),
-               0 5px 0 rgba(183, 28, 28, 0.6),
-               0 6px 0 rgba(183, 28, 28, 0.55),
-               0 7px 0 rgba(183, 28, 28, 0.50),
-               0 8px 0 rgba(183, 28, 28, 0.30),
-
-               0 0 5px rgba(0,0,0,.05),
-              0 1px 3px rgba(0,0,0,.2),
-              0 3px 5px rgba(0,0,0,.2),
-             0 5px 10px rgba(0,0,0,.2),
-            0 10px 10px rgba(0,0,0,.2),
-            0 20px 20px rgba(0,0,0,.3);
+  color: $red-color;
+  @include text-shadow($red-color)
 }
 
 .green {
-  color: #8bc34a;
-  text-shadow: 0 1px 0 rgba(51, 105, 30, 0.8),
-               0 2px 0 rgba(51, 105, 30, 0.75),
-               0 3px 0 rgba(51, 105, 30, 0.7),
-               0 4px 0 rgba(51, 105, 30, 0.65),
-               0 5px 0 rgba(51, 105, 30, 0.6),
-               0 6px 0 rgba(51, 105, 30, 0.55),
-               0 7px 0 rgba(51, 105, 30, 0.50),
-               0 8px 0 rgba(51, 105, 30, 0.30),
-
-               0 0 5px rgba(0,0,0,.05),
-              0 1px 3px rgba(0,0,0,.2),
-              0 3px 5px rgba(0,0,0,.2),
-             0 5px 10px rgba(0,0,0,.2),
-            0 10px 10px rgba(0,0,0,.2),
-            0 20px 20px rgba(0,0,0,.3);
+  color: $green-color;
+  @include text-shadow($green-color)
 }
 
 .purple {
-  color: #c935e2;
-  text-shadow: 0 1px 0 rgba(106, 27, 154, 0.8),
-               0 2px 0 rgba(106, 27, 154, 0.75),
-               0 3px 0 rgba(106, 27, 154, 0.7),
-               0 4px 0 rgba(106, 27, 154, 0.65),
-               0 5px 0 rgba(106, 27, 154, 0.6),
-               0 6px 0 rgba(106, 27, 154, 0.55),
-               0 7px 0 rgba(106, 27, 154, 0.50),
-               0 8px 0 rgba(106, 27, 154, 0.30),
-
-               0 0 5px rgba(0,0,0,.05),
-              0 1px 3px rgba(0,0,0,.2),
-              0 3px 5px rgba(0,0,0,.2),
-             0 5px 10px rgba(0,0,0,.2),
-            0 10px 10px rgba(0,0,0,.2),
-            0 20px 20px rgba(0,0,0,.3);
+  color: $purple-color;
+  @include text-shadow($purple-color)
 }
 
 .blue {
-  color: #03a9f4;
-  text-shadow: 0 1px 0 rgba(2, 119, 189, 0.8),
-               0 2px 0 rgba(2, 119, 189, 0.75),
-               0 3px 0 rgba(2, 119, 189, 0.7),
-               0 4px 0 rgba(2, 119, 189, 0.65),
-               0 5px 0 rgba(2, 119, 189, 0.6),
-               0 6px 0 rgba(2, 119, 189, 0.55),
-               0 7px 0 rgba(2, 119, 189, 0.50),
-               0 8px 0 rgba(2, 119, 189, 0.30),
-
-               0 0 5px rgba(0,0,0,.05),
-              0 1px 3px rgba(0,0,0,.2),
-              0 3px 5px rgba(0,0,0,.2),
-             0 5px 10px rgba(0,0,0,.2),
-            0 10px 10px rgba(0,0,0,.2),
-            0 20px 20px rgba(0,0,0,.3);
+  color: $blue-color;
+  @include text-shadow($blue-color)
 }
 
-.preview #green { border: solid 1vw #8bc34a; }
-.preview #red { border: solid 1vw #f44336; }
-.preview #blue { border: solid 1vw #03a9f4; }
-.preview #purple { border: solid 1vw #c935e2; }
-.preview #grey { border: solid 1vw grey; opacity: 0.2; }
+.preview #green { border: solid 1vw $green-color; }
+.preview #red { border: solid 1vw $red-color; }
+.preview #blue { border: solid 1vw $blue-color; }
+.preview #purple { border: solid 1vw $purple-color; }
+
+.preview #grey {
+  border: solid 1vw $grey-color;
+  opacity: 0.2;
+}
 
 .preview img {
   box-shadow: 0px 5px 25px #1a237e;
@@ -326,12 +301,6 @@ header h2 {
 .reset {
   width: 50px;
   margin: 20px auto;
-}
-
-@keyframes animate-maze {
-  0%   {fill: purple;}
-  50%  {fill: yellow;}
-  100% {fill: purple;}
 }
 
 .phone-items button {
@@ -372,10 +341,33 @@ header h2 {
   border-top-right-radius: 30%;
 }
 
-/* ///////////////////
-  Media Queries
-///////////////////// */
 
+//------------------------------------------------------------------------------
+//  Animations
+//------------------------------------------------------------------------------
+
+@keyframes power-animation {
+  0%   {box-shadow: 0px 0px 0px #fff;}
+  50%  {box-shadow: 0px 0px 10px #ffeb3b;}
+  100% {box-shadow: 0px 0px 0px #fff;}
+}
+
+@keyframes animate-dot {
+  0%   {background: #ffeb3b; box-shadow: 0px 0px 0px #fff;}
+  50%  {background: #fff; box-shadow: 0px 0px 10px #ffeb3b;}
+  100% {background: #ffeb3b; box-shadow: 0px 0px 0px #fff;}
+}
+
+@keyframes animate-maze {
+  0%   {fill: purple;}
+  50%  {fill: yellow;}
+  100% {fill: purple;}
+}
+
+
+//------------------------------------------------------------------------------
+//  Media Queries
+//------------------------------------------------------------------------------
 
 @media (max-width:414px) and (orientation: portrait) {
   .main-wrapper {
