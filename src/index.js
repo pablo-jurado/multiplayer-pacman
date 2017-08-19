@@ -1,6 +1,5 @@
 import { render } from 'inferno'
-import { deepCopy, log } from './helpers'
-import { socket } from './Socket'
+import { deepCopy } from './helpers'
 import App from './App'
 import mori from 'mori'
 

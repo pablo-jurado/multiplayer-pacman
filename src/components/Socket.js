@@ -1,8 +1,7 @@
 import io from 'socket.io-client'
 import mori from 'mori'
 import { addKeyListener, removeKeyListener } from './KeyHandler'
-import { resetInitialState } from './index'
-import { log } from './helpers'
+import { resetInitialState } from '../index'
 
 export const socket = io('http://localhost:3100')
 

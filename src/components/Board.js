@@ -1,7 +1,7 @@
 import mori from 'mori'
 import Tile from './Tile'
 import Player from './Player'
-import { maze, maze2 } from './img/maze'
+import { maze, maze2 } from '../img/maze'
 
 function Board (state) {
   const board = mori.getIn(state, ['game', 'board'])

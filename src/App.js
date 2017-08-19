@@ -1,10 +1,9 @@
 import { version, linkEvent } from 'inferno'
 import Component from 'inferno-component'
 import mori from 'mori'
-import Game from './Game'
-import HomePage from './HomePage'
-import SelectColor from './SelectColor'
-import { log } from './helpers'
+import Game from './components/Game'
+import HomePage from './components/HomePage'
+import SelectColor from './components/SelectColor'
 import './App.css'
 
 function App (state) {

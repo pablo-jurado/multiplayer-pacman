@@ -4,7 +4,7 @@ import mori from 'mori'
 import { sendNewColors, createNewPlayer } from './Socket'
 import Countdown from './Countdown'
 import { log } from './helpers'
-import playerSrc from './img/player.png'
+import playerSrc from '../img/player.png'
 
 function uuid () {
   function s4 () {
