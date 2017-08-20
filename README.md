@@ -5,6 +5,14 @@
 This project was bootstrapped with [Create Inferno App](https://github.com/infernojs/create-inferno-app)
 and deployed with Heroku.
 
+## Screenshots
+
+<img src="screenshot/screen1.png" alt="Multi pacman Screen shot">
+<br />
+<img src="screenshot/screen2.png" alt="Multi pacman Screen shot">
+<br />
+<img src="screenshot/screen3.png" alt="Multi pacman Screen shot">
+
 ## Game Description
 This is a Multiplayer Pacman that allows up to 4 players online and the player
 with more points wins the round. There is only one ghost that would chase the
