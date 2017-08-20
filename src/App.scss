@@ -157,11 +157,11 @@ header h2 {
   left: 20px;
 }
 
-.player.ghost { background: white;}
 .player.red { background-image: url('img/player1.svg'); background-size: contain; background-repeat: no-repeat;}
 .player.green { background-image: url('img/player2.svg'); background-size: contain; background-repeat: no-repeat;}
 .player.purple { background-image: url('img/player3.svg'); background-size: contain; background-repeat: no-repeat;}
 .player.blue { background-image: url('img/player4.svg'); background-size: contain; background-repeat: no-repeat;}
+.player.ghost { background-image: url('img/ghost.svg'); background-size: contain; background-repeat: no-repeat;}
 
 .player.isWeak { transform: scale(0.6); opacity: 0.5; }
 
