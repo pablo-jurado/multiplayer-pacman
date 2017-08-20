@@ -52,7 +52,7 @@ function SelectColor (state) {
 
   return (
     <div className='home'>
-      <h2>Welcome {name}</h2>
+      <h2>Hello {name}</h2>
       <p>Please select your player</p>
       <div className='preview' onClick={linkEvent(colorSelected, handleColorSelection)}>
         {colorsCollection}

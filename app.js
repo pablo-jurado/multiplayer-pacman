@@ -10,12 +10,12 @@ const boards = require('./boards')
 
 app.use(express.static(path.join(__dirname, '/build/')))
 
-// const COUNTDOWN = 150
-// const GAME_TIMER = 1000
+const COUNTDOWN = 150
+const GAME_TIMER = 1000
 
 // fast speed for testing
-const COUNTDOWN = 1
-const GAME_TIMER = 1500
+// const COUNTDOWN = 1
+// const GAME_TIMER = 1500
 let _playersBackup = {}
 
 const log = (...args) => {
@@ -50,10 +50,8 @@ function createPlayer (name, color, id, index) {
 
   if (index === 0) {
     direction = 'right'
-    // x = 2
-    // y = 1
-    x = 5
-    y = 14
+    x = 2
+    y = 1
   } else if (index === 1) {
     direction = 'left'
     x = 26
@@ -449,6 +447,20 @@ function checkIsGameReady (numberOfPlayers, countdown) {
   gameState = newState
 }
 
+function checkIsGameOver (players) {
+   const playersCount = mori.count(players) - 1
+   let deadPlayers = 0
+   mori.each(players, function (p) {
+     const isDead = mori.get(p, 'isDead')
+     if (isDead) {
+       deadPlayers = 1
+     }
+   })
+   if (deadPlayers === playersCount) {
+     gameState = mori.assocIn(gameState, ['game', 'isGameOver'], true)
+   }
+}
+
 // -----------------------------------------------------------------------------
 // Game Loop
 // -----------------------------------------------------------------------------
@@ -467,6 +479,7 @@ function gameTick () {
   checkIsGameReady(numberOfPlayers, countdown)
   if (isGameOver) return
   if (isGameReady) {
+    checkIsGameOver(players)
     updateAllPlayers(players, board)
     updatePowerTimer(powerTimer, isPowerMode, players)
     updateGameTimer(gameTimer)
