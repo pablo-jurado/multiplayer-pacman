@@ -10,7 +10,7 @@ const boards = require('./boards')
 
 app.use(express.static(path.join(__dirname, '/build/')))
 
-const COUNTDOWN = 150
+const COUNTDOWN = 50
 const GAME_TIMER = 1000
 
 // fast speed for testing
@@ -94,8 +94,6 @@ function checkCollision (x, y, direction, board) {
   if (direction === 'left') value = mori.getIn(board, [y, x - 1])
   if (direction === 'bottom') value = mori.getIn(board, [y + 1, x])
   if (direction === 'top') value = mori.getIn(board, [y - 1, x])
-
-  // const xGhost = mori.get()
 
   return value
 }
@@ -240,7 +238,7 @@ function chasePlayer (x, y, direction, targetPlayer, players, board) {
 
       // update new direction
       updatePosition(x, y, newDirection, board, 'ghost', 'ghost')
-      return
+      // return
     }
   })
 }
@@ -292,7 +290,6 @@ function checkGhostCollision (x, y, direction, board, players) {
   if (collisionVal === 'red' || collisionVal === 'green' || collisionVal === 'blue' || collisionVal === 'purple') {
     const playerId = getPlayerId(collisionVal)
     if (playerHasPower(playerId)) {
-      // kill ghost
       killPlayer('ghost')
       gameState = mori.assocIn(gameState, ['game', 'players', 'ghost', x], null)
       gameState = mori.assocIn(gameState, ['game', 'players', 'ghost', y], null)
@@ -323,6 +320,7 @@ function movePlayer (color, id, direction, hasPower, x, y, board, players) {
   const collisionVal = checkCollision(x, y, direction, board)
 
   if (collisionVal === 'red' || collisionVal === 'green' || collisionVal === 'blue' || collisionVal === 'purple') {
+    // console.log('hasPower', hasPower)
     if (hasPower) killPlayer(getPlayerId(collisionVal))
     return
   }
@@ -361,13 +359,13 @@ function updatePlayersSpeed (id, speed, tic, hasPower, isWeak) {
 
 function updatePlayersPosition (id, x, y, direction, color, hasPower, isDead, tic, speed, board, players) {
   // needs to check for ghost colision separeted becasuse he is not on board
-  checkGhostCollision(x, y, direction, board, players)
   if (isDead) {
     gameState = mori.assocIn(gameState, ['game', 'board', y, x], 0)
     return
   }
   if (tic === speed) {
     if (color === 'ghost') {
+      checkGhostCollision(x, y, direction, board, players)
       moveGhost(x, y, direction, board, players)
     } else {
       movePlayer(color, id, direction, hasPower, x, y, board, players)
@@ -453,7 +451,7 @@ function checkIsGameOver (players) {
    mori.each(players, function (p) {
      const isDead = mori.get(p, 'isDead')
      if (isDead) {
-       deadPlayers = 1
+       deadPlayers += 1
      }
    })
    if (deadPlayers === playersCount) {

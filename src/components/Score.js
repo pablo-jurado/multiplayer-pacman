@@ -8,14 +8,19 @@ function Score (players) {
   let playersArr = []
 
   mori.each(playerVal, function (p) {
-    let name = mori.get(p, 'name')
-    let score = mori.get(p, 'score')
+    const name = mori.get(p, 'name')
+    const score = mori.get(p, 'score')
+    const color = mori.get(p, 'color')
 
     if (name !== 'ghost') {
       playersArr.push(
         <div className='score'>
           <div>
-            <p>Player {name}<br />Score: {score}</p>
+            <p>
+              <span className={color} >{name}</span>
+              <br />
+              <span>Score: {score}</span>
+            </p>
           </div>
         </div>
       )

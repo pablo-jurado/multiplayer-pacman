@@ -16,7 +16,7 @@ $grey-color: #8e8e8e;
 //  Mixins
 //------------------------------------------------------------------------------
 
-@mixin text-shadow($color) {
+@mixin text-shadow-3d($color) {
   $darkColor: darken($color, 30%);
   text-shadow:
     0 1px 0 opacify($darkColor, 0.8),
@@ -167,7 +167,7 @@ header h2 {
 
 .player.hasPower { transform: scale(1.5); }
 
-.player.dead { display: none;}
+.player.dead { display: none; }
 
 .board-wrapper {
   position: relative;
@@ -260,24 +260,40 @@ header h2 {
   margin: 2.5%;
 }
 
+.red-letter {
+  color: $red-color;
+  @include text-shadow-3d($red-color)
+}
+
+.green-letter {
+  color: $green-color;
+  @include text-shadow-3d($green-color)
+}
+
+.purple-letter {
+  color: $purple-color;
+  @include text-shadow-3d($purple-color)
+}
+
+.blue-letter {
+  color: $blue-color;
+  @include text-shadow-3d($blue-color)
+}
+
 .red {
   color: $red-color;
-  @include text-shadow($red-color)
 }
 
 .green {
   color: $green-color;
-  @include text-shadow($green-color)
 }
 
 .purple {
   color: $purple-color;
-  @include text-shadow($purple-color)
 }
 
 .blue {
   color: $blue-color;
-  @include text-shadow($blue-color)
 }
 
 .preview #green { border: solid 1vw $green-color; }

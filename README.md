@@ -22,7 +22,7 @@ a controller will appear on the right side of the screen.
 ## Tech/framework used
 Built with:
 * SVG for graphics
-* CSS for animations
+* Sass for styles and animations
 * Flex box and Media Queries for Responsive Design
 * Inferno for the view layer in the client side
 * Mori for handle immutable data structure in server and client side

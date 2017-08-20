@@ -14,7 +14,7 @@ function updateName (event) {
 }
 
 function colorSpan (letter, color) {
-  return <span className={color}>{letter}</span>
+  return <span className={color + '-letter'}>{letter}</span>
 }
 
 function HomePage (state) {
