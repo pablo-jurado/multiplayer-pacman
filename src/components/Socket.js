@@ -6,7 +6,7 @@ import { resetInitialState } from '../index'
 // local testing
 // export const socket = io('http://localhost:3100')
 
-// export const socket = io()
+export const socket = io()
 
 function receiveNewGameState (state) {
   const newState = JSON.parse(state)
