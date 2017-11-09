@@ -12,6 +12,7 @@ let initialState = {
   colorSelected: null,
   name: '',
   id: null,
+  chatInput: '',
   game: {
     // players: {},
     // board: boards.board1,
@@ -22,7 +23,8 @@ let initialState = {
     // gameTimer: 150, // 1500
     // isGameReady: null,
     // isGameOver: null,
-    // colors: ['green', 'red', 'blue', 'purple']
+    // colors: ['green', 'red', 'blue', 'purple'],
+    // chat
   }
 }
 

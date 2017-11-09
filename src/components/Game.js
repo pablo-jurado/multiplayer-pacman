@@ -7,6 +7,8 @@ import Score from './Score'
 import Timer from './Timer'
 import Feedback from './Feedback'
 import PhoneItems from './PhoneItems'
+import Chat from './Chat'
+
 
 function Game (state) {
   let gameClass = 'game'
@@ -25,7 +27,10 @@ function Game (state) {
               <h2>Multiplayer Pacman</h2>
             </header>
             {Score(players)}
-            {Board(state)}
+            <div className='board-chat-wrapper'>
+              {Board(state)}
+              {Chat(state)}
+            </div>
             {Timer(timer)}
           </div>
         </div>

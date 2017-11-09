@@ -52,3 +52,7 @@ export function sendRestartGame () {
 export function sendEndGame () {
   socket.emit('endGame')
 }
+
+export function updateChat (chat) {
+  socket.emit('updateChat', JSON.stringify(mori.toJs((chat))))
+}

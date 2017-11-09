@@ -37,7 +37,10 @@ const initialState = {
     powerTimer: 0,
     isPowerMode: false,
     isGameReady: null,
-    isGameOver: null
+    isGameOver: null,
+    chat: [
+      { user: 'me', msg: 'hello' }
+    ]
   }
 }
 
@@ -546,6 +549,13 @@ function receivedEndGame () {
   io.sockets.emit('resetLocalState')
 }
 
+function receivedChat (chat) {
+  const newChatData = mori.toClj(JSON.parse(chat))
+  const serverChat = mori.getIn(gameState, ['game', 'chat'])
+  const chatUpdated = mori.conj(serverChat, newChatData)
+  gameState = mori.assocIn(gameState, ['game', 'chat'], chatUpdated)
+}
+
 function onConnection (socket) {
   console.log('A user connected!')
 
@@ -554,6 +564,7 @@ function onConnection (socket) {
   socket.on('updateNewColors', receivedNewColors)
   socket.on('restartGame', receivedRestartGame)
   socket.on('endGame', receivedEndGame)
+  socket.on('updateChat', receivedChat)
 }
 
 io.on('connection', onConnection)

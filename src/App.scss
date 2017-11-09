@@ -171,7 +171,7 @@ header h2 {
 
 .board-wrapper {
   position: relative;
-  width: 100%;
+  // width: 100%;
 }
 
 .board {
@@ -319,6 +319,49 @@ header h2 {
   margin: 20px auto;
 }
 
+//------------------------------------------------------------------------------
+//  Chat
+//------------------------------------------------------------------------------
+.board-chat-wrapper {
+  display: flex;
+}
+.chat {
+  width: 250px;
+  border: solid 1px #ccc;
+  margin: 10px 20px 10px 80px;
+  padding: 10px;
+
+  input[type="text"] {
+    width: 75%;
+  }
+  input[type="submit"] {
+    background: white;
+    color: black;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin: 0px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+  }
+}
+.chat-text {
+  font-family: monospace;
+  font-family: sans-serif;
+  text-transform: lowercase;
+  font-size: 1.5em;
+  overflow-y: scroll;
+  height: 485px;
+  margin-bottom: 20px;
+}
+
+
+
+//------------------------------------------------------------------------------
+//  Phone
+//------------------------------------------------------------------------------
+
 .phone-items button {
   border-radius: 0;
   width: 80px;
@@ -386,6 +429,9 @@ header h2 {
 //------------------------------------------------------------------------------
 
 @media (max-width:414px) and (orientation: portrait) {
+  .chat {
+    display: none;
+  }
   .main-wrapper {
     justify-content: center;
   }
