@@ -10,7 +10,7 @@ const boards = require('./boards')
 
 app.use(express.static(path.join(__dirname, '/build/')))
 
-const COUNTDOWN = 50
+const COUNTDOWN = 150
 const GAME_TIMER = 1000
 
 // fast speed for testing

@@ -3,7 +3,8 @@ import mori from 'mori'
 import { addKeyListener, removeKeyListener } from './KeyHandler'
 import { resetInitialState } from '../index'
 
-export const socket = io('http://localhost:3100')
+// local testing
+// export const socket = io('http://localhost:3100')
 
 // export const socket = io()
 
