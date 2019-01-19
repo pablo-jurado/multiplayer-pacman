@@ -1,10 +1,8 @@
-import { version, linkEvent } from 'inferno'
-import Component from 'inferno-component'
+import { linkEvent } from 'inferno'
 import mori from 'mori'
 import Countdown from './Countdown'
 import { createPlayer, updateColors } from '../index'
 import playerSrc from '../img/player.png'
-import { log } from '../helpers'
 
 function savePlayer (name, colorSelected) {
   createPlayer(name, colorSelected)
@@ -23,7 +21,7 @@ function handleColorSelection (colorObj, event) {
   updateColors(color, newColors)
 }
 
-function SelectColor (state) {
+function SelectColor ({ state }) {
   const name = mori.get(state, 'name')
   const id = mori.get(state, 'id')
   const colorSelected = mori.get(state, 'colorSelected')
@@ -45,7 +43,7 @@ function SelectColor (state) {
       <div className='preview' onClick={linkEvent({ colorSelected, colors }, handleColorSelection)}>
         {colorsCollection}
       </div>
-      {Countdown(state)}
+      <Countdown state={state} />
     </div>
   )
 }

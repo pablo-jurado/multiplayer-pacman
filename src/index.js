@@ -2,8 +2,6 @@ import { render } from 'inferno'
 import { deepCopy, uuid } from './helpers'
 import { createNewPlayer, sendNewColors } from './components/Socket'
 import { addKeyListener } from './components/KeyHandler'
-
-
 import App from './App'
 import mori from 'mori'
 
@@ -78,7 +76,7 @@ export function receiveNewPlayer (state) {
 const rootEl = document.getElementById('app')
 
 function renderNow() {
-  render(App(appState), rootEl)
+  render(<App state={appState} />, rootEl)
   window.requestAnimationFrame(renderNow)
 }
 

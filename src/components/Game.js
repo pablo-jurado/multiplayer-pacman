@@ -1,5 +1,3 @@
-import { version } from 'inferno'
-import Component from 'inferno-component'
 import mori from 'mori'
 import Board from './Board'
 import Score from './Score'
@@ -7,7 +5,7 @@ import Timer from './Timer'
 import Feedback from './Feedback'
 import PhoneItems from './PhoneItems'
 
-function Game (state) {
+function Game ({ state }) {
   let gameClass = 'game'
   const players = mori.getIn(state, ['game', 'players'])
   const isPowerMode = mori.getIn(state, ['game', 'isPowerMode'])

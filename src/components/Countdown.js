@@ -1,9 +1,7 @@
-import { version, linkEvent } from 'inferno'
-import Component from 'inferno-component'
 import mori from 'mori'
-import { addZero} from '../helpers'
+import { addZero } from '../helpers'
 
-function Countdown (state) {
+function Countdown ({ state }) {
   const numberOfPlayers = mori.getIn(state, ['game', 'numberOfPlayers'])
   const countdown = mori.getIn(state, ['game', 'countdown'])
   let time = null
