@@ -1,29 +1,25 @@
-import { version } from 'inferno'
+import { version, linkEvent } from 'inferno'
 import Component from 'inferno-component'
-import { log } from './helpers'
 import mori from 'mori'
 import { sendKeyPress } from './Socket'
 
-function handleController (event) {
-  const id = mori.get(window.appState, 'id')
+function handleController (id, event) {
   const direction = event.target.id
-  if (id) {
-    if (direction) sendKeyPress({id: id, direction: direction})
-  }
+  if (id && direction) sendKeyPress({ id, direction })
 }
 
-function Controller () {
-  const id = mori.get(window.appState, 'id')
+function Controller (state) {
+  const id = mori.get(state, 'id')
   if (id) {
     return (
       <div className='controller'>
         <div>
-          <button onClick={handleController} id='top' />
-          <button onClick={handleController} id='right' />
+          <button onClick={linkEvent(id, handleController)} id='top' />
+          <button onClick={linkEvent(id, handleController)} id='right' />
         </div>
         <div>
-          <button onClick={handleController} id='left' />
-          <button onClick={handleController} id='bottom' />
+          <button onClick={linkEvent(id, handleController)} id='left' />
+          <button onClick={linkEvent(id, handleController)} id='bottom' />
         </div>
       </div>
     )

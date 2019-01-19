@@ -2,15 +2,16 @@ import { version, linkEvent } from 'inferno'
 import Component from 'inferno-component'
 import mori from 'mori'
 import Countdown from './Countdown'
-import { log } from './helpers'
+import { updateName, savetUserName } from '../index'
 
-function savetUserName (e) {
+function handleSubmit (e) {
   e.preventDefault()
-  window.appState = mori.assocIn(window.appState, ['page'], 'select')
+  savetUserName()
 }
 
-function updateName (event) {
-  window.appState = mori.assocIn(window.appState, ['name'], event.target.value)
+function handleInput (event) {
+  const name = event.target.value
+  updateName(name);
 }
 
 function colorSpan (letter, color) {
@@ -45,8 +46,8 @@ function HomePage (state) {
       </h1>
       <h4>Enter your name</h4>
       <form>
-        <input value={name} onInput={updateName} />
-        <button onClick={savetUserName}>Next</button>
+        <input value={name} onInput={handleInput} />
+        <button onClick={handleSubmit}>Next</button>
       </form>
       {Countdown(state)}
     </div>

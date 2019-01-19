@@ -1,6 +1,6 @@
 import mori from 'mori'
 import { sendKeyPress } from './Socket'
-import { log } from './helpers'
+import { appState } from '../index'
 
 export function addKeyListener () {
   window.addEventListener('keydown', checkArrow)
@@ -11,7 +11,7 @@ export function removeKeyListener () {
 }
 
 function checkArrow (event) {
-  const id = mori.get(window.appState, 'id')
+  const id = mori.get(appState, 'id')
   let direction = null
   const keyValue = event.keyCode
   const left = 37

@@ -1,7 +1,6 @@
 import { version } from 'inferno'
 import Component from 'inferno-component'
 import mori from 'mori'
-import { log } from './helpers'
 
 function Player (player, tic, board) {
   const color = mori.get(player, 'color')

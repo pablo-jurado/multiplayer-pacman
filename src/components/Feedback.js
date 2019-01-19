@@ -1,8 +1,6 @@
 import { version } from 'inferno'
 import Component from 'inferno-component'
 import mori from 'mori'
-import { log } from './helpers'
-import Countdown from './Countdown'
 import { sendRestartGame, sendEndGame } from './Socket'
 
 function getWinner (a, b) {

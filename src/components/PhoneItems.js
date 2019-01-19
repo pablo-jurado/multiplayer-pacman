@@ -1,7 +1,6 @@
 import { version } from 'inferno'
 import Component from 'inferno-component'
 import mori from 'mori'
-import { log } from './helpers'
 import Board from './Board'
 import Score from './Score'
 import Timer from './Timer'
@@ -18,7 +17,7 @@ function PhoneItems (state) {
       </header>
       {Score(players)}
       {Timer(timer)}
-      {Controller()}
+      {Controller(state)}
     </div>
   )
 }

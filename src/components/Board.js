@@ -16,7 +16,7 @@ function Board (state) {
   }
 
   let playersArr = []
-  mori.each(players, function (p) {
+  mori.each(players, (p) => {
     playersArr.push(Player(p, tic, board))
   })
   return (

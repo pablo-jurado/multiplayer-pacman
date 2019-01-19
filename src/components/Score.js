@@ -1,6 +1,5 @@
 import { version } from 'inferno'
 import Component from 'inferno-component'
-import { log } from './helpers'
 import mori from 'mori'
 
 function Score (players) {
