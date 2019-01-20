@@ -10,6 +10,8 @@ function Game ({ state }) {
   const players = mori.getIn(state, ['game', 'players'])
   const isPowerMode = mori.getIn(state, ['game', 'isPowerMode'])
   const timer = mori.getIn(state, ['game', 'gameTimer'])
+  const id = mori.get(state, 'id')
+
 
   if (isPowerMode) gameClass = 'game power-mode'
 
@@ -26,7 +28,7 @@ function Game ({ state }) {
             <Timer timer={timer} />
           </div>
         </div>
-        <PhoneItems state={state} />
+        <PhoneItems players={players} timer={timer} id={id} />
         <Feedback state={state} />
       </div>
     </div>
