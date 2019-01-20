@@ -32,7 +32,7 @@ export function onHomePageMounted() {
 let welcomeText = null
 
 function HomePage ({ state }) {
-  let name = mori.get(state, 'name')
+  let gio = mori.get(state, 'name')
   const numberOfPlayers = mori.getIn(state, ['game', 'numberOfPlayers'])
   const countdown = mori.getIn(state, ['game', 'countdown'])
   return (

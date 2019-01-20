@@ -6,13 +6,14 @@ import Feedback from './Feedback'
 import PhoneItems from './PhoneItems'
 
 function Game ({ state }) {
-  let gameClass = 'game'
   const players = mori.getIn(state, ['game', 'players'])
   const isPowerMode = mori.getIn(state, ['game', 'isPowerMode'])
   const timer = mori.getIn(state, ['game', 'gameTimer'])
   const id = mori.get(state, 'id')
+  const board = mori.getIn(state, ['game', 'board'])
+  const isGameOver = mori.getIn(state, ['game', 'isGameOver'])
 
-
+  let gameClass = 'game'
   if (isPowerMode) gameClass = 'game power-mode'
 
   return (
@@ -24,12 +25,12 @@ function Game ({ state }) {
               <h2>Multiplayer Pacman</h2>
             </header>
             <Score players={players} />
-            <Board state={state} />
+            <Board board={board} players={players} />
             <Timer timer={timer} />
           </div>
         </div>
         <PhoneItems players={players} timer={timer} id={id} />
-        <Feedback state={state} />
+        {isGameOver && <Feedback players={players} id={id} />}
       </div>
     </div>
   )
