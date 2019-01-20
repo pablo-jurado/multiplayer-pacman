@@ -1,16 +1,5 @@
-import mori from 'mori'
 import Countdown from './Countdown'
 import { updateName, savetUserName } from '../index'
-
-function handleSubmit (e) {
-  e.preventDefault()
-  savetUserName()
-}
-
-function handleInput (event) {
-  const name = event.target.value
-  updateName(name);
-}
 
 const ColorSpan = ({ letter, color }) => <span className={color + '-letter'}>{letter}</span>
 
@@ -22,31 +11,35 @@ export function onHomePageMounted() {
   const textWithColor = textArray.map(letter => {
     counter++
     if(counter === colorsArray.length) counter = 0
-
     return <ColorSpan letter={letter} color={colorsArray[counter]} />
   })
 
-  welcomeText =  textWithColor;
+  welcomeText = textWithColor
 }
 
 let welcomeText = null
 
-function HomePage ({ state }) {
-  let gio = mori.get(state, 'name')
-  const numberOfPlayers = mori.getIn(state, ['game', 'numberOfPlayers'])
-  const countdown = mori.getIn(state, ['game', 'countdown'])
-  return (
-    <div className='home'>
-      <p>Welcome to</p>
-      <h1>{ welcomeText }</h1>
-      <h4>Enter your name</h4>
-      <form>
-        <input value={name} onInput={handleInput} />
-        <button onClick={handleSubmit}>Next</button>
-      </form>
-      <Countdown numberOfPlayers={numberOfPlayers} countdown={countdown} />
-    </div>
-  )
+function handleSubmit (e) {
+  e.preventDefault()
+  savetUserName()
 }
+
+function handleInput (event) {
+  const name = event.target.value
+  updateName(name);
+}
+
+const HomePage = ({ name, numberOfPlayers, countdown }) => (
+  <div className='home'>
+    <p>Welcome to</p>
+    <h1>{ welcomeText }</h1>
+    <h4>Enter your name</h4>
+    <form>
+      <input value={name} onInput={handleInput} />
+      <button onClick={handleSubmit}>Next</button>
+    </form>
+    <Countdown numberOfPlayers={numberOfPlayers} countdown={countdown} />
+  </div>
+)
 
 export default HomePage

@@ -21,14 +21,7 @@ function handleColorSelection (colorObj, event) {
   updateColors(color, newColors)
 }
 
-function SelectColor ({ state }) {
-  const name = mori.get(state, 'name')
-  const id = mori.get(state, 'id')
-  const colorSelected = mori.get(state, 'colorSelected')
-  const colors = mori.getIn(state, ['game', 'colors'])
-  const numberOfPlayers = mori.getIn(state, ['game', 'numberOfPlayers'])
-  const countdown = mori.getIn(state, ['game', 'countdown'])
-
+function SelectColor ({ name, id, colorSelected, colors, numberOfPlayers, countdown }) {
   if (colorSelected && !id) savePlayer(name, colorSelected)
 
   let colorsCollection = []
