@@ -1,9 +1,6 @@
-import mori from 'mori'
 import { addZero } from '../helpers'
 
-function Countdown ({ state }) {
-  const numberOfPlayers = mori.getIn(state, ['game', 'numberOfPlayers'])
-  const countdown = mori.getIn(state, ['game', 'countdown'])
+function Countdown ({ numberOfPlayers, countdown }) {
   let time = null
 
   if (!numberOfPlayers) return null

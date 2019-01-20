@@ -26,6 +26,8 @@ function SelectColor ({ state }) {
   const id = mori.get(state, 'id')
   const colorSelected = mori.get(state, 'colorSelected')
   const colors = mori.getIn(state, ['game', 'colors'])
+  const numberOfPlayers = mori.getIn(state, ['game', 'numberOfPlayers'])
+  const countdown = mori.getIn(state, ['game', 'countdown'])
 
   if (colorSelected && !id) savePlayer(name, colorSelected)
 
@@ -43,7 +45,7 @@ function SelectColor ({ state }) {
       <div className='preview' onClick={linkEvent({ colorSelected, colors }, handleColorSelection)}>
         {colorsCollection}
       </div>
-      <Countdown state={state} />
+      <Countdown numberOfPlayers={numberOfPlayers} countdown={countdown} />
     </div>
   )
 }

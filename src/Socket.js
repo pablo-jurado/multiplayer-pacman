@@ -1,12 +1,11 @@
 import io from 'socket.io-client'
 import mori from 'mori'
-import { removeKeyListener } from './KeyHandler'
-import { resetInitialState, receiveNewPlayer, receiveNewGameState } from '../index'
+import { removeKeyListener } from './components/KeyHandler'
+import { resetInitialState, receiveNewPlayer, receiveNewGameState } from './index'
 
 export const socket = io('http://localhost:3100')
 
 // export const socket = io()
-
 
 function receiveResetLocalState () {
   removeKeyListener()

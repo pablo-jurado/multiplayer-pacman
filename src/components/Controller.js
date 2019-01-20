@@ -1,14 +1,13 @@
-import { version, linkEvent } from 'inferno'
-import Component from 'inferno-component'
+import { linkEvent } from 'inferno'
 import mori from 'mori'
-import { sendKeyPress } from './Socket'
+import { sendKeyPress } from '../Socket'
 
 function handleController (id, event) {
   const direction = event.target.id
   if (id && direction) sendKeyPress({ id, direction })
 }
 
-function Controller (state) {
+function Controller ({ state }) {
   const id = mori.get(state, 'id')
   if (id) {
     return (

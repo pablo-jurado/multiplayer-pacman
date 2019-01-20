@@ -1,8 +1,6 @@
-import { version } from 'inferno'
-import Component from 'inferno-component'
 import mori from 'mori'
 
-function Score (players) {
+function Score ({ players }) {
   const playerVal = mori.vals(players)
   let playersArr = []
 

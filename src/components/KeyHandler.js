@@ -1,5 +1,5 @@
 import mori from 'mori'
-import { sendKeyPress } from './Socket'
+import { sendKeyPress } from '../Socket'
 import { appState } from '../index'
 
 export function addKeyListener () {

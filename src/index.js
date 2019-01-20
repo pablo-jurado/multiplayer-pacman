@@ -1,6 +1,6 @@
 import { render } from 'inferno'
 import { deepCopy, uuid } from './helpers'
-import { createNewPlayer, sendNewColors } from './components/Socket'
+import { createNewPlayer, sendNewColors } from './Socket'
 import { addKeyListener } from './components/KeyHandler'
 import App from './App'
 import mori from 'mori'

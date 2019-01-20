@@ -1,7 +1,5 @@
-import { version } from 'inferno'
-import Component from 'inferno-component'
 import mori from 'mori'
-import { sendRestartGame, sendEndGame } from './Socket'
+import { sendRestartGame, sendEndGame } from '../Socket'
 
 function getWinner (a, b) {
   const scoreA = mori.get(a, 'score')
@@ -11,7 +9,7 @@ function getWinner (a, b) {
   else return b
 }
 
-function Feedback (state) {
+function Feedback ({ state }) {
   const players = mori.vals(mori.getIn(state, ['game', 'players']))
   const isGameOver = mori.getIn(state, ['game', 'isGameOver'])
   const id = mori.get(state, 'id')

@@ -33,6 +33,8 @@ let welcomeText = null
 
 function HomePage ({ state }) {
   let name = mori.get(state, 'name')
+  const numberOfPlayers = mori.getIn(state, ['game', 'numberOfPlayers'])
+  const countdown = mori.getIn(state, ['game', 'countdown'])
   return (
     <div className='home'>
       <p>Welcome to</p>
@@ -42,7 +44,7 @@ function HomePage ({ state }) {
         <input value={name} onInput={handleInput} />
         <button onClick={handleSubmit}>Next</button>
       </form>
-      <Countdown state={state} />
+      <Countdown numberOfPlayers={numberOfPlayers} countdown={countdown} />
     </div>
   )
 }

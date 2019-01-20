@@ -21,13 +21,13 @@ function Game ({ state }) {
             <header>
               <h2>Multiplayer Pacman</h2>
             </header>
-            {Score(players)}
-            {Board(state)}
-            {Timer(timer)}
+            <Score players={players} />
+            <Board state={state} />
+            <Timer timer={timer} />
           </div>
         </div>
-        {PhoneItems(state)}
-        {Feedback(state)}
+        <PhoneItems state={state} />
+        <Feedback state={state} />
       </div>
     </div>
   )
