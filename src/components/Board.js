@@ -3,11 +3,9 @@ import Tile from './Tile'
 import Player from './Player'
 import { maze, maze2 } from '../img/maze'
 
-function Board (state) {
-  const board = mori.getIn(state, ['game', 'board'])
+function Board ({ board, players }) {
+  const playersData = mori.vals(players)
   const numRows = mori.count(board)
-  const players = mori.vals(mori.getIn(state, ['game', 'players']))
-  const tic = mori.getIn(state, ['game', 'tic'])
 
   let rows = []
   for (let i = 0; i < numRows; i++) {
@@ -16,9 +14,7 @@ function Board (state) {
   }
 
   let playersArr = []
-  mori.each(players, function (p) {
-    playersArr.push(Player(p, tic, board))
-  })
+  mori.each(playersData, (p) => playersArr.push(Player(p, board)))
   return (
     <div className='board-wrapper'>
       <div className='board'>

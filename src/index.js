@@ -1,5 +1,7 @@
 import { render } from 'inferno'
-import { deepCopy } from './helpers'
+import { deepCopy, uuid } from './helpers'
+import { createNewPlayer, sendNewColors } from './Socket'
+import { addKeyListener } from './components/KeyHandler'
 import App from './App'
 import mori from 'mori'
 
@@ -26,10 +28,45 @@ let initialState = {
   }
 }
 
-window.appState = mori.toClj(initialState)
+export let appState = mori.toClj(initialState)
 
-export function resetInitialState () {
-  window.appState = mori.toClj(deepCopy(initialState))
+export function resetInitialState() {
+  appState = mori.toClj(deepCopy(initialState))
+}
+
+export function updateName(name) {
+  appState = mori.assocIn(appState, ['name'], name)
+}
+
+export function savetUserName() {
+  appState = mori.assocIn(appState, ['page'], 'select')
+}
+
+export function updateColors(color, newColors) {
+  appState = mori.assoc(appState, 'colorSelected', color)
+  sendNewColors(newColors)
+}
+
+export function createPlayer (name, colorSelected) {
+  const id = uuid()
+  createNewPlayer({name: name, color: colorSelected, id: id})
+  appState = mori.assoc(appState, 'id', id)
+}
+
+export function receiveNewGameState (state) {
+  const newState = JSON.parse(state)
+  appState = mori.assoc(appState, 'game', mori.toClj(newState.game))
+}
+
+export function receiveNewPlayer (state) {
+  const players = mori.vals(mori.toClj(JSON.parse(state)))
+
+  mori.each(players, function (p) {
+    const id = mori.get(p, 'id')
+    const localPlayer = mori.get(appState, 'id')
+
+    if (id === localPlayer) addKeyListener()
+  })
 }
 
 // -----------------------------------------------------------------------------
@@ -38,8 +75,8 @@ export function resetInitialState () {
 
 const rootEl = document.getElementById('app')
 
-function renderNow () {
-  render(App(window.appState), rootEl)
+function renderNow() {
+  render(<App state={appState} />, rootEl)
   window.requestAnimationFrame(renderNow)
 }
 

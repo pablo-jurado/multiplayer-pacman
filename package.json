@@ -17,8 +17,7 @@
   "scripts": {
     "build-css": "node-sass-chokidar src/ -o src/",
     "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
-    "start": "nodemon app.js",
-    "webpack": "npm-run-all -p watch-css start-js",
+    "start": "nodemon app.js & npm-run-all -p watch-css start-js",
     "start-js": "inferno-scripts start",
     "build": "inferno-scripts build",
     "test": "inferno-scripts test --env=jsdom",
