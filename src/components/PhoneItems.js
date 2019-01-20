@@ -6,6 +6,7 @@ import Controller from './Controller'
 function PhoneItems ({ state }) {
   const players = mori.getIn(state, ['game', 'players'])
   const timer = mori.getIn(state, ['game', 'gameTimer'])
+  const id = mori.get(state, 'id')
 
   return (
     <div className='phone-items'>
@@ -14,7 +15,7 @@ function PhoneItems ({ state }) {
       </header>
       <Score players={players} />
       <Timer timer={timer} />
-      <Controller state={state} />
+      <Controller id={id} />
     </div>
   )
 }

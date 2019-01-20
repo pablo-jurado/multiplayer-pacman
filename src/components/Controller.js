@@ -1,5 +1,4 @@
 import { linkEvent } from 'inferno'
-import mori from 'mori'
 import { sendKeyPress } from '../Socket'
 
 function handleController (id, event) {
@@ -7,8 +6,7 @@ function handleController (id, event) {
   if (id && direction) sendKeyPress({ id, direction })
 }
 
-function Controller ({ state }) {
-  const id = mori.get(state, 'id')
+function Controller ({ id }) {
   if (id) {
     return (
       <div className='controller'>
