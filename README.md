@@ -1,7 +1,5 @@
 # Multiplayer Pacman
 
-> status: work in progress
-
 This project was bootstrapped with [Create Inferno App](https://github.com/infernojs/create-inferno-app)
 and deployed with Heroku.
 
@@ -71,8 +69,6 @@ It correctly bundles Inferno in production mode and optimizes the build for the 
 The build is minified and the filenames include the hashes.<br>
 Your app is ready to be deployed!
 
-> todo: finish this
-
 ## Development Setup
 
 ```sh
@@ -81,7 +77,3 @@ npm install
 
 
 ```
-
-## Credits
-
-This project was done by [Pablo Jurado](https://github.com/pablo-jurado).
